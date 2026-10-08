@@ -1,0 +1,1635 @@
+/* ==========================================================================
+   NACOS Week 2027 (NACOS Week ’27) — Official Stylesheet
+   Strict Design Rules:
+   - Solid #005012 on dark sections (NO radial-gradients, NO glow/spotlights)
+   - NO box-shadow on any element except sticky nav & hero delegate-pass card
+   - Max border-radius: 10px (buttons & inputs: 8px)
+   - Left-aligned section headers (max-width 720px) except Schedule & Final CTA
+   ========================================================================== */
+
+:root {
+  /* Brand Exact Color System */
+  --green: #089002;
+  --green-hover: #077902;
+  --deep-green: #005012;
+  --off-white: #F5F7F2;
+  --pale-green: #E6F2E3;
+  --soft-green: #78B978;
+  --black: #0B0F0C;
+
+  /* 1px Hairlines */
+  --hairline-light: rgba(0, 80, 18, 0.15);
+  --hairline-dark: rgba(245, 247, 242, 0.22);
+
+  /* Typography */
+  --font-heading: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Radii (strictly <= 10px, buttons/inputs 8px) */
+  --radius-max: 10px;
+  --radius-btn: 8px;
+  --radius-input: 8px;
+  --radius-sm: 6px;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-smooth: 0.35s ease;
+}
+
+/* --------------------------------------------------------------------------
+   Reset & Baseline
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 76px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--black);
+  background-color: var(--off-white);
+  line-height: 1.65;
+  font-size: 1rem;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+::selection {
+  background-color: var(--green);
+  color: var(--off-white);
+}
+
+/* Typography Base */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--deep-green);
+  letter-spacing: -0.025em;
+}
+
+p {
+  max-width: 65ch;
+}
+
+.container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Section Headers: Left-Aligned Default vs Centered (Schedule & Final CTA)
+   -------------------------------------------------------------------------- */
+.section-header-block {
+  text-align: left;
+  max-width: 720px;
+  margin-bottom: 3.5rem;
+}
+
+.section-eyebrow-line {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--green);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.section-eyebrow-line.on-dark {
+  color: #8be587;
+}
+
+.section-h2-title {
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  font-weight: 850;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--deep-green);
+  max-width: 720px;
+  margin-bottom: 1rem;
+}
+
+.section-h2-title.on-dark {
+  color: var(--off-white);
+}
+
+.section-desc-text {
+  font-size: 1.05rem;
+  color: var(--black);
+  opacity: 0.8;
+  line-height: 1.7;
+  max-width: 65ch;
+}
+
+.section-desc-text.on-dark {
+  color: #c9dec9;
+}
+
+/* Centered Variation for Rhythm (Schedule & Final CTA) */
+.section-header-centered {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 3.5rem;
+}
+
+.section-header-centered .section-eyebrow-line {
+  display: inline-block;
+}
+
+.section-header-centered .section-h2-title {
+  margin: 0 auto 1rem;
+}
+
+.section-header-centered .section-desc-text {
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons & Links (Strict 8px radius, NO box-shadow)
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-btn);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  box-shadow: none !important;
+}
+
+.btn-primary {
+  background-color: var(--green);
+  color: var(--off-white);
+  border: 1px solid var(--green);
+}
+
+.btn-primary:hover {
+  background-color: var(--green-hover);
+  border-color: var(--green-hover);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--off-white);
+  border: 1px solid rgba(245, 247, 242, 0.4);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(245, 247, 242, 0.1);
+  border-color: var(--off-white);
+}
+
+.btn-secondary-light {
+  background-color: transparent;
+  color: var(--deep-green);
+  border: 1px solid var(--hairline-light);
+}
+
+.btn-secondary-light:hover {
+  background-color: var(--pale-green);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+}
+
+.text-link:hover {
+  color: var(--green);
+  border-bottom-color: var(--green);
+}
+
+/* --------------------------------------------------------------------------
+   1. Sticky Navigation (Retains subtle box-shadow on scroll)
+   -------------------------------------------------------------------------- */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--off-white);
+  border-bottom: 1px solid var(--hairline-light);
+  transition: box-shadow var(--transition-fast);
+}
+
+.site-nav.scrolled {
+  box-shadow: 0 4px 16px rgba(0, 80, 18, 0.08);
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 76px;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 850;
+  color: var(--deep-green);
+  line-height: 1.1;
+}
+
+.brand-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.nav-links-desktop {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-links-desktop a {
+  font-weight: 500;
+  font-size: 0.925rem;
+  color: var(--black);
+  padding: 0.35rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-links-desktop a:hover,
+.nav-links-desktop a.active {
+  color: var(--green);
+  border-bottom-color: var(--green);
+}
+
+.nav-cta-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 38px;
+  height: 38px;
+  padding: 6px;
+}
+
+.hamburger-line {
+  width: 100%;
+  height: 2px;
+  background-color: var(--deep-green);
+}
+
+/* Mobile Drawer */
+.mobile-nav-drawer {
+  position: fixed;
+  top: 76px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--off-white);
+  border-top: 1px solid var(--hairline-light);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translateX(100%);
+  transition: transform var(--transition-smooth);
+  z-index: 999;
+}
+
+.mobile-nav-drawer.open {
+  transform: translateX(0);
+}
+
+.mobile-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.mobile-nav-list a {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--deep-green);
+  border-bottom: 1px solid var(--hairline-light);
+  padding-bottom: 0.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   2. Hero Section (Solid #005012, NO radial gradient, NO glow)
+   -------------------------------------------------------------------------- */
+.hero-section {
+  background-color: var(--deep-green);
+  color: var(--off-white);
+  padding: 5.5rem 0 6rem;
+  position: relative;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: 3.5rem;
+}
+
+.hero-content {
+  text-align: left;
+}
+
+.hero-meta-kicker {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8be587;
+  margin-bottom: 1.5rem;
+}
+
+.hero-headline {
+  font-size: clamp(3rem, 6vw, 4.75rem);
+  font-weight: 900;
+  color: var(--off-white);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  margin-bottom: 0.5rem;
+}
+
+.hero-theme-display {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.hero-theme-display .theme-label-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--soft-green);
+}
+
+.hero-theme-display .theme-name {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+  font-weight: 800;
+  color: #8be587;
+}
+
+/* 1. Hero Subhead (Rewritten, human voice, <=20 words) */
+.hero-subheading {
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  line-height: 1.65;
+  color: var(--off-white);
+  max-width: 60ch;
+  margin-bottom: 2.25rem;
+}
+
+/* Hero Meta Row with Inline 16px Glyphs (NO background box) */
+.hero-meta-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--hairline-dark);
+  border-bottom: 1px solid var(--hairline-dark);
+  padding: 1.35rem 0;
+  margin-bottom: 2.5rem;
+  gap: 1.5rem;
+}
+
+.hero-meta-col {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.hero-meta-glyph {
+  width: 16px;
+  height: 16px;
+  color: #8be587;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.hero-meta-text-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-meta-label {
+  font-size: 0.725rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8be587;
+}
+
+.hero-meta-value {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--off-white);
+  line-height: 1.35;
+}
+
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2.25rem;
+  flex-wrap: wrap;
+}
+
+/* Confirmed Stats Only: 4 days, 1 venue, Free admission, sessions [TBC] */
+.hero-confirmed-stats {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--hairline-dark);
+  font-size: 0.875rem;
+  color: #b8dcb6;
+}
+
+.hero-stat-item strong {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--off-white);
+}
+
+/* Hero Delegate-Pass Card (KEEPS box-shadow, max border-radius 10px, NO barcode) */
+.hero-ticket-card {
+  background-color: #003a0d;
+  border: 1px solid var(--hairline-dark);
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+.hero-ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--hairline-dark);
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.hero-ticket-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #8be587;
+}
+
+.hero-ticket-img-frame {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--hairline-dark);
+}
+
+.hero-ticket-img-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-ticket-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--hairline-dark);
+}
+
+.hero-ticket-meta-block span {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8be587;
+  margin-bottom: 2px;
+}
+
+.hero-ticket-meta-block strong {
+  font-family: var(--font-heading);
+  font-size: 0.925rem;
+  color: var(--off-white);
+}
+
+.hero-ticket-bottom {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #b8dcb6;
+}
+
+/* --------------------------------------------------------------------------
+   Marquee Band (Between Hero & Countdown)
+   Background #089002, off-white Montserrat 14px, letter-spacing .2em, 30s scroll
+   -------------------------------------------------------------------------- */
+.marquee-band {
+  width: 100%;
+  background-color: var(--green);
+  color: var(--off-white);
+  overflow: hidden;
+  padding: 0.85rem 0;
+  white-space: nowrap;
+}
+
+.marquee-content-track {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  animation: marquee-scroll 30s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-content-track {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. Countdown Section (Single Hairline Strip on Off-White, No Card Box)
+   -------------------------------------------------------------------------- */
+.countdown-section {
+  background-color: var(--off-white);
+  border-bottom: 1px solid var(--hairline-light);
+  padding: 2.25rem 0;
+}
+
+.countdown-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.countdown-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--deep-green);
+}
+
+.countdown-timer-strip {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+}
+
+.countdown-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.countdown-num {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 850;
+  color: var(--deep-green);
+  line-height: 1;
+}
+
+.countdown-unit {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--green);
+  margin-top: 0.25rem;
+}
+
+.countdown-divider {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--soft-green);
+  line-height: 1;
+}
+
+/* --------------------------------------------------------------------------
+   4. Section 01 — The Gathering (About: Numbered Hairline List 01–04)
+   -------------------------------------------------------------------------- */
+.about-section {
+  padding: 6.5rem 0;
+  background-color: var(--off-white);
+  border-bottom: 1px solid var(--hairline-light);
+}
+
+.about-editorial-grid {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 4rem;
+  align-items: flex-start;
+  margin-bottom: 4rem;
+}
+
+.about-body-text {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--black);
+}
+
+.about-host-box {
+  border-left: 2px solid var(--green);
+  padding-left: 1.5rem;
+}
+
+.about-host-box strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--deep-green);
+  margin-bottom: 0.35rem;
+}
+
+.about-host-box p {
+  font-size: 0.95rem;
+  color: var(--black);
+  opacity: 0.8;
+  line-height: 1.65;
+}
+
+/* Numbered Hairline List 01–04 */
+.about-hairline-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--hairline-light);
+}
+
+.about-hairline-row {
+  display: grid;
+  grid-template-columns: 80px 220px 1fr;
+  align-items: baseline;
+  gap: 2rem;
+  padding: 1.85rem 0;
+  border-bottom: 1px solid var(--hairline-light);
+}
+
+.about-hairline-num {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 850;
+  color: var(--green);
+  line-height: 1;
+}
+
+.about-hairline-title {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--deep-green);
+}
+
+.about-hairline-desc {
+  font-size: 1rem;
+  color: var(--black);
+  opacity: 0.85;
+  line-height: 1.65;
+}
+
+/* --------------------------------------------------------------------------
+   5. Section 02 — The Frame (Theme: Solid #005012, Flat)
+   -------------------------------------------------------------------------- */
+.theme-section {
+  padding: 6.5rem 0;
+  background-color: var(--deep-green);
+  color: var(--off-white);
+  border-bottom: 1px solid var(--hairline-dark);
+}
+
+.theme-split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* 3. Theme Paragraph (Rewritten, human voice, <=20 words) */
+.theme-narrative-paragraph {
+  font-size: 1.15rem;
+  line-height: 1.75;
+  color: var(--off-white);
+  margin-bottom: 2.5rem;
+}
+
+.theme-currents-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--hairline-dark);
+}
+
+.theme-current-row {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--hairline-dark);
+}
+
+.theme-current-row strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--off-white);
+  margin-bottom: 0.25rem;
+}
+
+.theme-current-row span {
+  font-size: 0.875rem;
+  color: #badcba;
+}
+
+.theme-frame-photo {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--hairline-dark);
+}
+
+.theme-frame-photo img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+
+/* --------------------------------------------------------------------------
+   6. Section 03 — Why Attend (Plain Hairline Rows)
+   -------------------------------------------------------------------------- */
+.why-attend-section {
+  padding: 6.5rem 0;
+  background-color: var(--pale-green);
+  border-bottom: 1px solid var(--hairline-light);
+}
+
+.why-hairline-rows {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--hairline-light);
+}
+
+.why-hairline-row {
+  display: grid;
+  grid-template-columns: 70px 220px 1fr;
+  align-items: baseline;
+  gap: 2rem;
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--hairline-light);
+}
+
+.why-row-num {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 850;
+  color: var(--green);
+}
+
+.why-row-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--deep-green);
+}
+
+.why-row-desc {
+  font-size: 1rem;
+  color: var(--black);
+  opacity: 0.85;
+}
+
+/* --------------------------------------------------------------------------
+   7. Section 04 — Schedule (Centered for Rhythm Variation)
+   -------------------------------------------------------------------------- */
+.schedule-section {
+  padding: 6.5rem 0;
+  background-color: var(--off-white);
+  border-bottom: 1px solid var(--hairline-light);
+}
+
+.schedule-tabs-bar {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  border-bottom: 1px solid var(--hairline-light);
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.schedule-tab-btn {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--black);
+  opacity: 0.7;
+  padding: 0.85rem 0;
+  border-bottom: 3px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.schedule-tab-btn:hover {
+  opacity: 1;
+  color: var(--deep-green);
+}
+
+.schedule-tab-btn.active {
+  opacity: 1;
+  color: var(--green);
+  border-bottom-color: var(--green);
+}
+
+.schedule-tab-pane {
+  display: none;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.schedule-tab-pane.active {
+  display: block;
+}
+
+.schedule-day-header-bar {
+  background-color: var(--deep-green);
+  color: var(--off-white);
+  border-radius: 10px 10px 0 0;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.schedule-day-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--off-white);
+}
+
+.schedule-day-call {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8be587;
+}
+
+.schedule-sessions-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--hairline-light);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+}
+
+.schedule-session-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 120px;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 1.6rem 2rem;
+  border-bottom: 1px solid var(--hairline-light);
+  background-color: #ffffff;
+}
+
+.schedule-session-row:last-child {
+  border-bottom: none;
+  border-radius: 0 0 10px 10px;
+}
+
+.session-time-text {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--deep-green);
+}
+
+.session-info-wrap h4 {
+  font-size: 1.15rem;
+  font-weight: 750;
+  color: var(--deep-green);
+  margin-bottom: 0.25rem;
+}
+
+.session-info-wrap p {
+  font-size: 0.9rem;
+  color: var(--black);
+  opacity: 0.75;
+}
+
+.session-tag-text {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--green);
+  text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+   8. Section 05 — Voices (Speakers: 4:5 Portrait Frames with Grayscale & Duotone)
+   -------------------------------------------------------------------------- */
+.speakers-section {
+  padding: 6.5rem 0;
+  background-color: var(--pale-green);
+  border-bottom: 1px solid var(--hairline-light);
+}
+
+.speakers-portrait-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.75rem;
+  margin-top: 2.5rem;
+}
+
+.speaker-frame-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 4:5 portrait frames: background #E6F2E3, centered Montserrat initials in #005012 */
+.speaker-portrait-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background-color: var(--pale-green);
+  border: 1px solid var(--hairline-light);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.speaker-initials-text {
+  font-family: var(--font-heading);
+  font-size: 2.75rem;
+  font-weight: 850;
+  color: var(--deep-green);
+  letter-spacing: -0.04em;
+  user-select: none;
+}
+
+/* Future <img> photos render grayscale(1) and turn green-duotone on hover */
+.speaker-portrait-box img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1);
+  transition: filter var(--transition-smooth);
+}
+
+.speaker-portrait-box:hover img {
+  filter: grayscale(1) sepia(1) hue-rotate(85deg) saturate(3);
+}
+
+/* Role caption under a 1px hairline */
+.speaker-caption-box {
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--hairline-light);
+  margin-top: 1rem;
+}
+
+.speaker-caption-name {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--deep-green);
+  margin-bottom: 0.2rem;
+}
+
+.speaker-caption-role {
+  font-size: 0.85rem;
+  color: var(--black);
+  opacity: 0.8;
+  line-height: 1.4;
+}
+
+.speaker-tbc-tag {
+  font-family: var(--font-heading);
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--green);
+  margin-top: 0.35rem;
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   9. Section 06 — Backers (Sponsors & Partners)
+   -------------------------------------------------------------------------- */
+.sponsors-section {
+  padding: 6.5rem 0;
+  background-color: var(--off-white);
+  border-bottom: 1px solid var(--hairline-light);
+}
+
+.sponsors-hairline-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--hairline-light);
+  border-left: 1px solid var(--hairline-light);
+  margin-bottom: 3rem;
+}
+
+.sponsor-grid-cell {
+  border-right: 1px solid var(--hairline-light);
+  border-bottom: 1px solid var(--hairline-light);
+  padding: 2.25rem 1.75rem;
+  min-height: 135px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sponsor-category-label {
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--green);
+}
+
+.sponsor-tier-placeholder {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--deep-green);
+}
+
+/* --------------------------------------------------------------------------
+   10. Section 07 — Registration
+   -------------------------------------------------------------------------- */
+.registration-section {
+  padding: 6.5rem 0;
+  background-color: var(--off-white);
+  border-bottom: 1px solid var(--hairline-light);
+}
+
+.reg-split-card {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  border: 1px solid var(--hairline-light);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.reg-left-panel {
+  background-color: var(--deep-green);
+  color: var(--off-white);
+  padding: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.reg-left-title {
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 850;
+  color: var(--off-white);
+  margin-bottom: 1rem;
+}
+
+/* 4. Registration Intro (Rewritten, human voice, <=20 words) */
+.reg-left-intro {
+  font-size: 1rem;
+  color: #badcba;
+  line-height: 1.65;
+  margin-bottom: 2rem;
+}
+
+.reg-perks-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.reg-perk-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  font-size: 0.925rem;
+  color: var(--off-white);
+}
+
+.reg-perk-check {
+  color: #8be587;
+  font-weight: 800;
+}
+
+.reg-left-reassurance {
+  font-size: 0.85rem;
+  color: #8be587;
+  font-weight: 600;
+  border-top: 1px solid var(--hairline-dark);
+  padding-top: 1.25rem;
+}
+
+.reg-right-form {
+  background-color: var(--off-white);
+  padding: 3.5rem;
+}
+
+.form-field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.35rem;
+}
+
+.form-field-row label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.form-field-row input,
+.form-field-row select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--hairline-light);
+  background-color: #ffffff;
+  font-size: 0.95rem;
+  color: var(--black);
+  outline: none;
+}
+
+.form-field-row input:focus,
+.form-field-row select:focus {
+  border-color: var(--green);
+}
+
+/* --------------------------------------------------------------------------
+   11. Section 08 — Venue (Venue Meta Text Row + Grayscale Google Maps Iframe)
+   -------------------------------------------------------------------------- */
+.venue-section {
+  padding: 6.5rem 0;
+  background-color: var(--pale-green);
+  border-bottom: 1px solid var(--hairline-light);
+}
+
+.venue-split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: flex-start;
+}
+
+.venue-address-title {
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+  font-weight: 850;
+  color: var(--deep-green);
+  margin-bottom: 0.5rem;
+}
+
+.venue-address-lines {
+  font-size: 1.05rem;
+  color: var(--black);
+  line-height: 1.65;
+  margin-bottom: 2rem;
+}
+
+/* Venue Meta as a Text Row (No rounded icon squares) */
+.venue-meta-text-row {
+  display: flex;
+  gap: 2rem;
+  border-top: 1px solid var(--hairline-light);
+  border-bottom: 1px solid var(--hairline-light);
+  padding: 1.25rem 0;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.venue-meta-text-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.venue-meta-text-col span {
+  font-size: 0.725rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--green);
+  font-weight: 700;
+}
+
+.venue-meta-text-col strong {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  color: var(--deep-green);
+}
+
+/* Grayscale Google Maps Iframe of AKSU Main Campus */
+.venue-map-iframe-wrap {
+  width: 100%;
+  height: 380px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--hairline-light);
+  background-color: var(--off-white);
+}
+
+.venue-map-iframe-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: grayscale(100%);
+}
+
+/* --------------------------------------------------------------------------
+   12. Section 09 — FAQ (Hairline Accordion Rows)
+   -------------------------------------------------------------------------- */
+.faq-section {
+  padding: 6.5rem 0;
+  background-color: var(--off-white);
+  border-bottom: 1px solid var(--hairline-light);
+}
+
+.faq-hairline-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--hairline-light);
+  max-width: 900px;
+}
+
+.faq-row-item {
+  border-bottom: 1px solid var(--hairline-light);
+}
+
+.faq-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 750;
+  color: var(--deep-green);
+}
+
+.faq-summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-indicator {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  color: var(--green);
+  line-height: 1;
+}
+
+.faq-content {
+  padding-bottom: 1.5rem;
+  font-size: 0.975rem;
+  line-height: 1.7;
+  color: var(--black);
+  opacity: 0.85;
+}
+
+/* --------------------------------------------------------------------------
+   13. Final CTA (Centered for Rhythm, Solid Green #089002)
+   -------------------------------------------------------------------------- */
+.final-cta-section {
+  background-color: var(--green);
+  color: var(--off-white);
+  padding: 6.5rem 0;
+  text-align: center;
+}
+
+.final-cta-container {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.final-cta-headline {
+  font-size: clamp(2.5rem, 5.5vw, 4rem);
+  font-weight: 900;
+  color: var(--off-white);
+  line-height: 1.05;
+  margin-bottom: 1.25rem;
+}
+
+/* 5. Final CTA Subhead (Rewritten, human voice, <=20 words) */
+.final-cta-subhead {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #e6f9e3;
+  margin-bottom: 2.75rem;
+}
+
+.final-cta-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.final-cta-white-btn {
+  background-color: var(--off-white);
+  color: var(--deep-green);
+  border: 1px solid var(--off-white);
+  border-radius: 8px;
+  padding: 0.85rem 2rem;
+  font-weight: 700;
+}
+
+.final-cta-white-btn:hover {
+  background-color: #ffffff;
+  color: var(--green);
+}
+
+/* --------------------------------------------------------------------------
+   14. Footer (Solid #005012, 4 Hairline Columns)
+   -------------------------------------------------------------------------- */
+.site-footer {
+  background-color: var(--deep-green);
+  color: var(--off-white);
+  padding: 5.5rem 0 2.5rem;
+  border-top: 1px solid var(--hairline-dark);
+}
+
+.footer-grid-four {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 3rem;
+  padding-bottom: 3.5rem;
+  border-bottom: 1px solid var(--hairline-dark);
+  margin-bottom: 2rem;
+}
+
+.footer-brand-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 850;
+  color: var(--off-white);
+  margin-bottom: 0.75rem;
+}
+
+.footer-brand-copy {
+  font-size: 0.9rem;
+  color: #badcba;
+  line-height: 1.65;
+  max-width: 32ch;
+}
+
+.footer-col-heading {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #8be587;
+  margin-bottom: 1.15rem;
+}
+
+.footer-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-links-list a {
+  font-size: 0.9rem;
+  color: #d1ead1;
+}
+
+.footer-links-list a:hover {
+  color: #ffffff;
+}
+
+.footer-bottom-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.8125rem;
+  color: #92b892;
+}
+
+/* --------------------------------------------------------------------------
+   Modals & Toast Feedback
+   -------------------------------------------------------------------------- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(11, 15, 12, 0.75);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast);
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-dialog-box {
+  background-color: var(--off-white);
+  border-radius: 10px;
+  border: 1px solid var(--hairline-light);
+  max-width: 520px;
+  width: 100%;
+  padding: 2.75rem 2.25rem;
+  position: relative;
+  text-align: left;
+}
+
+.modal-close-x {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  font-size: 1.5rem;
+  color: var(--deep-green);
+  font-weight: 700;
+}
+
+.flat-toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: var(--deep-green);
+  color: var(--off-white);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--green);
+  z-index: 3000;
+  font-size: 0.9rem;
+  transform: translateY(120%);
+  transition: transform var(--transition-fast);
+}
+
+.flat-toast.show {
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Layout
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .hero-grid,
+  .about-editorial-grid,
+  .theme-split-layout,
+  .reg-split-card,
+  .venue-split-layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .speakers-portrait-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sponsors-hairline-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-grid-four {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-links-desktop,
+  .nav-cta-wrapper .btn-primary {
+    display: none;
+  }
+
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .hero-headline {
+    font-size: 2.75rem;
+  }
+
+  .hero-meta-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .countdown-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .about-hairline-row,
+  .why-hairline-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .schedule-session-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .speakers-portrait-grid,
+  .sponsors-hairline-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reg-left-panel,
+  .reg-right-form {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .footer-grid-four {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
