@@ -121,19 +121,6 @@
     }
   }
 
-  /* ---------- Phone register bar ---------- */
-  // Shown once the hero has scrolled away; hidden while the form, closer or footer is on screen.
-  var mbar = $("[data-mbar]");
-  if (mbar && "IntersectionObserver" in window) {
-    var watched = [$(".hero"), $("#register"), $(".closer"), $(".footer")].filter(Boolean);
-    var seen = watched.map(function () { return true; });
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) { seen[watched.indexOf(en.target)] = en.isIntersecting; });
-      mbar.classList.toggle("is-shown", seen.indexOf(true) === -1);
-    });
-    watched.forEach(function (el) { io.observe(el); });
-  }
-
   /* ---------- Carousel ---------- */
   var car = $("[data-carousel]");
   if (car) {

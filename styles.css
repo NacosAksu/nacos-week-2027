@@ -714,23 +714,6 @@ abbr { text-decoration: none; font-size: 0.7em; letter-spacing: 0.04em; vertical
 .carousel__track:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
 
 /* ---------- Phones: most visitors arrive here ---------- */
-/* Sticky register bar, only on small screens */
-.mbar { display: none; }
-@media (max-width: 700px) {
-  .mbar {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-xs);
-    padding: var(--space-xs) var(--gutter) calc(var(--space-xs) + env(safe-area-inset-bottom, 0px));
-    background: var(--brand-black);
-    border-top: 1px solid var(--color-night-rule);
-    transform: translateY(110%);
-    visibility: hidden;
-    transition: transform var(--dur-short) var(--ease-out), visibility 0s linear var(--dur-short);
-  }
-  .mbar.is-shown { transform: none; visibility: visible; transition: transform var(--dur-short) var(--ease-out), visibility 0s; }
-  .mbar__btn { min-height: 2.875rem; padding-inline: var(--space-sm); }
-}
-@media (max-width: 700px) and (prefers-reduced-motion: reduce) { .mbar, .mbar.is-shown { transition: none; } }
 
 @media (max-width: 700px) {
   /* Announcement strip on two lines, not three */
