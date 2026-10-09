@@ -1,1068 +1,600 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NACOS Week 2027 — Confluence | NACOS AKSU</title>
-  <meta name="description" content="NACOS Week 2027 (NACOS Week ’27) — Confluence. Flagship technology event organized by the National Association of Computing Students, Akwa Ibom State University. 1st–4th February 2027.">
-  <meta name="theme-color" content="#005012">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="NACOS Week 2027 — Confluence | NACOS AKSU">
-  <meta property="og:description" content="Where students, professionals, and technology communities meet for four days of focused learning and collaboration.">
-  <meta property="og:type" content="website">
-
-  <!-- Typography: Montserrat & Poppins -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NACOS Week 2027: Confluence | NACOS AKSU</title>
+  <meta name="description" content="NACOS Week 2027: Confluence. Energy, finance, oil and gas, and medicine meet computing at Akwa Ibom State University. Hackathon, Conference Day, Football, Fashion & Pageantry and the Dinner & Award Night.">
+  <meta name="theme-color" content="#0B0F0C">
+  <meta property="og:title" content="NACOS Week 2027: Confluence">
+  <meta property="og:description" content="Five events. Four industries. One university. Organised by NACOS AKSU and hosted by the Faculty of Computing and Information Technology, Akwa Ibom State University.">
+  <meta property="og:image" content="assets/brand/og-image.jpg">
+  <link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;850;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css?v=50">
+  <link rel="stylesheet" href="styles.css?v=50">
+  <script src="config.js?v=50" defer></script>
+  <script src="app.js?v=50" defer></script>
 </head>
-<body>
+<body id="top">
+  <a class="skip" href="#main">Skip to content</a>
 
-  <!-- ========================================================================
-       1. STICKY NAVIGATION BAR (Retains subtle box-shadow on scroll)
-       ======================================================================== -->
-  <nav class="site-nav" id="siteNav" aria-label="Main Navigation">
-    <div class="container nav-container">
-      <a href="#hero" class="brand-link" id="brandLink">
-        <div style="display: flex; flex-direction: column;">
-          <span class="brand-title">NACOS Week ’27</span>
-          <span class="brand-badge">NACOS AKSU • Confluence</span>
-        </div>
+  <!-- Announcement strip -->
+  <div class="strip" data-strip>
+    <div class="wrap strip__inner">
+      <p>Partner packages for NACOS Week 2027 are open.</p>
+      <a href="#partner" class="strip__link">See the tiers</a>
+    </div>
+  </div>
+
+  <header class="nav" data-nav>
+    <div class="wrap nav__inner">
+      <a class="brand" href="#top" aria-label="NACOS Week 27, back to top">
+        <span class="logo-slot" data-logo="assets/brand/nw27-primary-reversed.svg">
+          <span class="wordmark" aria-hidden="true"><span class="wordmark__stack"><span class="wordmark__a">NACOS</span><span class="wordmark__b">WEEK</span></span><span class="wordmark__n">27</span></span>
+        </span>
       </a>
-
-      <div class="nav-links-desktop">
-        <a href="#about">About</a>
-        <a href="#theme">The Frame</a>
-        <a href="#why-attend">Why Attend</a>
-        <a href="#schedule">Schedule</a>
-        <a href="#speakers">Voices</a>
-        <a href="#sponsors">Backers</a>
+      <nav class="nav__links" aria-label="Primary" data-menu>
+        <a href="#programme">Programme</a>
+        <a href="#hackathon">Hackathon</a>
+        <a href="#partner">Partner</a>
         <a href="#venue">Venue</a>
         <a href="#faq">FAQ</a>
-      </div>
-
-      <div class="nav-cta-wrapper">
-        <a href="#register" class="btn btn-primary" id="navRegisterBtn">Register</a>
-        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobileNavDrawer">
-          <span class="hamburger-line"></span>
-          <span class="hamburger-line"></span>
-          <span class="hamburger-line"></span>
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Mobile Drawer -->
-  <aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Navigation">
-    <div class="mobile-nav-list">
-      <a href="#about" class="mobile-nav-link">01 — The Gathering</a>
-      <a href="#theme" class="mobile-nav-link">02 — The Frame</a>
-      <a href="#why-attend" class="mobile-nav-link">03 — Why Attend</a>
-      <a href="#schedule" class="mobile-nav-link">Schedule</a>
-      <a href="#speakers" class="mobile-nav-link">05 — Voices</a>
-      <a href="#sponsors" class="mobile-nav-link">06 — Backers</a>
-      <a href="#venue" class="mobile-nav-link">08 — Venue</a>
-      <a href="#faq" class="mobile-nav-link">09 — FAQ</a>
-    </div>
-
-    <div>
-      <a href="#register" class="btn btn-primary mobile-nav-link" style="width: 100%;">Register — free</a>
-      <p style="font-size: 0.8125rem; color: var(--text-dim); margin-top: 1rem;">
-        1st–4th Feb 2027 • AKSU Main Campus
-      </p>
-    </div>
-  </aside>
-
-  <!-- ========================================================================
-       2. HERO SECTION (Solid #005012, no radial gradient, no glow)
-       ======================================================================== -->
-  <header class="hero-section" id="hero">
-    <div class="container hero-grid">
-      <div class="hero-content">
-        <div class="hero-meta-kicker">
-          NACOS AKSU — FLAGSHIP ANNUAL GATHERING
-        </div>
-
-        <h1 class="hero-headline">
-          NACOS Week ’27
-        </h1>
-
-        <div class="hero-theme-display">
-          <span class="theme-label-badge">THEME</span>
-          <span class="theme-name">Confluence</span>
-        </div>
-
-        <!-- 1. Hero Subhead (Rewritten, plain human voice, max 20 words) -->
-        <p class="hero-subheading">
-          Where students, professionals, and technology communities meet for four days of focused learning and collaboration.
-        </p>
-
-        <!-- Meta row with inline 16px glyphs only (NO background squares) -->
-        <div class="hero-meta-row">
-          <div class="hero-meta-col">
-            <svg class="hero-meta-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            <div class="hero-meta-text-wrap">
-              <span class="hero-meta-label">Dates</span>
-              <span class="hero-meta-value">1st–4th February, 2027</span>
-            </div>
-          </div>
-
-          <div class="hero-meta-col">
-            <svg class="hero-meta-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-            <div class="hero-meta-text-wrap">
-              <span class="hero-meta-label">Venue</span>
-              <span class="hero-meta-value">Conference Hall, AKSU Main Campus</span>
-            </div>
-          </div>
-
-          <div class="hero-meta-col">
-            <svg class="hero-meta-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-            <div class="hero-meta-text-wrap">
-              <span class="hero-meta-label">Time</span>
-              <span class="hero-meta-value">10:00 AM prompt</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-cta-group">
-          <a href="#register" class="btn btn-primary" id="heroPrimaryCta">Register Now</a>
-          <a href="#schedule" class="btn btn-secondary" id="heroSecondaryCta">View Schedule</a>
-        </div>
-
-        <!-- Confirmed statistics only: 4 days, 1 venue, Free admission, sessions [TBC] -->
-        <div class="hero-confirmed-stats">
-          <span class="hero-stat-item"><strong>4</strong> days</span>
-          <span class="hero-stat-item">•</span>
-          <span class="hero-stat-item"><strong>1</strong> venue</span>
-          <span class="hero-stat-item">•</span>
-          <span class="hero-stat-item"><strong>Free</strong> admission</span>
-          <span class="hero-stat-item">•</span>
-          <span class="hero-stat-item">Sessions <strong>[TBC]</strong></span>
-        </div>
-      </div>
-
-      <!-- Hero Delegate-Pass Card (Keeps box-shadow, NO barcode) -->
-      <div class="hero-ticket-card">
-        <div class="hero-ticket-header">
-          <span style="font-family: var(--font-heading); font-size: 0.95rem; font-weight: 800; color: #ffffff;">CONFLUENCE ’27</span>
-          <span class="hero-ticket-badge">Delegate Pass</span>
-        </div>
-
-        <div class="hero-ticket-img-frame">
-          <img src="assets/confluence-hero.jpg" alt="Confluence Gathering Visual" width="600" height="338">
-        </div>
-
-        <div class="hero-ticket-meta-grid">
-          <div class="hero-ticket-meta-block">
-            <span>Event Dates</span>
-            <strong>1st–4th Feb 2027</strong>
-          </div>
-          <div class="hero-ticket-meta-block">
-            <span>Call Time</span>
-            <strong>10:00 AM Prompt</strong>
-          </div>
-          <div class="hero-ticket-meta-block">
-            <span>Hall</span>
-            <strong>Conference Hall</strong>
-          </div>
-          <div class="hero-ticket-meta-block">
-            <span>Campus</span>
-            <strong>AKSU Main Campus</strong>
-          </div>
-        </div>
-
-        <div class="hero-ticket-bottom">
-          <span>Pass ID: NW27-DELEGATE</span>
-          <span style="color: #8be587; font-weight: 600;">Verified Entry</span>
-        </div>
-      </div>
+        <a href="#register" class="btn btn--signal nav__cta">Register</a>
+      </nav>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
+        <span class="nav__toggle-bars" aria-hidden="true"></span>
+        <span class="sr-only">Menu</span>
+      </button>
     </div>
   </header>
 
-  <!-- ========================================================================
-       FULL-WIDTH MARQUEE BAND (Between Hero & Countdown)
-       Background #089002, off-white uppercase Montserrat 14px, letter-spacing .2em
-       ======================================================================== -->
-  <div class="marquee-band" aria-hidden="true">
-    <div class="marquee-content-track">
-      CONFLUENCE • TECHNOLOGY • COMMUNITY • INNOVATION • CREATIVITY • CONNECTION • FUTURE • ENERGY • CONFLUENCE • TECHNOLOGY • COMMUNITY • INNOVATION • CREATIVITY • CONNECTION • FUTURE • ENERGY • CONFLUENCE • TECHNOLOGY • COMMUNITY • INNOVATION • CREATIVITY • CONNECTION • FUTURE • ENERGY •
-    </div>
-  </div>
+  <main id="main">
 
-  <!-- ========================================================================
-       3. COUNTDOWN SECTION (Single Hairline Strip, Tabular Figures)
-       ======================================================================== -->
-  <section class="countdown-section" aria-label="Event Countdown">
-    <div class="container countdown-container">
-      <div class="countdown-title">
-        NACOS Week ’27 begins soon
-      </div>
-
-      <div class="countdown-timer-strip" role="timer" aria-live="polite">
-        <div class="countdown-col">
-          <span class="countdown-num" id="countdownDays">115</span>
-          <span class="countdown-unit">days</span>
-        </div>
-        <span class="countdown-divider">:</span>
-        <div class="countdown-col">
-          <span class="countdown-num" id="countdownHours">08</span>
-          <span class="countdown-unit">hours</span>
-        </div>
-        <span class="countdown-divider">:</span>
-        <div class="countdown-col">
-          <span class="countdown-num" id="countdownMinutes">24</span>
-          <span class="countdown-unit">minutes</span>
-        </div>
-        <span class="countdown-divider">:</span>
-        <div class="countdown-col">
-          <span class="countdown-num" id="countdownSeconds">36</span>
-          <span class="countdown-unit">seconds</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       4. SECTION 01 — THE GATHERING (About: Numbered Hairline List 01–04)
-       ======================================================================== -->
-  <section class="about-section" id="about">
-    <div class="container">
-      <div class="section-header-block">
-        <span class="section-eyebrow-line">01 — The gathering</span>
-        <h2 class="section-h2-title">About NACOS Week 2027</h2>
-      </div>
-
-      <div class="about-editorial-grid">
-        <div class="about-body-text">
-          <p>
-            NACOS Week 2027 is a flagship technology event built around the idea of Confluence — the coming together of distinct forces to create something greater than either could achieve alone. It brings together people, ideas, skills, experiences, and different areas of technology into one shared ecosystem.
-          </p>
-        </div>
-
-        <div class="about-host-box">
-          <strong>Organized by</strong>
-          <p>
-            National Association of Computing Students, Akwa Ibom State University Chapter (NACOS AKSU).
-          </p>
-        </div>
-      </div>
-
-      <!-- Numbered Hairline List 01–04 (NO icon-in-rounded-square) -->
-      <div class="about-hairline-list">
-        <div class="about-hairline-row">
-          <span class="about-hairline-num">01</span>
-          <h3 class="about-hairline-title">Learn</h3>
-          <p class="about-hairline-desc">
-            Gain practical technical insight across systems programming, artificial intelligence, cloud infrastructure, and user interface design.
-          </p>
-        </div>
-
-        <div class="about-hairline-row">
-          <span class="about-hairline-num">02</span>
-          <h3 class="about-hairline-title">Connect</h3>
-          <p class="about-hairline-desc">
-            Build lasting contacts with student developers, faculty members, visiting engineering leaders, and technology community organizers.
-          </p>
-        </div>
-
-        <div class="about-hairline-row">
-          <span class="about-hairline-num">03</span>
-          <h3 class="about-hairline-title">Innovate</h3>
-          <p class="about-hairline-desc">
-            Turn theoretical computing knowledge into functional prototypes and test ideas that address real campus and community problems.
-          </p>
-        </div>
-
-        <div class="about-hairline-row">
-          <span class="about-hairline-num">04</span>
-          <h3 class="about-hairline-title">Create Impact</h3>
-          <p class="about-hairline-desc">
-            Contribute to open repositories, share findings, and take software solutions beyond the classroom into production environments.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       5. SECTION 02 — THE FRAME (Theme: Confluence, Solid #005012)
-       ======================================================================== -->
-  <section class="theme-section" id="theme">
-    <div class="container">
-      <div class="section-header-block">
-        <span class="section-eyebrow-line on-dark">02 — The frame</span>
-        <h2 class="section-h2-title on-dark">The Theme: Confluence</h2>
-      </div>
-
-      <div class="theme-split-layout">
-        <div>
-          <!-- 3. Theme Paragraph (Rewritten, plain human voice, max 20 words) -->
-          <p class="theme-narrative-paragraph">
-            Confluence is where separate currents meet. For four days, our campus gathers people, ideas, and code into one room.
-          </p>
-
-          <div class="theme-currents-list">
-            <div class="theme-current-row">
-              <strong>People</strong>
-              <span>Students, researchers, alumni, and visiting engineers collaborating together.</span>
-            </div>
-            <div class="theme-current-row">
-              <strong>Ideas</strong>
-              <span>Testing assumptions and turning coursework into resilient software products.</span>
-            </div>
-            <div class="theme-current-row">
-              <strong>Technology</strong>
-              <span>Building with modern cloud, AI, and security architectures.</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="theme-frame-photo">
-          <img src="assets/confluence-theme.jpg" alt="Confluence Visual Representation" width="560" height="420">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       6. SECTION 03 — WHY ATTEND (Plain Hairline Rows, NO icon squares)
-       ======================================================================== -->
-  <section class="why-attend-section" id="why-attend">
-    <div class="container">
-      <div class="section-header-block">
-        <span class="section-eyebrow-line">03 — Why attend</span>
-        <h2 class="section-h2-title">Why Attend</h2>
-        <!-- 2. Why Attend Intro (Rewritten, plain human voice, max 20 words) -->
-        <p class="section-desc-text">
-          Four days to learn, build, and test your ideas alongside students and engineers from across the state.
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <picture>
+        <source media="(max-width: 700px)" srcset="assets/photos/hero-mobile.jpg">
+        <img class="hero__bg" src="assets/photos/hero.jpg" srcset="assets/photos/hero-1400.jpg 1400w, assets/photos/hero.jpg 2400w" sizes="100vw" alt="" fetchpriority="high" decoding="async">
+      </picture>
+      <div class="wrap hero__inner">
+        <h1 id="hero-title" class="hero__title">Confluence<span class="hero__dot">.</span></h1>
+        <p class="hero__meta">
+          <span class="hero__when" data-bind="event.datesLabel">February 2027</span>
+          <span class="hero__where"><span data-bind="event.venue">Conference Centre, Perm Site</span>, Akwa Ibom State University</span>
         </p>
+        <div class="hero__actions">
+          <a href="#register" class="btn btn--signal" data-register-link>Register</a>
+          <a href="#partner" class="btn btn--ghost-night">Partner with us</a>
+        </div>
+
+        <div class="countdown" data-countdown hidden aria-live="off">
+          <p class="countdown__label">Opens in</p>
+          <ol class="countdown__units">
+            <li><span data-cd="d">00</span>days</li>
+            <li><span data-cd="h">00</span>hours</li>
+            <li><span data-cd="m">00</span>minutes</li>
+            <li><span data-cd="s">00</span>seconds</li>
+          </ol>
+        </div>
       </div>
+    </section>
 
-      <!-- Plain Hairline Rows -->
-      <div class="why-hairline-rows">
-        <div class="why-hairline-row">
-          <span class="why-row-num">01</span>
-          <h3 class="why-row-title">Learn</h3>
-          <p class="why-row-desc">Gain insights from technology sessions, workshops, and discussions.</p>
-        </div>
-
-        <div class="why-hairline-row">
-          <span class="why-row-num">02</span>
-          <h3 class="why-row-title">Connect</h3>
-          <p class="why-row-desc">Meet students, professionals, innovators, and tech communities.</p>
-        </div>
-
-        <div class="why-hairline-row">
-          <span class="why-row-num">03</span>
-          <h3 class="why-row-title">Innovate</h3>
-          <p class="why-row-desc">Explore ideas at the intersection of technology and creativity.</p>
-        </div>
-
-        <div class="why-hairline-row">
-          <span class="why-row-num">04</span>
-          <h3 class="why-row-title">Collaborate</h3>
-          <p class="why-row-desc">Discover opportunities to build, share, and grow together.</p>
-        </div>
-
-        <div class="why-hairline-row">
-          <span class="why-row-num">05</span>
-          <h3 class="why-row-title">Get Inspired</h3>
-          <p class="why-row-desc">Experience bold conversations about the future of technology.</p>
-        </div>
+    <!-- Keyword ticker -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker__track">
+        <span>Confluence</span><span>Technology</span><span>Community</span><span>Innovation</span><span>Creativity</span><span>Connection</span><span>Future</span><span>Energy</span>
+        <span>Confluence</span><span>Technology</span><span>Community</span><span>Innovation</span><span>Creativity</span><span>Connection</span><span>Future</span><span>Energy</span>
       </div>
     </div>
-  </section>
 
-  <!-- ========================================================================
-       7. SECTION 04 — SCHEDULE (Centered for Rhythm Variation)
-       ======================================================================== -->
-  <section class="schedule-section" id="schedule">
-    <div class="container">
-      <!-- Centered Header for Rhythm Variation -->
-      <div class="section-header-centered">
-        <span class="section-eyebrow-line">04 — The schedule</span>
-        <h2 class="section-h2-title">Event Schedule</h2>
-        <p class="section-desc-text">
-          Four days of sessions, technical workshops, and project reviews at the Conference Hall.
-        </p>
+    <!-- ABOUT -->
+    <section class="section about" id="about" aria-labelledby="about-title">
+      <div class="wrap about__grid">
+        <div class="about__text">
+          <h2 id="about-title" class="h2">Computing does not work alone anymore.</h2>
+          <p class="lead">The grid, the bank, the oil field and the hospital all run on software now. NACOS Week 2027 puts the people who build that software in the same rooms as the people who run those industries.</p>
+          <p>NACOS Week is the flagship week of NACOS AKSU, the Nigeria Association of Computing Students at Akwa Ibom State University. The Computer Science department has hosted it for over a decade. In 2027 the Faculty of Computing and Information Technology hosts it, and the week is open to every student at AKSU, whatever their faculty.</p>
+          <ul class="dept-list" aria-label="Who it is for">
+            <li>Hosted by FCIT</li>
+            <li>Open to every faculty</li>
+            <li>Built with industry</li>
+          </ul>
+        </div>
+        <div class="ph ph--tall about__photo" data-src="assets/photos/about-crowd.jpg" data-srcset="assets/photos/about-crowd-800.jpg 800w, assets/photos/about-crowd.jpg 1200w" data-sizes="(max-width: 899px) 100vw, 45vw" data-label="Students at a previous NACOS Week" data-spec="1200 x 1500, portrait"></div>
       </div>
+    </section>
 
-      <!-- Underlined Text Tabs -->
-      <div class="schedule-tabs-bar" role="tablist" aria-label="Schedule Tabs">
-        <button class="schedule-tab-btn active" role="tab" aria-selected="true" data-day="1" id="tabDay1">
-          Day 01 · Mon Feb 1
-        </button>
-        <button class="schedule-tab-btn" role="tab" aria-selected="false" data-day="2" id="tabDay2">
-          Day 02 · Tue Feb 2
-        </button>
-        <button class="schedule-tab-btn" role="tab" aria-selected="false" data-day="3" id="tabDay3">
-          Day 03 · Wed Feb 3
-        </button>
-        <button class="schedule-tab-btn" role="tab" aria-selected="false" data-day="4" id="tabDay4">
-          Day 04 · Thu Feb 4
-        </button>
+    <!-- NUMBERS -->
+    <section class="numbers" aria-label="NACOS Week 2027 in numbers">
+      <div class="wrap">
+        <h2 class="numbers__title">NACOS Week 2027 at a glance</h2>
+        <ul class="numbers__grid">
+          <li><span class="numbers__n">5</span><span class="numbers__l">Events across the week</span></li>
+          <li><span class="numbers__n">4</span><span class="numbers__l">Industry tracks</span></li>
+          <li><span class="numbers__n">500</span><span class="numbers__l">Conference Centre seats</span></li>
+          <li><span class="numbers__n">30,000<span class="numbers__plus">+</span></span><span class="numbers__l">Students on Campus</span></li>
+        </ul>
       </div>
+    </section>
 
-      <!-- Day 1 Pane -->
-      <div class="schedule-tab-pane active" id="schedule-pane-1" role="tabpanel" aria-labelledby="tabDay1">
-        <div class="schedule-day-header-bar">
-          <span class="schedule-day-title">Day 1: Opening Ceremony — Welcome to NACOS Week ’27</span>
-          <span class="schedule-day-call">Conference Hall • 10:00 AM Prompt</span>
-        </div>
-        <div class="schedule-sessions-list">
-          <div class="schedule-session-row">
-            <span class="session-time-text">10:00 AM</span>
-            <div class="session-info-wrap">
-              <h4>Opening Ceremony &amp; Presidential Address</h4>
-              <p>Welcome address by NACOS AKSU executives and faculty dignitaries on the Confluence vision.</p>
-            </div>
-            <span class="session-tag-text">Plenary</span>
-          </div>
-          <div class="schedule-session-row">
-            <span class="session-time-text">11:30 AM</span>
-            <div class="session-info-wrap">
-              <h4>Theme Keynote: The Confluence of Ideas &amp; Emerging Tech</h4>
-              <p>Examining collaborative intelligence and multidisciplinary computing in regional ecosystems.</p>
-            </div>
-            <span class="session-tag-text">Keynote</span>
-          </div>
-          <div class="schedule-session-row">
-            <span class="session-time-text">01:30 PM</span>
-            <div class="session-info-wrap">
-              <h4>Ecosystem Networking &amp; Student Exhibitions</h4>
-              <p>Exhibition booths open for student software projects and community networking.</p>
-            </div>
-            <span class="session-tag-text">Networking</span>
-          </div>
-        </div>
+    <!-- TRACKS -->
+    <section class="section tracks" id="tracks" aria-labelledby="tracks-title">
+      <div class="wrap">
+        <header class="section__head">
+          <h2 id="tracks-title" class="h2">Four industries. One university.</h2>
+          <p class="lead">Every pillar of the week, from the hackathon briefs to the Conference Day panels, is organised around four sectors that shape the economy of the Niger Delta and the country.</p>
+        </header>
+        <ol class="tracks__list">
+          <li class="track">
+            <span class="track__n">01</span>
+            <h3 class="track__name">Energy</h3>
+            <p>Power generation, distribution and metering. Where data meets the grid.</p>
+          </li>
+          <li class="track">
+            <span class="track__n">02</span>
+            <h3 class="track__name">Finance</h3>
+            <p>Banking, payments and fintech. Software that moves money and earns trust.</p>
+          </li>
+          <li class="track">
+            <span class="track__n">03</span>
+            <h3 class="track__name">Oil &amp; Gas</h3>
+            <p>Exploration, operations and safety. The industry this region is built on.</p>
+          </li>
+          <li class="track">
+            <span class="track__n">04</span>
+            <h3 class="track__name">Medicine</h3>
+            <p>Records, diagnostics and access to care. Computing that keeps people well.</p>
+          </li>
+        </ol>
+        <p class="tracks__note">Track partners set the real problem statements for the hackathon. Partners are being confirmed.</p>
       </div>
+    </section>
 
-      <!-- Day 2 Pane -->
-      <div class="schedule-tab-pane" id="schedule-pane-2" role="tabpanel" aria-labelledby="tabDay2">
-        <div class="schedule-day-header-bar">
-          <span class="schedule-day-title">Day 2: Tech Talks — Ideas Shaping the Future</span>
-          <span class="schedule-day-call">Conference Hall • 10:00 AM Prompt</span>
-        </div>
-        <div class="schedule-sessions-list">
-          <div class="schedule-session-row">
-            <span class="session-time-text">10:00 AM</span>
-            <div class="session-info-wrap">
-              <h4>Artificial Intelligence, Machine Learning &amp; Ethical Algorithms</h4>
-              <p>Practical integration of modern AI models, local datasets, and developer tools.</p>
-            </div>
-            <span class="session-tag-text">AI &amp; Data</span>
-          </div>
-          <div class="schedule-session-row">
-            <span class="session-time-text">11:45 AM</span>
-            <div class="session-info-wrap">
-              <h4>Modern Software Architecture &amp; Scalable Cloud Systems</h4>
-              <p>Cloud systems, distributed services, and microservice engineering in production.</p>
-            </div>
-            <span class="session-tag-text">Architecture</span>
-          </div>
-          <div class="schedule-session-row">
-            <span class="session-time-text">01:30 PM</span>
-            <div class="session-info-wrap">
-              <h4>Cybersecurity &amp; Digital Defense in an Interconnected World</h4>
-              <p>Defensive security operations, access controls, and infrastructure resilience.</p>
-            </div>
-            <span class="session-tag-text">Security</span>
-          </div>
-        </div>
-      </div>
+    <!-- PROGRAMME -->
+    <section class="section programme" id="programme" aria-labelledby="programme-title">
+      <div class="wrap">
+        <header class="section__head section__head--split">
+          <h2 id="programme-title" class="h2">Five events. One week.</h2>
+          <p class="lead">Day-by-day timings are published once the programme is approved. The pillars are set.</p>
+        </header>
 
-      <!-- Day 3 Pane -->
-      <div class="schedule-tab-pane" id="schedule-pane-3" role="tabpanel" aria-labelledby="tabDay3">
-        <div class="schedule-day-header-bar">
-          <span class="schedule-day-title">Day 3: Workshops — Building Skills for the Future</span>
-          <span class="schedule-day-call">Conference Hall &amp; Labs • 10:00 AM Prompt</span>
-        </div>
-        <div class="schedule-sessions-list">
-          <div class="schedule-session-row">
-            <span class="session-time-text">10:00 AM</span>
-            <div class="session-info-wrap">
-              <h4>Hands-on Code Sprint: Building Full-Stack Web Applications</h4>
-              <p>Interactive code lab developing and deploying functional full-stack applications.</p>
+        <div class="pillars">
+          <article class="pillar pillar--feature">
+            <div class="ph pillar__media" data-src="assets/photos/pillar-hackathon.jpg" data-srcset="assets/photos/pillar-hackathon-800.jpg 800w, assets/photos/pillar-hackathon.jpg 1600w" data-sizes="(max-width: 699px) 100vw, 50vw" data-label="Hackathon teams at work" data-spec="1600 x 1000"></div>
+            <div class="pillar__body">
+              <p class="pillar__when" data-programme="hackathon">Starts before the week</p>
+              <h3 class="pillar__name">Hackathon</h3>
+              <p class="pillar__sub">Innovation Bootcamp</p>
+              <p>About three weeks of building around the four tracks, with mentors. Final projects are judged on Conference Day, where the judges pick the winners.</p>
+              <a href="#hackathon" class="link">How the hackathon works</a>
             </div>
-            <span class="session-tag-text">Workshop</span>
-          </div>
-          <div class="schedule-session-row">
-            <span class="session-time-text">12:30 PM</span>
-            <div class="session-info-wrap">
-              <h4>UI/UX Masterclass: Designing Intuitive User Experiences</h4>
-              <p>User research methods, design system organization, and interface prototyping.</p>
+          </article>
+
+          <article class="pillar">
+            <div class="ph pillar__media" data-src="assets/photos/pillar-conference.jpg" data-srcset="assets/photos/pillar-conference-800.jpg 800w, assets/photos/pillar-conference.jpg 1600w" data-sizes="(max-width: 699px) 100vw, 50vw" data-label="Conference Day stage" data-spec="1200 x 800"></div>
+            <div class="pillar__body">
+              <p class="pillar__when" data-programme="conference">Day to be announced</p>
+              <h3 class="pillar__name">Conference Day</h3>
+              <p>Talks, panels and keynotes from professionals working in the four tracks. Networking after.</p>
             </div>
-            <span class="session-tag-text">Design</span>
-          </div>
-          <div class="schedule-session-row">
-            <span class="session-time-text">02:30 PM</span>
-            <div class="session-info-wrap">
-              <h4>Open Source Contribution Clinic &amp; Mentorship</h4>
-              <p>Git collaboration workflows, pull request reviews, and contributing to open projects.</p>
+          </article>
+
+
+          <article class="pillar">
+            <div class="ph pillar__media" data-src="assets/photos/pillar-football.jpg" data-label="Football tournament" data-spec="1200 x 800"></div>
+            <div class="pillar__body">
+              <p class="pillar__when" data-programme="football">Day to be announced</p>
+              <h3 class="pillar__name">Football Tournament</h3>
+              <p>Football for the whole university. An open-crowd event for the wider AKSU community.</p>
             </div>
-            <span class="session-tag-text">Clinic</span>
-          </div>
+          </article>
+
+          <article class="pillar">
+            <div class="ph pillar__media" data-src="assets/photos/pillar-fashion.jpg" data-srcset="assets/photos/pillar-fashion-800.jpg 800w, assets/photos/pillar-fashion.jpg 1600w" data-sizes="(max-width: 699px) 100vw, 50vw" data-label="Fashion &amp; Pageantry runway" data-spec="1200 x 800"></div>
+            <div class="pillar__body">
+              <p class="pillar__when" data-programme="fashion">Day to be announced</p>
+              <h3 class="pillar__name">Fashion &amp; Pageantry</h3>
+              <p>A runway night that crowns the Royal Council of NACOS AKSU.</p>
+            </div>
+          </article>
+
+          <article class="pillar pillar--dark">
+            <div class="ph pillar__media" data-src="assets/photos/pillar-dinner.jpg" data-srcset="assets/photos/pillar-dinner-800.jpg 800w, assets/photos/pillar-dinner.jpg 1600w" data-sizes="(max-width: 699px) 100vw, 50vw" data-label="Dinner & Award Night" data-spec="1200 x 800"></div>
+            <div class="pillar__body">
+              <p class="pillar__when" data-programme="dinner">Day to be announced</p>
+              <h3 class="pillar__name">Dinner &amp; Award Night</h3>
+              <p>A night to dine, unwind and celebrate exceptional students.</p>
+            </div>
+          </article>
         </div>
       </div>
+    </section>
 
-      <!-- Day 4 Pane -->
-      <div class="schedule-tab-pane" id="schedule-pane-4" role="tabpanel" aria-labelledby="tabDay4">
-        <div class="schedule-day-header-bar">
-          <span class="schedule-day-title">Day 4: Closing Session — From Confluence to Impact</span>
-          <span class="schedule-day-call">Conference Hall • 10:00 AM Prompt</span>
-        </div>
-        <div class="schedule-sessions-list">
-          <div class="schedule-session-row">
-            <span class="session-time-text">10:00 AM</span>
-            <div class="session-info-wrap">
-              <h4>Student Innovation Pitches &amp; Project Demos</h4>
-              <p>Project presentations evaluated in public by invited tech reviewers and faculty.</p>
-            </div>
-            <span class="session-tag-text">Pitches</span>
-          </div>
-          <div class="schedule-session-row">
-            <span class="session-time-text">12:00 PM</span>
-            <div class="session-info-wrap">
-              <h4>Awards Ceremony, Recognition &amp; Partner Commendations</h4>
-              <p>Presentation of certificates and recognition to project teams and community leaders.</p>
-            </div>
-            <span class="session-tag-text">Awards</span>
-          </div>
-          <div class="schedule-session-row">
-            <span class="session-time-text">01:30 PM</span>
-            <div class="session-info-wrap">
-              <h4>Official Closing Remarks &amp; Future Roadmap</h4>
-              <p>Closing address and community roadmap presentation for the upcoming term.</p>
-            </div>
-            <span class="session-tag-text">Closing</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       8. SECTION 05 — VOICES (4:5 Portrait Frames with Grayscale/Duotone)
-       ======================================================================== -->
-  <section class="speakers-section" id="speakers">
-    <div class="container">
-      <div class="section-header-block">
-        <span class="section-eyebrow-line">05 — Voices</span>
-        <h2 class="section-h2-title">Speakers &amp; Guests</h2>
-        <p class="section-desc-text">
-          Featured speakers and guests will be announced soon. Names land here as they are confirmed.
-        </p>
-      </div>
-
-      <!-- 4:5 portrait frames: background #E6F2E3, centered Montserrat initials in #005012, role caption under 1px hairline -->
-      <div class="speakers-portrait-grid">
-        <div class="speaker-frame-card">
-          <div class="speaker-portrait-box">
-            <span class="speaker-initials-text">KS</span>
-          </div>
-          <div class="speaker-caption-box">
-            <h3 class="speaker-caption-name">Keynote Speaker</h3>
-            <p class="speaker-caption-role">AI &amp; Cloud Infrastructure Leader</p>
-            <span class="speaker-tbc-tag">[TBC — Announced Jan 2027]</span>
+    <!-- HACKATHON -->
+    <section class="section hack" id="hackathon" aria-labelledby="hack-title">
+      <div class="wrap hack__grid">
+        <div class="hack__intro">
+          <h2 id="hack-title" class="h2">The Confluence Hackathon</h2>
+          <p class="lead">Teams build real solutions for the four tracks, against problem statements set by industry partners. Three weeks, mentors in the room, and a final judging on Conference Day.</p>
+          <ul class="facts">
+            <li><strong>Format</strong> Innovation Bootcamp, about three weeks</li>
+            <li><strong>Tracks</strong> Energy, Finance, Oil &amp; Gas, Medicine</li>
+            <li><strong>Finish</strong> Judged on Conference Day, winners picked by the judges</li>
+          </ul>
+          <div class="hack__actions">
+            <span class="btn btn--soon" role="button" aria-disabled="true" data-hack-link>Opening soon</span>
           </div>
         </div>
 
-        <div class="speaker-frame-card">
-          <div class="speaker-portrait-box">
-            <span class="speaker-initials-text">ED</span>
-          </div>
-          <div class="speaker-caption-box">
-            <h3 class="speaker-caption-name">Engineering Director</h3>
-            <p class="speaker-caption-role">Distributed Systems &amp; Architecture</p>
-            <span class="speaker-tbc-tag">[TBC — Announced Jan 2027]</span>
-          </div>
-        </div>
-
-        <div class="speaker-frame-card">
-          <div class="speaker-portrait-box">
-            <span class="speaker-initials-text">PL</span>
-          </div>
-          <div class="speaker-caption-box">
-            <h3 class="speaker-caption-name">Product &amp; Design Lead</h3>
-            <p class="speaker-caption-role">User Experience &amp; Emerging Tech</p>
-            <span class="speaker-tbc-tag">[TBC — Announced Jan 2027]</span>
-          </div>
-        </div>
-
-        <div class="speaker-frame-card">
-          <div class="speaker-portrait-box">
-            <span class="speaker-initials-text">WF</span>
-          </div>
-          <div class="speaker-caption-box">
-            <h3 class="speaker-caption-name">Workshop Facilitator</h3>
-            <p class="speaker-caption-role">Full-Stack Engineering &amp; Security</p>
-            <span class="speaker-tbc-tag">[TBC — Announced Jan 2027]</span>
-          </div>
+        <div class="hack__steps">
+          <ol class="steps">
+            <li>
+              <h3>Registration</h3>
+              <p>Opens before the bootcamp starts. Form a team or join one.</p>
+            </li>
+            <li>
+              <h3>Problem statements</h3>
+              <p>Published by track partners about six weeks before the week.</p>
+            </li>
+            <li>
+              <h3>Bootcamp</h3>
+              <p>About three weeks of building, with mentors from each sector.</p>
+            </li>
+            <li>
+              <h3>Judging on Conference Day</h3>
+              <p>Teams present their final projects to the judges, who pick the winners. Judges are confirmed three weeks before.</p>
+            </li>
+            <li>
+              <h3>After the week</h3>
+              <p>Winning teams are planned to become the first incubation cohort of the FCIT Tech Hub.</p>
+            </li>
+          </ol>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ========================================================================
-       9. SECTION 06 — BACKERS (Sponsors & Partners)
-       ======================================================================== -->
-  <section class="sponsors-section" id="sponsors">
-    <div class="container">
-      <div class="section-header-block">
-        <span class="section-eyebrow-line">06 — Backers</span>
-        <h2 class="section-h2-title">Sponsors &amp; Partners</h2>
-        <p class="section-desc-text">
-          Organizations collaborating with the department to support students and technology education.
-        </p>
+    <!-- SPEAKERS -->
+    <section class="section speakers" id="speakers" aria-labelledby="speakers-title">
+      <div class="wrap">
+        <header class="section__head">
+          <h2 id="speakers-title" class="h2">Speakers, mentors and judges</h2>
+        </header>
+        <ul class="people people--speakers">
+          <li class="person">
+            <div class="ph ph--square ph--mystery person__photo" data-src="assets/speakers/speaker-01.jpg" data-label="Revealing soon"></div>
+            <p class="person__track">Energy</p>
+          </li>
+          <li class="person">
+            <div class="ph ph--square ph--mystery person__photo" data-src="assets/speakers/speaker-02.jpg" data-label="Revealing soon"></div>
+            <p class="person__track">Finance</p>
+          </li>
+          <li class="person">
+            <div class="ph ph--square ph--mystery person__photo" data-src="assets/speakers/speaker-03.jpg" data-label="Revealing soon"></div>
+            <p class="person__track">Oil &amp; Gas</p>
+          </li>
+          <li class="person">
+            <div class="ph ph--square ph--mystery person__photo" data-src="assets/speakers/speaker-04.jpg" data-label="Revealing soon"></div>
+            <p class="person__track">Medicine</p>
+          </li>
+        </ul>
+        <p class="speakers__ask">Know someone who should be on this stage? <a class="link" href="#contact" data-mail="sponsorEmail" data-subject="Speaker suggestion: NACOS Week 2027">Suggest a speaker</a></p>
       </div>
+    </section>
 
-      <div class="sponsors-hairline-grid">
-        <div class="sponsor-grid-cell">
-          <span class="sponsor-category-label">Cloud Infrastructure</span>
-          <span class="sponsor-tier-placeholder">Partner Tier 1 [TBC]</span>
+    <!-- PARTNER -->
+    <section class="section partner" id="partner" aria-labelledby="partner-title">
+      <div class="wrap">
+        <header class="section__head section__head--split">
+          <h2 id="partner-title" class="h2">Partner with Confluence</h2>
+          <p class="lead">We sell outcomes, not logo space: students who sign up, talent you can hire, content you can use, and a report you can show your board.</p>
+        </header>
+
+        <ul class="outcomes">
+          <li><h3>Customers</h3><p>Sign-ups and referral codes from students on the floor.</p></li>
+          <li><h3>Talent</h3><p>An opt-in CV bank and intern access across the university.</p></li>
+          <li><h3>Content</h3><p>Recap video and photo rights from the week.</p></li>
+          <li><h3>Credibility</h3><p>An impact report with measured footfall after the week.</p></li>
+        </ul>
+
+        <div class="tiers-head">
+          <h3 class="h3">Partnership tiers</h3>
         </div>
+        <ol class="tiers" data-tiers>
+          <!-- Rendered from config.js -->
+        </ol>
 
-        <div class="sponsor-grid-cell">
-          <span class="sponsor-category-label">AI &amp; Solutions</span>
-          <span class="sponsor-tier-placeholder">Innovation Partner [TBC]</span>
-        </div>
-
-        <div class="sponsor-grid-cell">
-          <span class="sponsor-category-label">Network &amp; Telco</span>
-          <span class="sponsor-tier-placeholder">Ecosystem Sponsor [TBC]</span>
-        </div>
-
-        <div class="sponsor-grid-cell">
-          <span class="sponsor-category-label">Open Source &amp; Dev</span>
-          <span class="sponsor-tier-placeholder">Community Partner [TBC]</span>
-        </div>
-      </div>
-
-      <div>
-        <a href="#sponsor-inquiry" class="text-link" id="partnerCtaLink">
-          Become a Sponsor →
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       10. SECTION 07 — REGISTRATION (Left-Aligned Header, 2-Column Split)
-       ======================================================================== -->
-  <section class="registration-section" id="register">
-    <div class="container">
-      <div class="section-header-block">
-        <span class="section-eyebrow-line">07 — Registration</span>
-        <h2 class="section-h2-title">Register for NACOS Week ’27</h2>
-      </div>
-
-      <div class="reg-split-card">
-        <div class="reg-left-panel">
-          <div>
-            <h3 class="reg-left-title">Claim a seat.</h3>
-            <!-- 4. Registration Intro (Rewritten, plain human voice, max 20 words) -->
-            <p class="reg-left-intro">
-              Join students, builders, and technology leaders for four days of collaboration. Free entry, limited seats.
-            </p>
-
-            <div class="reg-perks-checklist">
-              <div class="reg-perk-row">
-                <span class="reg-perk-check">✓</span>
-                <span>Four-day admission to all keynotes and technical sessions</span>
-              </div>
-              <div class="reg-perk-row">
-                <span class="reg-perk-check">✓</span>
-                <span>Hands-on coding and UI/UX design workshop access</span>
-              </div>
-              <div class="reg-perk-row">
-                <span class="reg-perk-check">✓</span>
-                <span>Official Certificate of Participation issued by NACOS AKSU</span>
-              </div>
-              <div class="reg-perk-row">
-                <span class="reg-perk-check">✓</span>
-                <span>Direct interaction with attending industry engineers</span>
-              </div>
-            </div>
+        <div class="partner__foot">
+          <div class="partner__terms">
+            <p><strong>Category exclusivity</strong> at the top tiers: one bank, one telco, one fintech, one energy company.</p>
+            <p><strong>In-kind partners</strong> (printing, catering, power, venue, jerseys, media) are credited at the matching tier by market value.</p>
+            <p><strong>Payments</strong> go only to the NACOS AKSU student body account, never a personal account. <span data-account></span></p>
           </div>
-
-          <div class="reg-left-reassurance">
-            Free to register. Limited seats available.
+          <div class="partner__actions">
+            <a class="btn btn--deep" href="#contact" data-brochure>Download the brochure</a>
+            <a class="btn btn--outline" href="#contact" data-mail="sponsorEmail" data-subject="Partnership: NACOS Week 2027">Talk to the team</a>
           </div>
         </div>
 
-        <div class="reg-right-form">
-          <form id="registrationForm" novalidate>
-            <div class="form-field-row">
-              <label for="regFullName">Full Name *</label>
-              <input type="text" id="regFullName" placeholder="e.g. Samuel Okon" required>
-            </div>
+        <div class="sponsor-wall" aria-labelledby="sponsor-wall-title">
+          <h3 id="sponsor-wall-title" class="sponsor-wall__title">Partners</h3>
+          <ul class="sponsor-wall__grid">
+            <li class="sponsor-slot">
+              <div class="ph ph--logo ph--mystery-logo" data-src="assets/sponsors/title-partner.svg" data-label="Revealing soon"></div>
+            </li>
+            <li class="sponsor-slot">
+              <div class="ph ph--logo ph--mystery-logo" data-src="assets/sponsors/gold-1.svg" data-label="Revealing soon"></div>
+            </li>
+            <li class="sponsor-slot">
+              <div class="ph ph--logo ph--mystery-logo" data-src="assets/sponsors/gold-2.svg" data-label="Revealing soon"></div>
+            </li>
+            <li class="sponsor-slot">
+              <div class="ph ph--logo ph--mystery-logo" data-src="assets/sponsors/silver-1.svg" data-label="Revealing soon"></div>
+            </li>
+          </ul>
+          <p class="sponsor-wall__note">Your logo here. Partner slots are open.</p>
+        </div>
+      </div>
+    </section>
 
-            <div class="form-field-row">
-              <label for="regEmail">Email Address *</label>
-              <input type="email" id="regEmail" placeholder="e.g. samuel@example.com" required>
-            </div>
+    <!-- REGISTER -->
+    <section class="section register" id="register" aria-labelledby="register-title">
+      <div class="wrap register__grid">
+        <div class="register__intro">
+          <h2 id="register-title" class="h2">Register</h2>
+          <p class="lead">Tell us which events you want to be part of. We will send updates on dates, the hackathon and passes as they are confirmed.</p>
+          <p class="register__small">Attendance details, including any fees, are published when registration opens fully.</p>
+        </div>
 
-            <div class="form-field-row">
-              <label for="regPhone">Phone Number *</label>
-              <input type="tel" id="regPhone" placeholder="e.g. +234 801 234 5678" required>
+        <form class="form" data-register-form novalidate>
+          <div class="field">
+            <label for="f-name">Full name</label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required>
+            <p class="field__error" id="f-name-err" hidden>Enter your full name.</p>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-email">Email</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required>
+              <p class="field__error" id="f-email-err" hidden>Enter an email address like name@example.com.</p>
             </div>
-
-            <div class="form-field-row">
-              <label for="regStatus">Status *</label>
-              <select id="regStatus" required>
-                <option value="" disabled selected>Select status</option>
-                <option value="Student">Student</option>
-                <option value="Professional">Professional</option>
-                <option value="Speaker">Speaker</option>
-                <option value="Partner">Partner</option>
-                <option value="Other">Other</option>
+            <div class="field">
+              <label for="f-phone">WhatsApp number</label>
+              <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
+              <p class="field__error" id="f-phone-err" hidden>Enter a phone number we can reach on WhatsApp.</p>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="f-dept">Department</label>
+              <input id="f-dept" name="department" type="text" autocomplete="organization-title" required>
+              <p class="field__error" id="f-dept-err" hidden>Enter your department, or "Not an AKSU student".</p>
+            </div>
+            <div class="field">
+              <label for="f-level">Level</label>
+              <select id="f-level" name="level">
+                <option value="">Choose one</option>
+                <option>100</option><option>200</option><option>300</option><option>400</option><option>500</option>
+                <option>Postgraduate</option>
+                <option>Graduate or professional</option>
               </select>
             </div>
-
-            <div class="form-field-row">
-              <label for="regInterest">Area of Interest *</label>
-              <select id="regInterest" required>
-                <option value="" disabled selected>Select primary technical interest</option>
-                <option value="Software Engineering & Web">Software Engineering &amp; Web</option>
-                <option value="Artificial Intelligence & Data">Artificial Intelligence &amp; Data</option>
-                <option value="Cybersecurity & Cloud">Cybersecurity &amp; Cloud</option>
-                <option value="Product Design (UI/UX)">Product Design (UI/UX)</option>
-                <option value="Tech Entrepreneurship">Tech Entrepreneurship</option>
-              </select>
+          </div>
+          <fieldset class="field">
+            <legend>Which events interest you?</legend>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="interests" value="Hackathon"><span>Hackathon</span></label>
+              <label class="chip"><input type="checkbox" name="interests" value="Conference Day"><span>Conference Day</span></label>              <label class="chip"><input type="checkbox" name="interests" value="Football"><span>Football</span></label>
+              <label class="chip"><input type="checkbox" name="interests" value="Fashion & Pageantry"><span>Fashion &amp; Pageantry</span></label>
+              <label class="chip"><input type="checkbox" name="interests" value="Dinner & Award Night"><span>Dinner &amp; Awards</span></label>
             </div>
+          </fieldset>
 
-            <div style="margin-top: 1.75rem;">
-              <button type="submit" class="btn btn-primary" style="width: 100%;" id="submitRegBtn">
-                Reserve My Spot
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       11. SECTION 08 — VENUE (Venue Meta Text Row + Grayscale Google Maps Iframe)
-       ======================================================================== -->
-  <section class="venue-section" id="venue">
-    <div class="container">
-      <div class="section-header-block">
-        <span class="section-eyebrow-line">08 — Venue</span>
-        <h2 class="section-h2-title">Venue</h2>
-      </div>
-
-      <div class="venue-split-layout">
-        <div>
-          <h3 class="venue-address-title">Conference Hall</h3>
-          <p class="venue-address-lines">
-            Akwa Ibom State University, Main Campus<br>
-            Ikot Akpaden, Mkpat Enin LGA, Akwa Ibom State
-          </p>
-
-          <!-- Venue Meta as a Text Row (NO icon squares) -->
-          <div class="venue-meta-text-row">
-            <div class="venue-meta-text-col">
-              <span>Time</span>
-              <strong>10:00 AM prompt</strong>
-            </div>
-            <div class="venue-meta-text-col">
-              <span>Campus Gate</span>
-              <strong>Main Campus Gate</strong>
-            </div>
-            <div class="venue-meta-text-col">
-              <span>Hall Location</span>
-              <strong>Central Auditorium</strong>
-            </div>
+          <div class="consent">
+            <label class="check">
+              <input type="checkbox" name="contact_ok" required>
+              <span>NACOS AKSU may contact me about NACOS Week 2027.</span>
+            </label>
+            <p class="field__error" id="f-contact-err" hidden>Tick this so we can send you updates.</p>
+            <label class="check">
+              <input type="checkbox" name="share_with_partners">
+              <span>Optional: share my contact details and CV with NACOS Week 2027 partners for internships and jobs. Leave unticked and nothing is shared.</span>
+            </label>
           </div>
 
-          <div>
-            <button class="text-link" id="copyAddressBtn">
-              Copy address to clipboard →
+          <button class="btn btn--deep form__submit" type="submit" data-submit>
+            <span class="btn__label">Send</span>
+          </button>
+          <p class="form__status" role="status" aria-live="polite" data-form-status></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ARCHIVE (carousel) -->
+    <section class="section archive" id="archive" aria-labelledby="archive-title">
+      <div class="wrap">
+        <header class="section__head section__head--split">
+          <h2 id="archive-title" class="h2">Years in the making</h2>
+          <p class="lead">NACOS Week has run for over a decade under the Computer Science department. These are moments from earlier editions.</p>
+        </header>
+        <div class="carousel" data-carousel aria-roledescription="carousel" aria-label="Moments from earlier editions">
+          <ul class="carousel__track" data-carousel-track tabindex="0">
+            <li class="carousel__slide" aria-roledescription="slide" aria-label="1 of 5">
+              <img src="assets/carousel/slide-01.jpg" srcset="assets/carousel/slide-01-800.jpg 800w, assets/carousel/slide-01.jpg 1600w" sizes="(max-width: 1240px) 100vw, 1200px" alt="Contestants dancing on stage at a previous NACOS Week" decoding="async">
+            </li>
+            <li class="carousel__slide" aria-roledescription="slide" aria-label="2 of 5">
+              <img src="assets/carousel/slide-02.jpg" srcset="assets/carousel/slide-02-800.jpg 800w, assets/carousel/slide-02.jpg 1600w" sizes="(max-width: 1240px) 100vw, 1200px" alt="A packed hall, with pageant contestants in sashes and crowns" loading="lazy" decoding="async">
+            </li>
+            <li class="carousel__slide" aria-roledescription="slide" aria-label="3 of 5">
+              <img src="assets/carousel/slide-03.jpg" srcset="assets/carousel/slide-03-800.jpg 800w, assets/carousel/slide-03.jpg 1600w" sizes="(max-width: 1240px) 100vw, 1200px" alt="Students chatting in the hall between sessions" loading="lazy" decoding="async">
+            </li>
+            <li class="carousel__slide" aria-roledescription="slide" aria-label="4 of 5">
+              <img src="assets/carousel/slide-04.jpg" srcset="assets/carousel/slide-04-800.jpg 800w, assets/carousel/slide-04.jpg 1600w" sizes="(max-width: 1240px) 100vw, 1200px" alt="Guests seated in the audience" loading="lazy" decoding="async">
+            </li>
+            <li class="carousel__slide carousel__slide--contain" aria-roledescription="slide" aria-label="5 of 5">
+              <img src="assets/carousel/slide-05.jpg" srcset="assets/carousel/slide-05-800.jpg 800w, assets/carousel/slide-05.jpg 1200w" sizes="(max-width: 1240px) 100vw, 1200px" alt="Quote card: Curiosity acts as the spring board of creativity, Mr Hanson Johnson, CEO Start-up Hub" loading="lazy" decoding="async">
+            </li>
+          </ul>
+          <div class="carousel__controls">
+            <button class="carousel__btn" type="button" data-carousel-prev aria-label="Previous photo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <div class="carousel__dots" data-carousel-dots></div>
+            <button class="carousel__btn" type="button" data-carousel-next aria-label="Next photo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
             </button>
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- Grayscale Google Maps Iframe of AKSU Main Campus (No fake grid pattern) -->
-        <div class="venue-map-iframe-wrap">
-          <iframe
-            title="AKSU Main Campus Location Map"
-            src="https://maps.google.com/maps?q=Akwa%20Ibom%20State%20University%2C%20Ikot%20Akpaden&t=&z=15&ie=UTF8&iwloc=&output=embed"
-            loading="lazy"
-            allowfullscreen>
-          </iframe>
+    <!-- TEAM -->
+    <section class="section team" id="team" aria-labelledby="team-title">
+      <div class="wrap">
+        <header class="section__head">
+          <h2 id="team-title" class="h2">The people behind the week</h2>
+        </header>
+        <ul class="people people--team">
+          <li class="person">
+            <div class="ph ph--square person__photo" data-src="assets/team/dean.jpg" data-srcset="assets/team/dean-400.jpg 400w, assets/team/dean.jpg 800w" data-sizes="(max-width: 899px) 50vw, 25vw" data-label="Portrait" data-spec="800 x 800"></div>
+            <h3 class="person__name">Dr. Godwin Ansa</h3>
+            <p class="person__role">Dean, Faculty of Computing and Information Technology</p>
+          </li>
+          <li class="person">
+            <div class="ph ph--square person__photo" data-src="assets/team/president.jpg?v=2" data-srcset="assets/team/president-400.jpg 400w, assets/team/president.jpg?v=2 800w" data-sizes="(max-width: 899px) 50vw, 25vw" data-label="Portrait" data-spec="800 x 800"></div>
+            <h3 class="person__name">Comr. Essien Daniel Saviour <abbr title="Commander of Computing Students, AKSU">CCSA</abbr></h3>
+            <p class="person__role">Pioneer Faculty President, NACOS AKSU</p>
+          </li>
+          <li class="person">
+            <div class="ph ph--square ph--mystery person__photo" data-src="assets/team/planning-chair.jpg" data-label="Photo coming soon"></div>
+            <h3 class="person__name">Comr. Okon Precious <abbr title="Officer of Computing Students, AKSU">OCSA</abbr></h3>
+            <p class="person__role">Chairman, Planning Committee (Computer Science Departmental President)</p>
+          </li>
+          <li class="person">
+            <div class="ph ph--square person__photo" data-src="assets/team/general-secretary.jpg?v=2" data-srcset="assets/team/general-secretary-400.jpg 400w, assets/team/general-secretary.jpg?v=2 800w" data-sizes="(max-width: 899px) 50vw, 25vw" data-label="Portrait" data-spec="800 x 800"></div>
+            <h3 class="person__name">Comr. Emmanuel Ephraim Ita <abbr title="Officer of Computing Students, AKSU">OCSA</abbr></h3>
+            <p class="person__role">General Secretary</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PAST SPONSORS (logos come from pastSponsors in config.js) -->
+    <section class="section past" id="past-sponsors" aria-labelledby="past-title">
+      <div class="wrap">
+        <p class="past__kicker">Backed by the ecosystem</p>
+        <h2 id="past-title" class="past__title">Over a decade of partners who show up.</h2>
+        <div class="past__panel" data-past-sponsors>
+          <!-- Rows rendered by app.js -->
         </div>
+      </div>
+    </section>
+
+    <!-- VENUE -->
+    <section class="section venue" id="venue" aria-labelledby="venue-title">
+      <div class="wrap venue__grid">
+        <div class="venue__text">
+          <h2 id="venue-title" class="h2">Getting there</h2>
+          <p class="venue__place"><span data-bind="event.venue">Conference Centre, Perm Site</span></p>
+          <p class="venue__addr">Akwa Ibom State University, <span data-bind="event.location">Ikot Akpaden, Mkpat Enin, Akwa Ibom State</span></p>
+          <p>The main hall seats 500. Open-crowd events (Football, Fashion &amp; Pageantry) use other grounds on campus, announced with the programme.</p>
+          <a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Akwa+Ibom+State+University+Ikot+Akpaden" target="_blank" rel="noopener">Open in Google Maps</a>
+        </div>
+        <div class="venue__map">
+          <iframe title="Map of Akwa Ibom State University, Ikot Akpaden" src="https://www.google.com/maps?q=Akwa+Ibom+State+University,+Ikot+Akpaden&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section faq" id="faq" aria-labelledby="faq-title">
+      <div class="wrap faq__grid">
+        <h2 id="faq-title" class="h2">Questions</h2>
+        <div class="faq__list">
+          <details>
+            <summary>When exactly is NACOS Week 2027?</summary>
+            <p>February 2027. The exact dates are being finalised and will be published here first.</p>
+          </details>
+          <details>
+            <summary>Who can attend?</summary>
+            <p>Every student at Akwa Ibom State University, from any faculty. The Faculty of Computing and Information Technology hosts the week, but it is not limited to computing students. The Football Tournament and Fashion &amp; Pageantry are open-crowd events for the whole AKSU community.</p>
+          </details>
+          <details>
+            <summary>Does it cost anything?</summary>
+            <p>Attendance details, including any fees, will be published when registration opens fully. Register and we will tell you first.</p>
+          </details>
+          <details>
+            <summary>Who can join the hackathon?</summary>
+            <p>Eligibility and team rules are published with hackathon registration, which opens before the bootcamp starts.</p>
+          </details>
+          <details>
+            <summary>Who owns what we build at the hackathon?</summary>
+            <p>You do. Partners get the first right to a conversation with your team, not ownership of your work.</p>
+          </details>
+          <details>
+            <summary>Will my details be given to sponsors?</summary>
+            <p>Only if you tick the optional box on the registration form. If you leave it unticked, your details stay with NACOS AKSU.</p>
+          </details>
+          <details>
+            <summary>Is this the first NACOS Week?</summary>
+            <p>No. The Computer Science department has hosted NACOS Week for over a decade. 2027 is the first edition hosted by the Faculty of Computing and Information Technology.</p>
+          </details>
+          <details>
+            <summary>How does my company become a partner?</summary>
+            <p>See the tiers above, download the brochure, or write to the team. Payments go only to the NACOS AKSU student body account.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING CTA -->
+    <section class="closer" aria-labelledby="closer-title">
+      <div class="wrap closer__inner">
+        <h2 id="closer-title" class="closer__title">Be in the room where the streams meet.</h2>
+        <div class="closer__actions">
+          <a href="#register" class="btn btn--signal" data-register-link>Register</a>
+          <a href="#partner" class="btn btn--ghost-night">Partner with us</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Phone-only register bar: appears after the hero, hides near the form -->
+  <div class="mbar" data-mbar aria-hidden="true">
+    <a href="#register" class="btn btn--signal mbar__btn" tabindex="-1">Register</a>
+    <a href="#partner" class="btn btn--ghost-night mbar__btn" tabindex="-1">Partner with us</a>
+  </div>
+
+  <footer class="footer" id="contact">
+    <div class="wrap footer__top">
+      <div class="footer__brand">
+        <span class="logo-slot logo-slot--lg" data-logo="assets/brand/nw27-primary-reversed.svg">
+          <span class="wordmark" aria-hidden="true"><span class="wordmark__stack"><span class="wordmark__a">NACOS</span><span class="wordmark__b">WEEK</span></span><span class="wordmark__n">27</span></span>
+        </span>
+        <p class="footer__tag">Confluence. February 2027.</p>
+        <p class="footer__org">Organised by NACOS AKSU, the Nigeria Association of Computing Students, Akwa Ibom State University. Hosted by the Faculty of Computing and Information Technology. Open to every student at AKSU.</p>
+      </div>
+      <div class="footer__contact">
+        <h2 class="footer__h">Get in touch</h2>
+        <div class="footer__direct" data-contact-direct>
+          <!-- Email and phone rendered from config.js -->
+        </div>
+        <ul class="footer__social" data-contact-social aria-label="NACOS AKSU on social media">
+          <!-- Icons rendered from config.js -->
+        </ul>
       </div>
     </div>
-  </section>
-
-  <!-- ========================================================================
-       12. SECTION 09 — FAQ (Hairline Accordion Rows)
-       ======================================================================== -->
-  <section class="faq-section" id="faq">
-    <div class="container">
-      <div class="section-header-block">
-        <span class="section-eyebrow-line">09 — FAQ</span>
-        <h2 class="section-h2-title">Frequently Asked Questions</h2>
-      </div>
-
-      <div class="faq-hairline-list">
-        <details class="faq-row-item" name="nacos-faq">
-          <summary class="faq-summary">
-            <span>Who can attend NACOS Week ’27?</span>
-            <span class="faq-indicator">+</span>
-          </summary>
-          <div class="faq-content">
-            <p>NACOS Week 2027 is open to students of Akwa Ibom State University, computing enthusiasts, software builders, designers, and tech practitioners from across institutions and regional hubs.</p>
-          </div>
-        </details>
-
-        <details class="faq-row-item" name="nacos-faq">
-          <summary class="faq-summary">
-            <span>Is registration free?</span>
-            <span class="faq-indicator">+</span>
-          </summary>
-          <div class="faq-content">
-            <p>Yes. Registration is free. Seats in the main conference hall and breakout workshops are finite, so early registration reserves your place.</p>
-          </div>
-        </details>
-
-        <details class="faq-row-item" name="nacos-faq">
-          <summary class="faq-summary">
-            <span>Where is the event holding?</span>
-            <span class="faq-indicator">+</span>
-          </summary>
-          <div class="faq-content">
-            <p>The event is holding at the Conference Hall, Akwa Ibom State University (AKSU) Main Campus, located at Ikot Akpaden, Mkpat Enin LGA, Akwa Ibom State.</p>
-          </div>
-        </details>
-
-        <details class="faq-row-item" name="nacos-faq">
-          <summary class="faq-summary">
-            <span>What time does the event start?</span>
-            <span class="faq-indicator">+</span>
-          </summary>
-          <div class="faq-content">
-            <p>Sessions begin at 10:00 AM prompt each day from 1st to 4th February, 2027. We recommend arriving 30 minutes early for badge verification.</p>
-          </div>
-        </details>
-
-        <details class="faq-row-item" name="nacos-faq">
-          <summary class="faq-summary">
-            <span>Can professionals attend?</span>
-            <span class="faq-indicator">+</span>
-          </summary>
-          <div class="faq-content">
-            <p>Yes. Industry practitioners, alumni, engineers, and founders are invited to attend, share insights, mentor students, and engage during the sessions.</p>
-          </div>
-        </details>
-
-        <details class="faq-row-item" name="nacos-faq">
-          <summary class="faq-summary">
-            <span>How can I become a sponsor?</span>
-            <span class="faq-indicator">+</span>
-          </summary>
-          <div class="faq-content">
-            <p>Organizations can use the "Become a Sponsor" link or write to info@nacosaksu.ng. Partnership tiers cover session mentions, lab sponsorship, and talent access.</p>
-          </div>
-        </details>
-
-        <details class="faq-row-item" name="nacos-faq">
-          <summary class="faq-summary">
-            <span>Will there be certificates?</span>
-            <span class="faq-indicator">+</span>
-          </summary>
-          <div class="faq-content">
-            <p>Yes. Registered attendees who participate in workshops and technical sessions will receive verified digital certificates of participation.</p>
-          </div>
-        </details>
-
-        <details class="faq-row-item" name="nacos-faq">
-          <summary class="faq-summary">
-            <span>Who can I contact for support?</span>
-            <span class="faq-indicator">+</span>
-          </summary>
-          <div class="faq-content">
-            <p>Contact the NACOS AKSU Organizing Committee via email at info@nacosaksu.ng or connect with executive officers on campus.</p>
-          </div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       13. FINAL CTA (Centered for Rhythm Variation, Solid Green #089002)
-       ======================================================================== -->
-  <section class="final-cta-section" id="cta">
-    <div class="container final-cta-container">
-      <h2 class="final-cta-headline">
-        Be Part of the Confluence
-      </h2>
-      <!-- 5. Final CTA Subhead (Rewritten, plain human voice, max 20 words) -->
-      <p class="final-cta-subhead">
-        Four days. One campus. Join students and builders across Akwa Ibom for NACOS Week 2027.
-      </p>
-
-      <div class="final-cta-actions">
-        <a href="#register" class="final-cta-white-btn">Register Now</a>
-        <a href="#schedule" class="text-link" style="color: #ffffff; font-size: 1.05rem;">View Schedule →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       14. FOOTER (Solid #005012, Four Hairline Columns)
-       ======================================================================== -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid-four">
-        <div>
-          <div class="footer-brand-title">NACOS Week ’27</div>
-          <p class="footer-brand-copy">
-            The annual technology event organized by the National Association of Computing Students, Akwa Ibom State University.
-          </p>
-        </div>
-
-        <div>
-          <div class="footer-col-heading">Event</div>
-          <div class="footer-links-list">
-            <a href="#about">About NACOS Week</a>
-            <a href="#theme">The Theme: Confluence</a>
-            <a href="#why-attend">Why Attend</a>
-            <a href="#schedule">Event Schedule</a>
-            <a href="#speakers">Speakers &amp; Guests</a>
-          </div>
-        </div>
-
-        <div>
-          <div class="footer-col-heading">Participation</div>
-          <div class="footer-links-list">
-            <a href="#register">Register</a>
-            <a href="#sponsors">Become a Sponsor</a>
-            <a href="#venue">Venue</a>
-            <a href="#faq">FAQ</a>
-          </div>
-        </div>
-
-        <div>
-          <div class="footer-col-heading">Contact</div>
-          <div class="footer-links-list">
-            <a href="mailto:info@nacosaksu.ng">info@nacosaksu.ng</a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter / X →</a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn →</a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub →</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-bottom-strip">
-        <span>© 2027 NACOS AKSU. All rights reserved.</span>
-        <span>National Association of Computing Students • Akwa Ibom State University</span>
-      </div>
+    <div class="wrap footer__bottom">
+      <p>&copy; <span data-year>2026</span> NACOS AKSU. All rights reserved.</p>
+      <nav class="footer__nav" aria-label="Footer">
+        <a href="#programme">Programme</a>
+        <a href="#partner">Partner</a>
+        <a href="#venue">Venue</a>
+        <a href="https://fcitaksu.com.ng" data-bind-href="links.facultySite">fcitaksu.com.ng</a>
+      </nav>
     </div>
   </footer>
-
-  <!-- ========================================================================
-       MODAL DIALOGS
-       ======================================================================== -->
-  <!-- Registration Confirmation Modal -->
-  <div class="modal-overlay" id="registrationModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-dialog-box">
-      <button class="modal-close-x" id="modalCloseBtn" aria-label="Close dialog">×</button>
-
-      <span class="section-eyebrow-line">Confirmation</span>
-      <h3 style="font-size: 1.75rem; font-weight: 850; color: var(--deep-green); margin-bottom: 0.5rem;" id="modalTitle">
-        Seat Reserved
-      </h3>
-      <p style="font-size: 0.925rem; color: var(--black); opacity: 0.8; margin-bottom: 1.5rem;">
-        Your registration for NACOS Week 2027 has been recorded.
-      </p>
-
-      <div style="border: 1px solid var(--hairline-light); padding: 1.25rem; background: #ffffff; border-radius: 8px; margin-bottom: 1.5rem;">
-        <div style="display: flex; justify-content: space-between; padding-bottom: 0.5rem; border-bottom: 1px solid var(--hairline-light); font-size: 0.9rem;">
-          <span>Attendee</span>
-          <strong id="ticketAttendeeName" style="color: var(--deep-green);">Attendee Name</strong>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--hairline-light); font-size: 0.9rem;">
-          <span>Pass ID</span>
-          <strong id="ticketAttendeeCode" style="font-family: monospace; color: var(--green);">NW27-REG-8492</strong>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; font-size: 0.9rem;">
-          <span>Status</span>
-          <span id="ticketAttendeeRole">Student</span>
-        </div>
-      </div>
-
-      <p style="font-size: 0.825rem; color: var(--black); opacity: 0.7; margin-bottom: 1.75rem;">
-        Sessions start at 10:00 AM prompt daily. Please arrive by 09:30 AM for badge pickup.
-      </p>
-
-      <button class="btn btn-primary" id="modalDoneBtn" style="width: 100%;">
-        Done
-      </button>
-    </div>
-  </div>
-
-  <!-- Sponsor Modal -->
-  <div class="modal-overlay" id="sponsorModal" role="dialog" aria-modal="true" aria-labelledby="sponsorModalTitle">
-    <div class="modal-dialog-box">
-      <button class="modal-close-x" id="sponsorModalClose" aria-label="Close dialog">×</button>
-
-      <span class="section-eyebrow-line">Partnerships</span>
-      <h3 style="font-size: 1.75rem; font-weight: 850; color: var(--deep-green); margin-bottom: 0.5rem;" id="sponsorModalTitle">
-        Become a Sponsor
-      </h3>
-      <p style="font-size: 0.925rem; color: var(--black); opacity: 0.8; margin-bottom: 1.5rem;">
-        Collaborate with NACOS AKSU to reach students, researchers, and technology leaders.
-      </p>
-
-      <form id="sponsorForm">
-        <div class="form-field-row">
-          <label for="sponsorCompany">Company / Organization *</label>
-          <input type="text" id="sponsorCompany" placeholder="e.g. Acme Tech" required>
-        </div>
-        <div class="form-field-row">
-          <label for="sponsorEmail">Contact Email *</label>
-          <input type="email" id="sponsorEmail" placeholder="e.g. partnerships@acme.com" required>
-        </div>
-        <div class="form-field-row">
-          <label for="sponsorTier">Collaboration Area *</label>
-          <select id="sponsorTier" required>
-            <option value="" disabled selected>Select partnership area</option>
-            <option value="Headline">Keynote &amp; Tier 1 Partner</option>
-            <option value="Hackathon">Challenge &amp; Prize Sponsor</option>
-            <option value="Workshop">Technical Lab / Workshop Support</option>
-            <option value="Community">Ecosystem Partner</option>
-          </select>
-        </div>
-        <div style="margin-top: 1.5rem;">
-          <button type="submit" class="btn btn-primary" style="width: 100%;">
-            Send Inquiry
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Toast Notice -->
-  <div class="flat-toast" id="flatToast" role="alert" aria-live="assertive">
-    <span id="toastMessage">Notification message</span>
-  </div>
-
-  <script src="app.js"></script>
 </body>
 </html>
