@@ -41,9 +41,10 @@ window.NW27 = {
   },
 
   forms: {
-    // POST endpoint for the registration form (Formspree, Google Apps Script, own API).
+    // Google Apps Script web app URL (ends in /exec). See backend/SETUP.md.
+    // Saves each registration to the Google Sheet and emails a confirmation.
     // While "", the form validates but tells people registration opens soon and sends nothing.
-    registrationEndpoint: ""
+    registrationEndpoint: "https://script.google.com/macros/s/AKfycbwo-CgB-Bb9LNXPJV6IG6H7Vf6IW5DV7_1cGcnJZCaysQ5iUjC5i7Wqm-ySM8DLVXPv/exec"
   },
 
   // Payments must go to the NACOS-named student body account only. Never a personal account.

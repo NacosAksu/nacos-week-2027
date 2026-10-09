@@ -13,10 +13,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="tokens.css?v=51">
-  <link rel="stylesheet" href="styles.css?v=51">
-  <script src="config.js?v=51" defer></script>
-  <script src="app.js?v=51" defer></script>
+  <link rel="stylesheet" href="tokens.css?v=53">
+  <link rel="stylesheet" href="styles.css?v=53">
+  <script src="config.js?v=53" defer></script>
+  <script src="app.js?v=53" defer></script>
 </head>
 <body id="top">
   <a class="skip" href="#main">Skip to content</a>
@@ -404,8 +404,14 @@
             </label>
           </div>
 
+          <!-- Spam trap: hidden from people, bots fill it in and get ignored -->
+          <div class="hp" aria-hidden="true">
+            <label for="f-website">Leave this empty</label>
+            <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
           <button class="btn btn--deep form__submit" type="submit" data-submit>
-            <span class="btn__label">Send</span>
+            <span class="btn__label">Register</span>
           </button>
           <p class="form__status" role="status" aria-live="polite" data-form-status></p>
         </form>

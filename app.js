@@ -409,22 +409,27 @@
       data.set("interests", data.getAll("interests").join(", "));
       submit.disabled = true;
       submit.dataset.state = "loading";
-      label.textContent = "Sending";
-      fetch(endpoint, { method: "POST", body: data, headers: { Accept: "application/json" } })
-        .then(function (r) { if (!r.ok) throw new Error(r.status); })
-        .then(function () {
+      label.textContent = "Registering";
+      // URL-encoded body: a "simple" request, so Google Apps Script accepts it cross-origin without a preflight
+      fetch(endpoint, { method: "POST", body: new URLSearchParams(data) })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (res) {
+          if (res.result === "error") throw new Error(res.error || "rejected");
+          var email = form.elements.email.value.trim();
           form.reset();
           tried = false;
           statusEl.dataset.tone = "ok";
-          statusEl.textContent = "You're on the list. We'll be in touch on WhatsApp and email.";
+          statusEl.textContent = res.result === "duplicate"
+            ? "You're already registered with " + email + ". Your registration ID is " + res.id + "."
+            : "You're registered. Your ID is " + res.id + ". A confirmation email is on its way to " + email + ".";
           submit.dataset.state = "success";
-          label.textContent = "Sent";
+          label.textContent = "Registered";
         })
         .catch(function () {
           statusEl.dataset.tone = "error";
-          statusEl.textContent = "That didn't go through. Check your connection and send again.";
+          statusEl.textContent = "That didn't go through. Check your connection and try again.";
           submit.dataset.state = "error";
-          label.textContent = "Send again";
+          label.textContent = "Try again";
         })
         .then(function () { submit.disabled = false; if (submit.dataset.state !== "error") delete submit.dataset.state; });
     });

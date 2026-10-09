@@ -854,3 +854,6 @@ abbr { text-decoration: none; font-size: 0.7em; letter-spacing: 0.04em; vertical
   .footer__top { gap: var(--space-xl); padding-bottom: var(--space-xl); }
   .footer__social { margin-top: var(--space-md); }
 }
+
+/* Registration spam trap: off-screen, never shown */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
