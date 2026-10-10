@@ -166,7 +166,7 @@ abbr { text-decoration: none; font-size: 0.7em; letter-spacing: 0.04em; vertical
 /* ---------- Logo slot ---------- */
 .logo-slot { display: inline-flex; align-items: center; }
 .logo-slot img { height: 2.5rem; width: auto; }
-.logo-slot--lg img { height: 4rem; }
+.logo-slot--lg img { height: auto; width: min(22rem, calc(100vw - 2 * var(--gutter))); }
 .wordmark { display: inline-flex; align-items: center; gap: 0.35em; font-family: var(--font-display); font-weight: 800; line-height: 0.86; letter-spacing: 0.01em; font-size: 1rem; }
 .wordmark__stack { display: flex; flex-direction: column; }
 .wordmark__a { color: var(--brand-green); }
