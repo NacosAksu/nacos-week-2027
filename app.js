@@ -434,4 +434,60 @@
         .then(function () { submit.disabled = false; if (submit.dataset.state !== "error") delete submit.dataset.state; });
     });
   }
+  /* ---------- Scroll reveal ---------- */
+  // Content rises in as it scrolls into view. Classes are added here, so without JS
+  // (or with reduced motion) everything simply shows.
+  var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!calm && "IntersectionObserver" in window) {
+    document.documentElement.classList.add("has-reveal");
+    var show = function (el) { el.classList.add("is-in"); };
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var t = en.target;
+        observer.unobserve(t);
+        if (t.hasAttribute("data-rv-group")) { t.classList.add("rv-done"); $$(".rv", t).forEach(show); } else show(t);
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+
+    // Groups: children rise one after another
+    [".hero__inner", ".numbers__grid", ".tracks__list", ".pillars", ".steps", ".people", ".outcomes",
+     ".tiers", ".sponsor-wall__grid", ".faq__list", ".footer__top", ".dept-list"].forEach(function (sel) {
+      $$(sel).forEach(function (box) {
+        var kids = Array.prototype.slice.call(box.children).filter(function (k) { return !k.hidden; });
+        if (!kids.length) return;
+        kids.forEach(function (k, i) { k.classList.add("rv"); k.style.setProperty("--rv-delay", Math.min(i * 90, 450) + "ms"); });
+        box.setAttribute("data-rv-group", "");
+        observer.observe(box);
+      });
+    });
+    // Singles
+    [".section__head", ".about__text > .h2", ".about__text > .lead", ".about__text > p:not(.lead)", ".about__photo",
+     ".numbers__title", ".tracks__note", ".hack__intro", ".speakers__ask", ".partner__foot", ".tiers-head",
+     ".register__intro", ".form", ".carousel", ".past__kicker", ".past__title", ".past__panel",
+     ".venue__text", ".venue__map", ".faq__grid > .h2", ".closer__inner", ".sponsor-wall__title"].forEach(function (sel) {
+      $$(sel).forEach(function (el) { if (el.closest("[data-rv-group]")) return; el.classList.add("rv"); observer.observe(el); });
+    });
+
+    // Safety net: if the observer ever misses an element, a plain position check on
+    // scroll still reveals it, so content can never stay hidden.
+    var pending = function () { return $$("[data-rv-group]:not(.rv-done), .rv:not(.is-in)"); };
+    var sweep = function () {
+      var vh = window.innerHeight;
+      pending().forEach(function (el) {
+        if (el.closest("[data-rv-group]") && !el.hasAttribute("data-rv-group")) return;
+        var r = el.getBoundingClientRect();
+        if (r.top < vh * 0.94 && r.bottom > 0) {
+          observer.unobserve(el);
+          if (el.hasAttribute("data-rv-group")) { el.classList.add("rv-done"); $$(".rv", el).forEach(show); } else show(el);
+        }
+      });
+    };
+    var ticking = false;
+    var onScroll = function () { if (ticking) return; ticking = true; setTimeout(function () { ticking = false; sweep(); }, 60); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    window.addEventListener("load", sweep);
+    setTimeout(sweep, 120); // after first paint, so content already on screen still animates in
+  }
 })();

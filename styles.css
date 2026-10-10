@@ -878,3 +878,19 @@ abbr { text-decoration: none; font-size: 0.7em; letter-spacing: 0.04em; vertical
   /* Lift the hero type off the bottom edge */
   .hero { padding-bottom: 5.5rem; }
 }
+
+/* ---------- Scroll reveal (classes added by app.js; skipped for reduced motion) ---------- */
+.has-reveal .rv {
+  opacity: 0;
+  transform: translateY(1.75rem);
+  transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-out);
+  transition-delay: var(--rv-delay, 0ms);
+}
+.has-reveal .rv.is-in { opacity: 1; transform: none; }
+/* Hero photo settles in on load */
+.has-reveal .hero__bg { animation: hero-settle 1.8s var(--ease-out) both; }
+@keyframes hero-settle { from { transform: scale(1.08); opacity: 0.4; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .has-reveal .rv { opacity: 1; transform: none; transition: none; }
+  .has-reveal .hero__bg { animation: none; }
+}
