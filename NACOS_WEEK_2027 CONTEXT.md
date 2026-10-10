@@ -52,11 +52,11 @@ The Trade Fair has been dropped (9 Oct 2026). Do not mention it anywhere.
 
 | # | Pillar | Notes |
 |---|--------|-------|
-| 1 | Hackathon (Innovation Bootcamp) | Multi-week, about 3 weeks, built around the four sector tracks. Final projects are judged on Conference Day; the judges decide the winners. Flagship sponsorship product. |
+| 1 | Hackathon (Innovation Bootcamp) | Multi-week, about 3 weeks, built around the four sector tracks. Final projects are judged at the Tech Conference; the judges decide the winners. Flagship sponsorship product. |
 | 2 | Football Tournament | Open-crowd pillar. Needs jerseys / full kit sponsorship. |
 | 3 | Fashion & Pageantry | Crowns the Royal Council of NACOS AKSU. Open-crowd pillar. |
-| 5 | Conference Day | Talks, panels, keynotes, networking. Ties the sector tracks to real professionals. |
-| 6 | Dinner & Award Night | Not the closing night; venue not yet decided. Do not describe it as off-campus or as the closing night. A night to dine and have fun, with awards for students who have shown good character, conduct and contribution. Hackathon winners are decided on Conference Day, not here. |
+| 5 | Tech Conference | Talks, panels, keynotes, networking. Ties the sector tracks to real professionals. |
+| 6 | Dinner & Award Night | Not the closing night; venue not yet decided. Do not describe it as off-campus or as the closing night. A night to dine and have fun, with awards for students who have shown good character, conduct and contribution. Hackathon winners are decided at the Tech Conference, not here. |
 
 ### Audience target
 
@@ -144,9 +144,9 @@ Also in progress: courtesy visits to influential public figures to seek support 
 | Sponsor commitments locked | 6 to 8 weeks before |
 | Hackathon problem statements finalised | 6 weeks before |
 | Hackathon registration opens | before the bootcamp starts |
-| Judges confirmed | 3 weeks before Conference Day |
+| Judges confirmed | 3 weeks before the Tech Conference |
 | Logistics finalised | 2 weeks before |
-| Hackathon winners decided | Conference Day, by the judges |
+| Hackathon winners decided | Tech Conference, by the judges |
 
 ---
 
