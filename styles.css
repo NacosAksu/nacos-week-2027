@@ -879,6 +879,23 @@ abbr { text-decoration: none; font-size: 0.7em; letter-spacing: 0.04em; vertical
   .hero { padding-bottom: 5.5rem; }
 }
 
+/* ---------- Lenis Smooth Scroll ---------- */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
 /* ---------- Scroll reveal (classes added by app.js; skipped for reduced motion) ---------- */
 .has-reveal .rv {
   opacity: 0;
@@ -887,8 +904,12 @@ abbr { text-decoration: none; font-size: 0.7em; letter-spacing: 0.04em; vertical
   transition-delay: var(--rv-delay, 0ms);
 }
 .has-reveal .rv.is-in { opacity: 1; transform: none; }
+/* When GSAP is active, GSAP takes direct frame-by-frame control of transforms without CSS transition delay */
+html.has-gsap .rv {
+  transition: none !important;
+}
 /* Hero photo settles in on load */
-.has-reveal .hero__bg { animation: hero-settle 1.8s var(--ease-out) both; }
+.has-reveal:not(.has-gsap) .hero__bg { animation: hero-settle 1.8s var(--ease-out) both; }
 @keyframes hero-settle { from { transform: scale(1.08); opacity: 0.4; } to { transform: none; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
   .has-reveal .rv { opacity: 1; transform: none; transition: none; }
