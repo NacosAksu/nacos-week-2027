@@ -874,3 +874,7 @@ abbr { text-decoration: none; font-size: 0.7em; letter-spacing: 0.04em; vertical
   .footer .logo-slot--lg img { width: 12.5rem; }
   .footer__tag { font-size: var(--text-lg); }
 }
+@media (max-width: 700px) {
+  /* Lift the hero type off the bottom edge */
+  .hero { padding-bottom: 5.5rem; }
+}
