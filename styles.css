@@ -870,3 +870,7 @@ abbr { text-decoration: none; font-size: 0.7em; letter-spacing: 0.04em; vertical
   .past__logo--dark { padding-inline: 0.75rem; }
   .past__logo--dark img { height: 1.375rem; }
 }
+@media (max-width: 699px) {
+  .footer .logo-slot--lg img { width: 12.5rem; }
+  .footer__tag { font-size: var(--text-lg); }
+}
