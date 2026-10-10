@@ -916,3 +916,28 @@ html.has-gsap .rv {
   .has-reveal .hero__bg { animation: none; }
 }
 .carousel__count { font-family: var(--font-display); font-weight: 700; font-size: var(--text-sm); letter-spacing: 0.04em; color: var(--color-ink-muted); font-variant-numeric: tabular-nums; }
+
+/* Five tracks and five speaker slots */
+@media (min-width: 1040px) {
+  .tracks__list { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  /* sized so the longest name, Technology, stays on one line in a fifth of the row */
+  .track__name { font-size: clamp(1.0625rem, 1.5vw, 1.5rem); overflow-wrap: normal; }
+  .track { padding-right: var(--space-md); }
+}
+@media (max-width: 1039px) {
+  /* odd one out spans the full row */
+  .track:last-child:nth-child(odd) { grid-column: 1 / -1; padding-left: 0; border-left: 0; }
+  .track:last-child:nth-child(odd) p { max-width: none; }
+}
+@media (min-width: 900px) { .people--speakers { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+@media (max-width: 899px) {
+  /* two across, with the fifth centred underneath */
+  .people--speakers { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .people--speakers .person { grid-column: span 2; }
+  .people--speakers .person:nth-child(5) { grid-column: 2 / span 2; }
+}
+.people--speakers .person:nth-child(5) .ph--mystery::before { top: 21%; width: 33%; }
+@media (max-width: 699px) {
+  /* "30,000+" must fit its card on the narrowest phones */
+  .numbers__n { font-size: clamp(1.375rem, 7.4vw, 1.875rem); }
+}

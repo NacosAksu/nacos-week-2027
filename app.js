@@ -785,6 +785,27 @@
         );
       }
     }
+    // Reloading mid-page: the browser restores the old scroll position before ScrollTrigger
+    // hears about it, so every trigger is measured as if the page were at the top and the
+    // content in view stays hidden. Tell ScrollTrigger the real position, then re-measure.
+    var resync = function () {
+      window.dispatchEvent(new Event("scroll"));
+      window.ScrollTrigger.refresh();
+    };
+    window.addEventListener("load", function () { setTimeout(resync, 60); });
+    window.addEventListener("pageshow", function () { setTimeout(resync, 60); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(resync);
+    // Re-measure whenever the page height changes later (photos loading, FAQ opening)
+    if ("ResizeObserver" in window) {
+      var lastH = 0, resizeTimer = null;
+      new ResizeObserver(function () {
+        var h = document.documentElement.scrollHeight;
+        if (Math.abs(h - lastH) < 4) return;
+        lastH = h;
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () { window.ScrollTrigger.refresh(); }, 200);
+      }).observe(document.body);
+    }
   } else if (!calm && "IntersectionObserver" in window) {
     // Fallback if GSAP is not available
     document.documentElement.classList.add("has-reveal");

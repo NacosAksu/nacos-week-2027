@@ -2,7 +2,7 @@
 
 Official website for NACOS Week 2027, organised by NACOS AKSU (Nigeria Association of Computing Students, Akwa Ibom State University, Ikot Akpaden, Mkpat Enin). Hosted by the Faculty of Computing and Information Technology and open to every student at AKSU.
 
-Theme: **Confluence**. Energy, finance, oil and gas, and medicine meet computing.
+Theme: **Confluence**. Five tracks: energy, finance, oil and gas, medicine and technology.
 
 ## Run locally
 
