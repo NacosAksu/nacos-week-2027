@@ -857,3 +857,16 @@ abbr { text-decoration: none; font-size: 0.7em; letter-spacing: 0.04em; vertical
 
 /* Registration spam trap: off-screen, never shown */
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* Phones: smaller nav logo and sponsor logos */
+@media (max-width: 699px) {
+  .nav .logo-slot img { height: 1.75rem; }
+  .nav__inner { min-height: 3.75rem; }
+  .past__panel { gap: var(--space-md); padding-block: var(--space-md); }
+  .past__row + .past__row { padding-top: var(--space-md); }
+  .past__track { gap: var(--space-lg); padding-inline: var(--space-md); }
+  .past__logo, .past__logo img { height: 2.25rem; }
+  .past__logo img { max-width: 7.5rem; border-radius: 4px; }
+  .past__logo--dark { padding-inline: 0.75rem; }
+  .past__logo--dark img { height: 1.375rem; }
+}
