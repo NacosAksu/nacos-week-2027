@@ -133,7 +133,14 @@
       current = (i + slidesEl.length) % slidesEl.length;
       trackEl.scrollTo({ left: slidesEl[current].offsetLeft - slidesEl[0].offsetLeft, behavior: reduce ? "auto" : "smooth" });
     };
-    var dots = slidesEl.map(function (_, i) {
+    // Many photos: a "3 / 25" counter replaces the row of dots, which would not fit on a phone
+    var counter = null;
+    if (slidesEl.length > 8) {
+      counter = document.createElement("span");
+      counter.className = "carousel__count";
+      dotsEl.appendChild(counter);
+    }
+    var dots = (counter ? [] : slidesEl).map(function (_, i) {
       var d = document.createElement("button");
       d.type = "button";
       d.className = "carousel__dot";
@@ -146,6 +153,7 @@
       var w = slidesEl[0].offsetWidth || 1;
       current = Math.min(slidesEl.length - 1, Math.round(trackEl.scrollLeft / w));
       dots.forEach(function (d, i) { d.setAttribute("aria-current", i === current ? "true" : "false"); });
+      if (counter) counter.textContent = (current + 1) + " / " + slidesEl.length;
     };
     trackEl.addEventListener("scroll", function () { window.requestAnimationFrame(sync); }, { passive: true });
     $("[data-carousel-prev]", car).addEventListener("click", function () { go(current - 1); });

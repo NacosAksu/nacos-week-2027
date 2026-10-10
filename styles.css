@@ -915,3 +915,4 @@ html.has-gsap .rv {
   .has-reveal .rv { opacity: 1; transform: none; transition: none; }
   .has-reveal .hero__bg { animation: none; }
 }
+.carousel__count { font-family: var(--font-display); font-weight: 700; font-size: var(--text-sm); letter-spacing: 0.04em; color: var(--color-ink-muted); font-variant-numeric: tabular-nums; }
