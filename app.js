@@ -434,23 +434,365 @@
         .then(function () { submit.disabled = false; if (submit.dataset.state !== "error") delete submit.dataset.state; });
     });
   }
-  /* ---------- Scroll reveal ---------- */
-  // Content rises in as it scrolls into view. Classes are added here, so without JS
-  // (or with reduced motion) everything simply shows.
+  /* ---------- Smooth Scrolling (Lenis) & GSAP Animations ---------- */
   var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!calm && "IntersectionObserver" in window) {
+
+  // Initialize Lenis Smooth Scrolling
+  var lenis = null;
+  if (typeof window.Lenis !== "undefined" && !calm) {
+    lenis = new window.Lenis({
+      duration: 1.2,
+      easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.6,
+      infinite: false
+    });
+
+    // Make lenis globally accessible if needed
+    window.lenis = lenis;
+
+    // Anchor smooth scrolling
+    $$('a[href^="#"]').forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        var href = a.getAttribute("href");
+        if (!href || href === "#") return;
+        var target = (href === "#top" || href === "#") ? document.body : $(href);
+        if (target) {
+          e.preventDefault();
+          if (typeof closeMenu === "function") closeMenu();
+          var navEl = $("[data-nav]");
+          var offset = (href === "#top") ? 0 : (navEl ? -navEl.offsetHeight : -68);
+          lenis.scrollTo(target, { offset: offset, duration: 1.2 });
+          if (history.pushState) history.pushState(null, "", href);
+        }
+      });
+    });
+  }
+
+  // GSAP Animations with ScrollTrigger
+  var hasGsap = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
+
+  if (hasGsap) {
+    document.documentElement.classList.add("has-gsap");
+    window.gsap.registerPlugin(window.ScrollTrigger);
+
+    // Synchronize Lenis with GSAP ScrollTrigger
+    if (lenis) {
+      lenis.on("scroll", window.ScrollTrigger.update);
+      window.gsap.ticker.add(function (time) {
+        lenis.raf(time * 1000);
+      });
+      window.gsap.ticker.lagSmoothing(0);
+    }
+
+    if (!calm) {
+      // 1. Hero entrance and background parallax
+      var heroTl = window.gsap.timeline({ defaults: { ease: "power3.out", duration: 1.1 } });
+      heroTl
+        .from("#hero-title", { y: 45, opacity: 0, delay: 0.15 })
+        .from(".hero__meta", { y: 25, opacity: 0 }, "-=0.75")
+        .from(".hero__actions .btn", { y: 20, opacity: 0, stagger: 0.12 }, "-=0.75")
+        .from(".hero .countdown", { y: 20, opacity: 0 }, "-=0.6");
+
+      var heroBg = $(".hero__bg");
+      if (heroBg) {
+        window.gsap.from(heroBg, { scale: 1.12, opacity: 0.35, duration: 1.8, ease: "power2.out" });
+        window.gsap.to(heroBg, {
+          yPercent: 15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".hero",
+            start: "top top",
+            end: "bottom top",
+            scrub: true
+          }
+        });
+      }
+
+      // 2. Numbers count-up animation (re-counts every time it enters the viewport)
+      var numbersSec = $(".numbers");
+      var numberItems = $$(".numbers__grid li");
+      if (numbersSec && numberItems.length) {
+        var countTweens = [];
+        var runCountUp = function () {
+          countTweens.forEach(function (tw) { tw.kill(); });
+          countTweens = [];
+          numberItems.forEach(function (li) {
+            var nSpan = $(".numbers__n", li);
+            if (!nSpan) return;
+            var raw = nSpan.getAttribute("data-raw") || nSpan.textContent.trim();
+            nSpan.setAttribute("data-raw", raw);
+            var hasPlus = raw.indexOf("+") !== -1;
+            var targetVal = parseInt(raw.replace(/[^\d]/g, ""), 10);
+            if (!isNaN(targetVal) && targetVal > 0) {
+              var obj = { val: 0 };
+              var tw = window.gsap.to(obj, {
+                val: targetVal,
+                duration: 1.8,
+                ease: "power2.out",
+                onUpdate: function () {
+                  var str = Math.floor(obj.val).toLocaleString("en-US");
+                  if (hasPlus) {
+                    nSpan.innerHTML = str + '<span class="numbers__plus">+</span>';
+                  } else {
+                    nSpan.textContent = str;
+                  }
+                }
+              });
+              countTweens.push(tw);
+            }
+          });
+        };
+
+        window.gsap.fromTo(numberItems,
+          { y: 35, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.85,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: numbersSec,
+              start: "top 85%",
+              end: "bottom top",
+              toggleActions: "play reverse play reverse",
+              onEnter: runCountUp,
+              onEnterBack: runCountUp
+            }
+          }
+        );
+      }
+
+      // 3. Section headers and intro grids
+      $$(".section__head, .about__grid, .hack__intro, .register__intro, .form, .venue__grid, .closer__inner").forEach(function (el) {
+        window.gsap.fromTo(el,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 88%",
+              end: "bottom top",
+              toggleActions: "play reverse play reverse"
+            }
+          }
+        );
+      });
+
+      // 4. Sector Track cards
+      var tracksList = $(".tracks__list");
+      if (tracksList) {
+        window.gsap.fromTo($$(".track", tracksList),
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            stagger: 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: tracksList,
+              start: "top 85%",
+              end: "bottom top",
+              toggleActions: "play reverse play reverse"
+            }
+          }
+        );
+      }
+
+      // 5. Programme Pillars
+      var pillars = $(".pillars");
+      if (pillars) {
+        window.gsap.fromTo($$(".pillar", pillars),
+          { y: 45, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.95,
+            stagger: 0.14,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: pillars,
+              start: "top 85%",
+              end: "bottom top",
+              toggleActions: "play reverse play reverse"
+            }
+          }
+        );
+      }
+
+      // 6. Hackathon timeline steps
+      var steps = $(".steps");
+      if (steps) {
+        window.gsap.fromTo($$("li", steps),
+          { x: -25, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: steps,
+              start: "top 85%",
+              end: "bottom top",
+              toggleActions: "play reverse play reverse"
+            }
+          }
+        );
+      }
+
+      // 7. Speakers & Mentors
+      var speakers = $(".people--speakers");
+      if (speakers) {
+        window.gsap.fromTo($$(".person", speakers),
+          { scale: 0.9, opacity: 0 },
+          {
+            scale: 1,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "back.out(1.2)",
+            scrollTrigger: {
+              trigger: speakers,
+              start: "top 85%",
+              end: "bottom top",
+              toggleActions: "play reverse play reverse"
+            }
+          }
+        );
+      }
+
+      // 8. Outcomes & Sponsorship Tiers
+      var outcomes = $(".outcomes");
+      if (outcomes) {
+        window.gsap.fromTo($$("li", outcomes),
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: outcomes,
+              start: "top 85%",
+              end: "bottom top",
+              toggleActions: "play reverse play reverse"
+            }
+          }
+        );
+      }
+
+      var tiers = $(".tiers");
+      if (tiers) {
+        var tierItems = $$(".tier", tiers);
+        var tierBars = $$(".tier__bar span", tiers);
+        var animateBars = function () {
+          tierBars.forEach(function (bar) {
+            var targetW = bar.style.getPropertyValue("--w") || "0%";
+            bar.style.width = "0%";
+            window.gsap.to(bar, {
+              width: targetW,
+              duration: 1.2,
+              delay: 0.2,
+              ease: "power2.out"
+            });
+          });
+        };
+        var resetBars = function () {
+          tierBars.forEach(function (bar) {
+            bar.style.width = "0%";
+          });
+        };
+
+        window.gsap.fromTo(tierItems,
+          { y: 35, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.85,
+            stagger: 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: tiers,
+              start: "top 85%",
+              end: "bottom top",
+              toggleActions: "play reverse play reverse",
+              onEnter: animateBars,
+              onEnterBack: animateBars,
+              onLeave: resetBars,
+              onLeaveBack: resetBars
+            }
+          }
+        );
+      }
+
+      // 9. Sponsor slots
+      var sponsorWall = $(".sponsor-wall__grid");
+      if (sponsorWall) {
+        window.gsap.fromTo($$(".sponsor-slot", sponsorWall),
+          { scale: 0.92, opacity: 0 },
+          {
+            scale: 1,
+            opacity: 1,
+            duration: 0.75,
+            stagger: 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: sponsorWall,
+              start: "top 85%",
+              end: "bottom top",
+              toggleActions: "play reverse play reverse"
+            }
+          }
+        );
+      }
+
+      // 10. FAQ accordion items
+      var faqList = $(".faq__list");
+      if (faqList) {
+        window.gsap.fromTo($$("details", faqList),
+          { y: 20, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            stagger: 0.08,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: faqList,
+              start: "top 88%",
+              end: "bottom top",
+              toggleActions: "play reverse play reverse"
+            }
+          }
+        );
+      }
+    }
+  } else if (!calm && "IntersectionObserver" in window) {
+    // Fallback if GSAP is not available
     document.documentElement.classList.add("has-reveal");
     var show = function (el) { el.classList.add("is-in"); };
+    var hide = function (el) { el.classList.remove("is-in"); };
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (!en.isIntersecting) return;
         var t = en.target;
-        observer.unobserve(t);
-        if (t.hasAttribute("data-rv-group")) { t.classList.add("rv-done"); $$(".rv", t).forEach(show); } else show(t);
+        if (en.isIntersecting) {
+          if (t.hasAttribute("data-rv-group")) { t.classList.add("rv-done"); $$(".rv", t).forEach(show); } else show(t);
+        } else {
+          if (t.hasAttribute("data-rv-group")) { t.classList.remove("rv-done"); $$(".rv", t).forEach(hide); } else hide(t);
+        }
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
 
-    // Groups: children rise one after another
     [".hero__inner", ".numbers__grid", ".tracks__list", ".pillars", ".steps", ".people", ".outcomes",
      ".tiers", ".sponsor-wall__grid", ".faq__list", ".footer__top", ".dept-list"].forEach(function (sel) {
       $$(sel).forEach(function (box) {
@@ -461,7 +803,7 @@
         observer.observe(box);
       });
     });
-    // Singles
+
     [".section__head", ".about__text > .h2", ".about__text > .lead", ".about__text > p:not(.lead)", ".about__photo",
      ".numbers__title", ".tracks__note", ".hack__intro", ".speakers__ask", ".partner__foot", ".tiers-head",
      ".register__intro", ".form", ".carousel", ".past__kicker", ".past__title", ".past__panel",
@@ -469,8 +811,6 @@
       $$(sel).forEach(function (el) { if (el.closest("[data-rv-group]")) return; el.classList.add("rv"); observer.observe(el); });
     });
 
-    // Safety net: if the observer ever misses an element, a plain position check on
-    // scroll still reveals it, so content can never stay hidden.
     var pending = function () { return $$("[data-rv-group]:not(.rv-done), .rv:not(.is-in)"); };
     var sweep = function () {
       var vh = window.innerHeight;
@@ -484,10 +824,10 @@
       });
     };
     var ticking = false;
-    var onScroll = function () { if (ticking) return; ticking = true; setTimeout(function () { ticking = false; sweep(); }, 60); };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    var onScrollFallback = function () { if (ticking) return; ticking = true; setTimeout(function () { ticking = false; sweep(); }, 60); };
+    window.addEventListener("scroll", onScrollFallback, { passive: true });
+    window.addEventListener("resize", onScrollFallback);
     window.addEventListener("load", sweep);
-    setTimeout(sweep, 120); // after first paint, so content already on screen still animates in
+    setTimeout(sweep, 120);
   }
 })();
