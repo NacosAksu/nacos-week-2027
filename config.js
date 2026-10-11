@@ -137,6 +137,11 @@ window.NW27 = {
     { name: "Krait", logo: "assets/sponsors/past/krait.svg" },
     { name: "Alexx Alpha Visuals", logo: "assets/sponsors/past/alexx-alpha-visuals.png" },
     { name: "Esther Udokwo", logo: "assets/sponsors/past/esther-udokwo.png" },
+    { name: "Gexipay", logo: "assets/sponsors/past/gexipay.png" },
+    { name: "Injective", logo: "assets/sponsors/past/injective.png" },
+    { name: "Fhenix Africa", logo: "assets/sponsors/past/fhenix-africa.png" },
+    { name: "Google Developer Eket", logo: "assets/sponsors/past/google-developers.png" },
+    { name: "For the Love of DeFi (FTLD)", logo: "assets/sponsors/past/ftld.png" },
     { name: "", logo: "assets/sponsors/past/unnamed-a-ng.jpg" } // name to confirm
   ]
 };
