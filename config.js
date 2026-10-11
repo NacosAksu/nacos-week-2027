@@ -136,6 +136,7 @@ window.NW27 = {
     { name: "Bluresx", logo: "assets/sponsors/past/bluresx.jpg" },
     { name: "Krait", logo: "assets/sponsors/past/krait.svg" },
     { name: "Alexx Alpha Visuals", logo: "assets/sponsors/past/alexx-alpha-visuals.png" },
+    { name: "Esther Udokwo", logo: "assets/sponsors/past/esther-udokwo.png" },
     { name: "", logo: "assets/sponsors/past/unnamed-a-ng.jpg" } // name to confirm
   ]
 };
