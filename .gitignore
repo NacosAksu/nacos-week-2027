@@ -9,5 +9,12 @@ desktop.ini
 *.swp
 *.swo
 
+# Node & Build artifacts
+node_modules/
+dist/
+*.tsbuildinfo
+vite.config.d.ts
+vite.config.js
+
 # Temporary & Log Files
 *.log
