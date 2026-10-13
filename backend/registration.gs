@@ -15,15 +15,24 @@
 
 // ---------- Settings ----------
 var SHEET_NAME = "Registrations";
+var VOLUNTEER_SHEET_NAME = "Volunteers";
 var FROM_NAME = "NACOS AKSU";
 var REPLY_TO = "nacosfcitaksu@gmail.com";
 var ID_PREFIX = "NW27-";
+var VOL_ID_PREFIX = "NW27-VOL-";
 var EVENT = {
   name: "NACOS Week 2027: Confluence",
   when: "February 2027 (exact dates to be announced)",
   where: "Conference Centre, Perm Site, Akwa Ibom State University, Ikot Akpaden, Mkpat Enin",
   site: "https://nw27.vercel.app", // CHANGE to the live website address
   whatsapp: "https://whatsapp.com/channel/0029Vb87N0c9Bb5utsX0yk2R",
+  teamWhatsApp: {
+    media: "https://chat.whatsapp.com/JJNaojZl0Oj4EDQM9LhsMN?s=sw&p=a&mlu=4&ilr=4",
+    protocol: "https://chat.whatsapp.com/GKUcXY31wpmDEjJvExnUre?s=sw&p=a&mlu=4&ilr=4",
+    welfare_logistics: "https://chat.whatsapp.com/LuiTDSSpXNMAhjGacfWMpw?s=sw&p=a&mlu=4&ilr=4",
+    registration: "https://chat.whatsapp.com/BBIcYbEB3b1Avj4gXuQMVm?s=sw&p=a&mlu=4&ilr=4",
+    sponsorship: "https://chat.whatsapp.com/J29siJhWfLqARXxjC3fxbi?s=sw&p=a&mlu=4&ilr=4"
+  },
   instagram: "https://www.instagram.com/nacos_aksu/",
   x: "https://x.com/nacos_aksu"
 };
@@ -31,21 +40,25 @@ var BRAND = { green: "#089002", deep: "#005012", off: "#F5F7F2", pale: "#E6F2E3"
 
 var HEADERS = ["Reg ID", "Timestamp", "Full name", "Email", "WhatsApp", "Department", "Level",
                "Interests", "Contact consent", "Share with partners", "Email status"];
+var VOL_HEADERS = ["Volunteer ID", "Timestamp", "Full name", "Email", "WhatsApp", "Department", "Level",
+                   "Committee / Team", "Availability", "Prior experience", "Email status"];
 var COL = { id: 1, email: 4, status: 11 };
+var VOL_COL = { id: 1, email: 4, status: 11 };
 
 // ---------- Run once from the editor ----------
 function setup() {
   getSheet_();
+  getVolunteerSheet_();
   ScriptApp.getProjectTriggers().forEach(function (t) {
     if (t.getHandlerFunction() === "sendPending") ScriptApp.deleteTrigger(t);
   });
   ScriptApp.newTrigger("sendPending").timeBased().everyHours(1).create();
-  Logger.log("Ready. Sheet '" + SHEET_NAME + "' exists and the hourly email retry is on.");
+  Logger.log("Ready. Sheets '" + SHEET_NAME + "' and '" + VOLUNTEER_SHEET_NAME + "' exist and hourly email retry is active.");
 }
 
 // ---------- Web endpoints ----------
 function doGet() {
-  return json_({ result: "ok", service: "NACOS Week 2027 registration" });
+  return json_({ result: "ok", service: "NACOS Week 2027 registration & volunteer portal" });
 }
 
 function doPost(e) {
@@ -54,6 +67,7 @@ function doPost(e) {
   // Spam trap: the hidden "website" field is only ever filled by bots.
   if (p.website) return json_({ result: "success", id: ID_PREFIX + "0000" });
 
+  var isVolunteer = p.type === "volunteer" || !!p.volunteer_team;
   var name = text_(p.name, 120);
   var email = text_(p.email, 160).toLowerCase();
   var phone = text_(p.phone, 30);
@@ -62,17 +76,17 @@ function doPost(e) {
               /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
               phone.replace(/\D/g, "").length >= 10 &&
               dept.length > 1 &&
-              p.contact_ok;
+              (isVolunteer || p.contact_ok);
   if (!valid) return json_({ result: "error", error: "invalid" });
 
   var sheet, row, id;
   var lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {
-    sheet = getSheet_();
+    sheet = isVolunteer ? getVolunteerSheet_() : getSheet_();
     var last = sheet.getLastRow();
 
-    // One registration per email address.
+    // One registration/application per email address within this sheet.
     if (last > 1) {
       var emails = sheet.getRange(2, COL.email, last - 1, 1).getValues();
       for (var i = 0; i < emails.length; i++) {
@@ -82,20 +96,37 @@ function doPost(e) {
       }
     }
 
-    id = ID_PREFIX + ("0000" + last).slice(-4); // header is row 1, so the first person gets 0001
-    sheet.appendRow([
-      id,
-      new Date(),
-      cell_(name),
-      email,
-      "'" + phone, // keep the leading 0 and stop Sheets reading +234 as a formula
-      cell_(dept),
-      cell_(text_(p.level, 40)),
-      cell_(text_(p.interests, 300)),
-      "yes",
-      p.share_with_partners === "yes" ? "yes" : "no",
-      "pending"
-    ]);
+    if (isVolunteer) {
+      id = VOL_ID_PREFIX + ("0000" + last).slice(-4);
+      sheet.appendRow([
+        id,
+        new Date(),
+        cell_(name),
+        email,
+        "'" + phone,
+        cell_(dept),
+        cell_(text_(p.level, 40)),
+        cell_(text_(p.volunteer_team || p.interests, 120)),
+        cell_(text_(p.availability, 120)),
+        cell_(text_(p.experience, 300)),
+        "pending"
+      ]);
+    } else {
+      id = ID_PREFIX + ("0000" + last).slice(-4); // header is row 1, so the first person gets 0001
+      sheet.appendRow([
+        id,
+        new Date(),
+        cell_(name),
+        email,
+        "'" + phone, // keep the leading 0 and stop Sheets reading +234 as a formula
+        cell_(dept),
+        cell_(text_(p.level, 40)),
+        cell_(text_(p.interests, 300)),
+        "yes",
+        p.share_with_partners === "yes" ? "yes" : "no",
+        "pending"
+      ]);
+    }
     row = sheet.getLastRow();
   } finally {
     lock.releaseLock();
@@ -108,29 +139,41 @@ function doPost(e) {
 // ---------- Emails ----------
 // Hourly trigger: sends any confirmations held back by the daily limit.
 function sendPending() {
-  var sheet = getSheet_();
-  var last = sheet.getLastRow();
-  if (last < 2) return;
-  var statuses = sheet.getRange(2, COL.status, last - 1, 1).getValues();
-  for (var i = 0; i < statuses.length; i++) {
-    if (statuses[i][0] !== "pending") continue;
-    if (MailApp.getRemainingDailyQuota() < 1) return;
-    sendRow_(sheet, i + 2);
-  }
+  [getSheet_(), getVolunteerSheet_()].forEach(function (sheet) {
+    var last = sheet.getLastRow();
+    if (last < 2) return;
+    var statusCol = COL.status;
+    var statuses = sheet.getRange(2, statusCol, last - 1, 1).getValues();
+    for (var i = 0; i < statuses.length; i++) {
+      if (statuses[i][0] !== "pending") continue;
+      if (MailApp.getRemainingDailyQuota() < 1) return;
+      sendRow_(sheet, i + 2);
+    }
+  });
 }
 
 function sendRow_(sheet, row) {
   if (MailApp.getRemainingDailyQuota() < 1) return; // stays "pending" for sendPending()
-  var v = sheet.getRange(row, 1, 1, HEADERS.length).getValues()[0];
-  var person = { id: v[0], name: String(v[2]), email: String(v[3]), interests: String(v[7]) };
+  var isVolunteer = (sheet.getName() === VOLUNTEER_SHEET_NAME);
+  var v = sheet.getRange(row, 1, 1, isVolunteer ? VOL_HEADERS.length : HEADERS.length).getValues()[0];
+  var person = {
+    id: String(v[0]),
+    name: String(v[2]),
+    email: String(v[3]),
+    interests: String(v[7]),
+    team: isVolunteer ? String(v[7]) : "",
+    availability: isVolunteer ? String(v[8]) : ""
+  };
   try {
     MailApp.sendEmail({
       to: person.email,
-      subject: "You're registered for NACOS Week 2027 (" + person.id + ")",
+      subject: isVolunteer
+        ? "Volunteer Application Received (" + person.id + ") · NACOS Week 2027"
+        : "You're registered for NACOS Week 2027 (" + person.id + ")",
       name: FROM_NAME,
       replyTo: REPLY_TO,
-      body: plainEmail_(person),
-      htmlBody: htmlEmail_(person),
+      body: isVolunteer ? plainVolunteerEmail_(person) : plainEmail_(person),
+      htmlBody: isVolunteer ? htmlVolunteerEmail_(person) : htmlEmail_(person),
       inlineImages: { nw27logo: logoBlob_() }
     });
     sheet.getRange(row, COL.status).setValue("sent " + Utilities.formatDate(new Date(), "Africa/Lagos", "d MMM HH:mm"));
@@ -206,6 +249,83 @@ function htmlEmail_(p) {
         "NACOS AKSU, Akwa Ibom State University. You received this because you registered at " + link(EVENT.site, EVENT.site.replace("https://", "")) + "." +
       "</td></tr>" +
     "</table></div>";
+function getTeamWhatsAppLink_(teamName) {
+  if (!teamName) return "";
+  var t = String(teamName).toLowerCase();
+  if (t.indexOf("media") !== -1) return EVENT.teamWhatsApp.media;
+  if (t.indexOf("protocol") !== -1) return EVENT.teamWhatsApp.protocol;
+  if (t.indexOf("welfare") !== -1 || t.indexOf("logistics") !== -1) return EVENT.teamWhatsApp.welfare_logistics;
+  if (t.indexOf("registration") !== -1 || t.indexOf("accreditation") !== -1) return EVENT.teamWhatsApp.registration;
+  if (t.indexOf("sponsor") !== -1 || t.indexOf("collaboration") !== -1) return EVENT.teamWhatsApp.sponsorship;
+  return "";
+}
+
+function plainVolunteerEmail_(p) {
+  var teamLink = getTeamWhatsAppLink_(p.team);
+  var lines = [
+    "Hi " + firstName_(p.name) + ",",
+    "",
+    "Thank you for applying to join the NACOS Week 2027 Organizing Crew (" + EVENT.name + ").",
+    "",
+    "Accreditation ID: " + p.id,
+    "Selected Committee: " + p.team,
+    "Availability: " + (p.availability || "Full Festival Week"),
+    "",
+    "We have received your application. The Planning Committee will review roles and send orientation rosters.",
+    "",
+    teamLink ? "Official " + p.team + " WhatsApp Group: " + teamLink + "\n" : "",
+    "Follow for updates:",
+    "WhatsApp channel: " + EVENT.whatsapp,
+    "Instagram: " + EVENT.instagram,
+    "X: " + EVENT.x,
+    "",
+    "Questions? Reply directly to this email.",
+    "",
+    "NACOS AKSU",
+    "Akwa Ibom State University, Ikot Akpaden"
+  ];
+  return lines.filter(function (l, i, a) { return l !== "" || a[i - 1] !== ""; }).join("\n");
+}
+
+function htmlVolunteerEmail_(p) {
+  var row = function (label, value) {
+    return '<tr><td style="padding:10px 0;border-bottom:1px solid #d9e3d6;color:#4a554c;font-size:13px;width:140px;vertical-align:top">' + label +
+           '</td><td style="padding:10px 0;border-bottom:1px solid #d9e3d6;color:' + BRAND.black + ';font-size:15px;font-weight:600">' + value + "</td></tr>";
+  };
+  var link = function (href, text) {
+    return '<a href="' + href + '" style="color:' + BRAND.deep + ';font-weight:600;text-decoration:underline">' + text + "</a>";
+  };
+  var teamLink = getTeamWhatsAppLink_(p.team);
+
+  return '' +
+    '<div style="margin:0;padding:24px 12px;background:' + BRAND.pale + ';font-family:Poppins,Arial,Helvetica,sans-serif">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;background:' + BRAND.off + ';border-radius:14px;overflow:hidden">' +
+      '<tr><td style="background:' + BRAND.black + ';padding:22px 28px;border-bottom:4px solid ' + BRAND.green + '">' +
+        '<img src="cid:nw27logo" width="200" height="41" alt="NACOS Week 27" style="display:block;border:0;width:200px;height:auto;color:' + BRAND.green + ';font-family:Montserrat,Arial,Helvetica,sans-serif;font-weight:800;font-size:20px">' +
+      "</td></tr>" +
+      '<tr><td style="padding:28px">' +
+        '<h1 style="margin:0 0 8px;font-family:Montserrat,Arial,Helvetica,sans-serif;font-size:24px;line-height:1.2;color:' + BRAND.black + '">Volunteer Application Received</h1>' +
+        '<p style="margin:0 0 20px;color:#4a554c;font-size:15px;line-height:1.6">Hi ' + esc_(firstName_(p.name)) +
+          ", thank you for stepping up to serve on the NACOS Week 2027 Organizing Crew.</p>" +
+        '<div style="margin:0 0 20px;padding:16px 18px;background:' + BRAND.deep + ';border-radius:10px">' +
+          '<div style="color:#b9d8b6;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700">Volunteer Accreditation ID</div>' +
+          '<div style="color:#ffffff;font-family:Montserrat,Arial,Helvetica,sans-serif;font-size:26px;font-weight:800;letter-spacing:1px">' + esc_(p.id) + "</div>" +
+        "</div>" +
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px">' +
+          row("Committee", esc_(p.team)) +
+          row("Availability", esc_(p.availability || "Full Week")) +
+          row("Location", esc_(EVENT.where)) +
+        "</table>" +
+        (teamLink ? '<div style="margin:0 0 20px;padding:14px;background:#e2f7e0;border-left:4px solid ' + BRAND.green + ';border-radius:6px;font-size:14px;line-height:1.5;color:' + BRAND.black + '"><strong>' + esc_(p.team) + ' Working Group:</strong> Join your committee\'s active WhatsApp group for briefings and rosters: ' + link(teamLink, "Join " + esc_(p.team) + " WhatsApp &rarr;") + '</div>' : '') +
+        '<p style="margin:0 0 12px;color:' + BRAND.black + ';font-size:15px;line-height:1.6">Committee leads will communicate roster assignments, training sessions and official event merchandise briefings.</p>' +
+        '<p style="margin:0 0 4px;color:' + BRAND.black + ';font-size:15px;line-height:1.6">Community channels: ' +
+          link(EVENT.whatsapp, "WhatsApp channel") + " &middot; " + link(EVENT.instagram, "Instagram") + " &middot; " + link(EVENT.x, "X") + "</p>" +
+        '<p style="margin:16px 0 0;color:#4a554c;font-size:14px;line-height:1.6">Questions? Simply reply to this email.</p>' +
+      "</td></tr>" +
+      '<tr><td style="padding:16px 28px;background:' + BRAND.pale + ';color:#4a554c;font-size:12px;line-height:1.5">' +
+        "NACOS AKSU, Akwa Ibom State University. You received this because you applied at " + link(EVENT.site, EVENT.site.replace("https://", "")) + "." +
+      "</td></tr>" +
+    "</table></div>";
 }
 
 // ---------- Helpers ----------
@@ -216,6 +336,17 @@ function getSheet_() {
     sheet.appendRow(HEADERS);
     sheet.setFrozenRows(1);
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight("bold").setBackground(BRAND.pale);
+  }
+  return sheet;
+}
+
+function getVolunteerSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(VOLUNTEER_SHEET_NAME) || ss.insertSheet(VOLUNTEER_SHEET_NAME);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(VOL_HEADERS);
+    sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, VOL_HEADERS.length).setFontWeight("bold").setBackground(BRAND.pale);
   }
   return sheet;
 }

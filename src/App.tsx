@@ -33,7 +33,14 @@ const AppContent: React.FC = () => {
           <Route path="/programme" element={<ProgrammePage />} />
           <Route path="/hackathon" element={<HackathonPage />} />
           <Route path="/partner" element={<PartnerPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/booth" element={<PartnerPage />} />
+          <Route path="/booths" element={<PartnerPage />} />
+          <Route path="/exhibit" element={<PartnerPage />} />
+          <Route path="/register" element={<RegisterPage defaultTab="attendee" />} />
+          <Route path="/auth" element={<RegisterPage defaultTab="signin" />} />
+          <Route path="/login" element={<RegisterPage defaultTab="signin" />} />
+          <Route path="/signin" element={<RegisterPage defaultTab="signin" />} />
+          <Route path="/volunteer" element={<RegisterPage defaultTab="volunteer" />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/faq" element={<VenueFaqPage />} />
           {/* Fallback to home */}

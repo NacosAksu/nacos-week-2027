@@ -10,7 +10,12 @@ interface ConfirmedPass {
   interests: string[];
 }
 
-export const RegisterForm: React.FC = () => {
+interface RegisterFormProps {
+  onSwitchToVolunteer?: () => void;
+  onSwitchToSignIn?: () => void;
+}
+
+export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer, onSwitchToSignIn }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,6 +36,18 @@ export const RegisterForm: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitLabel, setSubmitLabel] = useState('Register Free Pass');
   const [confirmedPass, setConfirmedPass] = useState<ConfirmedPass | null>(null);
+
+  const savePassLocally = (pass: ConfirmedPass) => {
+    try {
+      localStorage.setItem('nw27_last_pass', JSON.stringify({
+        ...pass,
+        registeredAt: new Date().toISOString(),
+        type: 'delegate'
+      }));
+    } catch {
+      // storage unavailable
+    }
+  };
 
   const validate = () => {
     const errs: Record<string, string> = {};
@@ -85,14 +102,16 @@ export const RegisterForm: React.FC = () => {
     const endpoint = siteConfig.forms.registrationEndpoint;
     if (!endpoint) {
       const demoId = `NW27-REG-${Math.floor(1000 + Math.random() * 9000)}`;
-      setConfirmedPass({
+      const passObj: ConfirmedPass = {
         name: currentName,
         passId: demoId,
         department: currentDept,
         level: currentLevel,
         email: currentEmail,
         interests: currentInterests
-      });
+      };
+      setConfirmedPass(passObj);
+      savePassLocally(passObj);
       setStatus({
         tone: 'ok',
         message: `Seat Reserved! Your pass ID is ${demoId}. Details saved.`
@@ -129,14 +148,16 @@ export const RegisterForm: React.FC = () => {
       }
 
       const generatedId = res.id || `NW27-REG-${Math.floor(1000 + Math.random() * 9000)}`;
-      setConfirmedPass({
+      const passObj: ConfirmedPass = {
         name: currentName,
         passId: generatedId,
         department: currentDept,
         level: currentLevel,
         email: currentEmail,
         interests: currentInterests
-      });
+      };
+      setConfirmedPass(passObj);
+      savePassLocally(passObj);
 
       setFormData({
         name: '',
@@ -166,14 +187,16 @@ export const RegisterForm: React.FC = () => {
     } catch {
       // In case network endpoint encounters CORS or local dev offline error, generate verified preview pass
       const fallbackId = `NW27-REG-${Math.floor(1000 + Math.random() * 9000)}`;
-      setConfirmedPass({
+      const passObj: ConfirmedPass = {
         name: currentName,
         passId: fallbackId,
         department: currentDept,
         level: currentLevel,
         email: currentEmail,
         interests: currentInterests
-      });
+      };
+      setConfirmedPass(passObj);
+      savePassLocally(passObj);
       setStatus({
         tone: 'ok',
         message: `Registration recorded locally! Your pass ID is ${fallbackId}.`
@@ -190,13 +213,13 @@ export const RegisterForm: React.FC = () => {
         <div className="wrap register__grid">
           <div className="register__intro">
             <span className="tag">Official Delegate Portal</span>
-            <h2 id="register-title" className="h2" style={{ margin: 'var(--space-xs) 0 var(--space-sm)' }}>
+            <h2 id="register-title" className="h2" style={{ margin: 'var(--space-xs) 0 var(--space-sm)', color: '#ffffff' }}>
               Reserve Your Pass
             </h2>
-            <p className="lead">
+            <p className="lead" style={{ color: 'rgba(255, 255, 255, 0.78)' }}>
               Tell us which events and tracks you want to be part of. We will send you priority access badges, hackathon team portal access, and session schedules.
             </p>
-            <div className="register__benefits" style={{ marginTop: 'var(--space-lg)', display: 'grid', gap: 'var(--space-sm)', fontSize: 'var(--text-sm)', color: 'var(--color-ink-muted)' }}>
+            <div className="register__benefits" style={{ marginTop: 'var(--space-md)', display: 'grid', gap: 'var(--space-sm)', fontSize: 'var(--text-sm)', color: 'rgba(255, 255, 255, 0.85)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ color: 'var(--brand-green)', fontWeight: 800 }}>✓</span>
                 <span>Free admission for all AKSU students across all faculties</span>
@@ -210,6 +233,50 @@ export const RegisterForm: React.FC = () => {
                 <span>Direct entry into the 3-week Confluence Innovation Bootcamp</span>
               </div>
             </div>
+
+            {/* Holographic Badge Preview on Left Column */}
+            <div className="pass-preview-card" style={{ marginTop: 'var(--space-lg)' }}>
+              <div className="pass-preview-card__header">
+                <div className="pass-preview-card__live-indicator">
+                  <span className="nacos-green-dot" />
+                  <span>OFFICIAL BADGE ACCREDITATION</span>
+                </div>
+                <span className="pass-preview-card__year">FEB 2027</span>
+              </div>
+              <div className="pass-preview-card__body">
+                <div className="pass-preview-card__theme">CONFLUENCE &bull; NACOS WEEK 27</div>
+                <div className="pass-preview-card__role">DELEGATE &bull; ALL-ACCESS</div>
+                <div className="pass-preview-card__location">Conference Centre, Perm Site, AKSU</div>
+              </div>
+              <div className="pass-preview-card__footer">
+                <div className="pass-preview-barcode">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </div>
+                <span className="pass-preview-card__id">NW27-VERIFIED-PASS</span>
+              </div>
+            </div>
+
+            {onSwitchToSignIn && (
+              <div style={{ marginTop: 'var(--space-md)', padding: 'var(--space-sm)', background: 'rgba(255, 255, 255, 0.05)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <span style={{ fontSize: 'var(--text-xs)', color: 'rgba(255, 255, 255, 0.8)' }}>
+                  Already registered for NACOS Week 2027?{' '}
+                </span>
+                <button
+                  type="button"
+                  onClick={onSwitchToSignIn}
+                  style={{ background: 'none', border: 'none', color: '#a4f49b', fontWeight: 700, fontSize: 'var(--text-xs)', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+                >
+                  Sign In / Find Your Pass &rarr;
+                </button>
+              </div>
+            )}
           </div>
 
           <form className="form" onSubmit={handleSubmit} noValidate>
@@ -382,6 +449,30 @@ export const RegisterForm: React.FC = () => {
               >
                 {status.message}
               </p>
+            )}
+
+            {onSwitchToVolunteer && (
+              <div style={{ textAlign: 'center', marginTop: 'var(--space-md)' }}>
+                <button
+                  type="button"
+                  onClick={onSwitchToVolunteer}
+                  className="volunteer-switch-link"
+                >
+                  Looking to join the organizing crew? Apply as a Volunteer &rarr;
+                </button>
+              </div>
+            )}
+
+            {onSwitchToSignIn && (
+              <div style={{ textAlign: 'center', marginTop: 'var(--space-xs)' }}>
+                <button
+                  type="button"
+                  onClick={onSwitchToSignIn}
+                  style={{ background: 'none', border: 'none', color: 'var(--brand-deep)', fontWeight: 600, fontSize: 'var(--text-xs)', cursor: 'pointer', padding: 0 }}
+                >
+                  Already reserved your pass? Sign in &amp; retrieve your badge &rarr;
+                </button>
+              </div>
             )}
           </form>
         </div>
