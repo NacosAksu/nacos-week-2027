@@ -24,6 +24,10 @@ export interface LinksConfig {
   phone: string;
   whatsapp: string;
   mediaTeamWhatsApp?: string;
+  protocolTeamWhatsApp?: string;
+  welfareLogisticsWhatsApp?: string;
+  registrationTeamWhatsApp?: string;
+  sponsorshipTeamWhatsApp?: string;
   instagram: string;
   x: string;
   linkedin: string;

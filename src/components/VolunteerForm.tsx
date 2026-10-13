@@ -17,7 +17,7 @@ export const volunteerTeams: VolunteerTeam[] = [
     id: 'media',
     name: 'Media & Publicity Team',
     icon: '📸',
-    badge: 'WhatsApp Group Active',
+    badge: 'Production & Video',
     description: 'Capture, document and broadcast NACOS Week 2027 across campus and digital platforms.',
     tasks: [
       'Photography & DSLR camera coverage',
@@ -29,17 +29,64 @@ export const volunteerTeams: VolunteerTeam[] = [
     whatsAppNote: 'Direct link to the active Media Team WhatsApp group for shoot schedules, gear briefings, and content assignments.'
   },
   {
-    id: 'logistics',
-    name: 'Logistics & Protocol Team',
-    icon: '📦',
-    badge: 'Operations',
-    description: 'Coordinate venue readiness, VIP protocol, hall arrangements, and attendee ushering.',
+    id: 'protocol',
+    name: 'Protocol Team',
+    icon: '🎖️',
+    badge: 'Dignitaries & VIPs',
+    description: 'Coordinate VIP protocol, guest speaker hospitality, high-table coordination, and official ushering.',
     tasks: [
-      'Conference hall staging & podium layout',
       'VIP guest & keynote speaker escort protocol',
-      'Physical delegate badge check-in desk',
-      'Merchandise, swag and program brochure distribution'
-    ]
+      'Stage management & dignitary podium coordination',
+      'High-table ushering & executive guest reception',
+      'Itinerary timing compliance & protocol duties'
+    ],
+    whatsAppGroup: siteConfig.links.protocolTeamWhatsApp || 'https://chat.whatsapp.com/GKUcXY31wpmDEjJvExnUre?s=sw&p=a&mlu=4&ilr=4',
+    whatsAppNote: 'Direct link to the official Protocol Team WhatsApp group for VIP briefings and ushering assignments.'
+  },
+  {
+    id: 'welfare_logistics',
+    name: 'Welfare and Logistics Team',
+    icon: '📦',
+    badge: 'Operations & Care',
+    description: 'Manage venue readiness, hall layout, attendee hospitality, and sustenance logistics.',
+    tasks: [
+      'Conference hall staging & seating arrangements',
+      'Speaker & delegate refreshment checkpoints',
+      'Dietary logistics for hackathon teams',
+      'Swag, gear & program brochure distribution'
+    ],
+    whatsAppGroup: siteConfig.links.welfareLogisticsWhatsApp || 'https://chat.whatsapp.com/LuiTDSSpXNMAhjGacfWMpw?s=sw&p=a&mlu=4&ilr=4',
+    whatsAppNote: 'Direct link to the Welfare and Logistics WhatsApp group for operational planning and shift rosters.'
+  },
+  {
+    id: 'registration',
+    name: 'Registration Team',
+    icon: '🎟️',
+    badge: 'Accreditation Desk',
+    description: 'Manage attendee check-in, pass validation, delegate tag issuance, and accreditation desk.',
+    tasks: [
+      'Attendee digital pass verification & validation',
+      'Accreditation badge & wristband issuance',
+      'Helpdesk assistance for registration queries',
+      'Real-time check-in flow & attendance logging'
+    ],
+    whatsAppGroup: siteConfig.links.registrationTeamWhatsApp || 'https://chat.whatsapp.com/BBIcYbEB3b1Avj4gXuQMVm?s=sw&p=a&mlu=4&ilr=4',
+    whatsAppNote: 'Direct link to the Registration Team WhatsApp group for accreditation training and check-in workflows.'
+  },
+  {
+    id: 'sponsorship',
+    name: 'Sponsorship / Collaboration Department',
+    icon: '🤝',
+    badge: 'Partnerships & Grants',
+    description: 'Serve as company liaisons for corporate sponsors, exhibitors, and recruitment partners.',
+    tasks: [
+      'Sponsor exhibition booth reception & assistance',
+      'Corporate delegate escort & executive networking desk',
+      'Hackathon challenge partner coordination',
+      'Partner gift bag assembly & presentation'
+    ],
+    whatsAppGroup: siteConfig.links.sponsorshipTeamWhatsApp || 'https://chat.whatsapp.com/J29siJhWfLqARXxjC3fxbi?s=sw&p=a&mlu=4&ilr=4',
+    whatsAppNote: 'Direct link to the Sponsorship / Collaboration Department WhatsApp group for partner outreach and corporate desk.'
   },
   {
     id: 'technical',
@@ -52,46 +99,8 @@ export const volunteerTeams: VolunteerTeam[] = [
       'Projector displays, HDMI routing & presentations',
       'Hackathon local lab network & power backup monitoring',
       'Virtual stream technical supervision'
-    ]
-  },
-  {
-    id: 'welfare',
-    name: 'Welfare & Hospitality Team',
-    icon: '🍱',
-    badge: 'Hospitality',
-    description: 'Ensure delegates, dignitaries, and organizing teams remain energized and cared for.',
-    tasks: [
-      'Speaker green room & VIP lounge catering',
-      'Delegate hydration & refreshment checkpoints',
-      'Dietary logistics for hackathon overnight teams',
-      'Campus first-aid & medical post liaison'
-    ]
-  },
-  {
-    id: 'security',
-    name: 'Security & Crowd Management Team',
-    icon: '🛡️',
-    badge: 'Access Control',
-    description: 'Maintain safety, hall capacity compliance, and seamless crowd movement.',
-    tasks: [
-      'Auditorium gate pass verification & wristband checks',
-      'Crowd flow control between keynote & breakout sessions',
-      'Campus security unit liaison & venue safety patrols',
-      'Emergency response & perimeter coordination'
-    ]
-  },
-  {
-    id: 'sponsorship',
-    name: 'Sponsorship & Partner Desk',
-    icon: '🤝',
-    badge: 'Partnerships',
-    description: 'Serve as company liaisons for corporate sponsors, exhibitors, and recruiters.',
-    tasks: [
-      'Sponsor exhibition booth reception & assistance',
-      'Corporate delegate escort & executive networking desk',
-      'Hackathon challenge partner coordination',
-      'Partner gift bag assembly & presentation'
-    ]
+    ],
+    whatsAppNote: 'Technical leads will contact approved crew directly for sound checks and equipment setup.'
   }
 ];
 
@@ -116,7 +125,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
     phone: '',
     department: '',
     level: '',
-    selectedTeam: 'media', // Default to media team or empty
+    selectedTeam: '', // Unselected by default so user picks their specific committee
     experience: '',
     availability: 'Full Week (Mon - Fri)',
     agreed_terms: false,
@@ -188,7 +197,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
     setSubmitLabel('Submitting Application...');
 
     const endpoint = siteConfig.forms.registrationEndpoint;
-    const generatedPassId = `NW27-VOL-${Math.floor(1000 + Math.random() * 9000)}`;
+    let finalPassId = `NW27-VOL-${Math.floor(1000 + Math.random() * 9000)}`;
 
     try {
       if (endpoint) {
@@ -197,21 +206,31 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
         bodyParams.append('email', formData.email);
         bodyParams.append('phone', formData.phone);
         bodyParams.append('department', formData.department);
-        bodyParams.append('level', formData.level);
+        bodyParams.append('level', formData.level || 'Student');
         bodyParams.append('volunteer_team', chosenTeam.name);
         bodyParams.append('availability', formData.availability);
-        bodyParams.append('experience', formData.experience);
+        bodyParams.append('experience', formData.experience || 'None');
         bodyParams.append('type', 'volunteer');
+        bodyParams.append('contact_ok', 'yes');
+        bodyParams.append('interests', `Volunteer: ${chosenTeam.name}`);
+        bodyParams.append('share_with_partners', 'no');
 
-        await fetch(endpoint, {
+        const response = await fetch(endpoint, {
           method: 'POST',
           body: bodyParams
         });
+
+        if (response.ok) {
+          const res = await response.json();
+          if (res && res.id) {
+            finalPassId = res.id;
+          }
+        }
       }
 
       setConfirmedVolunteer({
         name: applicantName,
-        passId: generatedPassId,
+        passId: finalPassId,
         department: applicantDept,
         level: applicantLevel,
         email: applicantEmail,
@@ -221,7 +240,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
 
       setStatus({
         tone: 'ok',
-        message: `Application received! Accreditation ID: ${generatedPassId}.`
+        message: `Application received! Accreditation ID: ${finalPassId}.`
       });
 
       setSubmitLabel('Application Submitted');
@@ -229,7 +248,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
       // Offline / fallback verification
       setConfirmedVolunteer({
         name: applicantName,
-        passId: generatedPassId,
+        passId: finalPassId,
         department: applicantDept,
         level: applicantLevel,
         email: applicantEmail,
@@ -365,37 +384,6 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
                 );
               })}
             </div>
-
-            {/* Special WhatsApp Callout if Media Team is selected */}
-            {selectedTeamData?.id === 'media' && (
-              <div className="volunteer-whatsapp-callout" role="region" aria-label="Media Team WhatsApp Notification">
-                <div className="volunteer-whatsapp-callout__icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
-                  </svg>
-                </div>
-                <div className="volunteer-whatsapp-callout__content">
-                  <div className="volunteer-whatsapp-callout__headline">
-                    <strong>Official Media Team Coordination Group</strong>
-                    <span className="volunteer-whatsapp-callout__badge">Active Working Group</span>
-                  </div>
-                  <p className="volunteer-whatsapp-callout__text">
-                    You have chosen the <strong>Media &amp; Publicity Team</strong>. Join our official WhatsApp group right away to receive gear briefings, photography rosters, and live production assignments:
-                  </p>
-                  <a
-                    href={selectedTeamData.whatsAppGroup}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="volunteer-whatsapp-link-btn"
-                  >
-                    <span>Join Media Team on WhatsApp</span>
-                    <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13" aria-hidden="true">
-                      <path fillRule="evenodd" d="M3.75 8a.75.75 0 0 1 .75-.75h5.69L7.97 5.03a.75.75 0 1 1 1.06-1.06l3.5 3.5a.75.75 0 0 1 0 1.06l-3.5 3.5a.75.75 0 0 1-1.06-1.06l2.22-2.22H4.5A.75.75 0 0 1 3.75 8Z" clipRule="evenodd" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            )}
 
             {/* Applicant Details Form */}
             <div className="volunteer-fields-box">
@@ -676,11 +664,11 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
               </div>
             </div>
 
-            {/* Special WhatsApp action button inside modal if Media Team */}
+            {/* Private WhatsApp invitation: strictly visible ONLY after submission to applicants of that specific team */}
             {confirmedVolunteer.team.whatsAppGroup && (
               <div style={{ marginTop: 'var(--space-md)', background: 'rgba(8, 144, 2, 0.12)', border: '1px solid rgba(8, 144, 2, 0.35)', borderRadius: 'var(--radius-sm)', padding: 'var(--space-md)', textAlign: 'center' }}>
                 <p style={{ fontSize: '0.825rem', color: '#e6f2e3', margin: '0 0 var(--space-xs)', fontWeight: 500 }}>
-                  Step 2: Join the official <strong>{confirmedVolunteer.team.name}</strong> WhatsApp group now:
+                  Step 2: Join the private <strong>{confirmedVolunteer.team.name}</strong> WhatsApp working group now:
                 </p>
                 <a
                   href={confirmedVolunteer.team.whatsAppGroup}
@@ -692,7 +680,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style={{ marginRight: '8px' }}>
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
                   </svg>
-                  <span>Join Media Team WhatsApp Group</span>
+                  <span>Join {confirmedVolunteer.team.name} WhatsApp Group</span>
                 </a>
               </div>
             )}

@@ -21,7 +21,7 @@ emails are sent from whichever account deploys the script.
 2. Google asks for permission. Click **Review permissions**, choose the NACOS
    account, then **Advanced → Go to (project name) → Allow**. The warning appears
    because you wrote the script yourself; it is not published by Google.
-3. Back in the sheet, a `Registrations` tab now exists with headings.
+3. Back in the sheet, both a `Registrations` tab and a `Volunteers` tab now exist with headings.
 
 `setup` also turns on an hourly job that sends any confirmation emails held
 back by Gmail's daily limit (see below).
@@ -47,6 +47,10 @@ Commit and push. Then register once on the live site with your own email to test
 
 ## Things to know
 
+- **Dual sheet routing.** General attendees and delegates go to the **Registrations**
+  tab with pass IDs (`NW27-0001`...). Volunteer applications go directly to the
+  **Volunteers** tab with accreditation IDs (`NW27-VOL-0001`...), their selected
+  committee, availability, and experience.
 - **Daily email limit.** A free Gmail account can send about 100 script emails a
   day. Every registration is saved straight away. If the limit is reached, the
   row shows `pending` in the **Email status** column and the email goes out
