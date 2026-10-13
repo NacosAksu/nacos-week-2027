@@ -103,6 +103,8 @@ export const Navbar: React.FC = () => {
             <NavLink to="/programme" onClick={closeMenu}>Programme</NavLink>
             <NavLink to="/hackathon" onClick={closeMenu}>Hackathon</NavLink>
             <NavLink to="/partner" onClick={closeMenu}>Partner &amp; Sponsor</NavLink>
+            <NavLink to="/auth" onClick={closeMenu}>Sign In / My Pass</NavLink>
+            <NavLink to="/register?tab=volunteer" onClick={closeMenu}>Join as Volunteer</NavLink>
             <NavLink to="/about" onClick={closeMenu}>About NACOS</NavLink>
             <NavLink to="/faq" onClick={closeMenu}>Venue &amp; FAQ</NavLink>
           </nav>

@@ -26,6 +26,7 @@ export const siteConfig: SiteConfig = {
     generalEmail: "nacosfcitaksu@gmail.com",
     phone: "09035056134",
     whatsapp: "https://whatsapp.com/channel/0029Vb87N0c9Bb5utsX0yk2R",
+    mediaTeamWhatsApp: "https://chat.whatsapp.com/JJNaojZl0Oj4EDQM9LhsMN?s=sw&p=a&mlu=4&ilr=4",
     instagram: "https://www.instagram.com/nacos_aksu/",
     x: "https://x.com/nacos_aksu",
     linkedin: "",

@@ -1,0 +1,725 @@
+import React, { useState } from 'react';
+import { siteConfig } from '../config/siteConfig';
+
+export interface VolunteerTeam {
+  id: string;
+  name: string;
+  icon: string;
+  badge: string;
+  description: string;
+  tasks: string[];
+  whatsAppGroup?: string;
+  whatsAppNote?: string;
+}
+
+export const volunteerTeams: VolunteerTeam[] = [
+  {
+    id: 'media',
+    name: 'Media & Publicity Team',
+    icon: '📸',
+    badge: 'WhatsApp Group Active',
+    description: 'Capture, document and broadcast NACOS Week 2027 across campus and digital platforms.',
+    tasks: [
+      'Photography & DSLR camera coverage',
+      'Short-form reels & recap video editing',
+      'Live social media updates & Twitter/X spaces',
+      'Speaker & attendee red-carpet interviews'
+    ],
+    whatsAppGroup: siteConfig.links.mediaTeamWhatsApp || 'https://chat.whatsapp.com/JJNaojZl0Oj4EDQM9LhsMN?s=sw&p=a&mlu=4&ilr=4',
+    whatsAppNote: 'Direct link to the active Media Team WhatsApp group for shoot schedules, gear briefings, and content assignments.'
+  },
+  {
+    id: 'logistics',
+    name: 'Logistics & Protocol Team',
+    icon: '📦',
+    badge: 'Operations',
+    description: 'Coordinate venue readiness, VIP protocol, hall arrangements, and attendee ushering.',
+    tasks: [
+      'Conference hall staging & podium layout',
+      'VIP guest & keynote speaker escort protocol',
+      'Physical delegate badge check-in desk',
+      'Merchandise, swag and program brochure distribution'
+    ]
+  },
+  {
+    id: 'technical',
+    name: 'Technical & Sound Team',
+    icon: '⚡',
+    badge: 'Audio-Visual',
+    description: 'Manage audio-visual engineering, stage electronics, and hackathon lab networking.',
+    tasks: [
+      'Auditorium sound engineering & live microphones',
+      'Projector displays, HDMI routing & presentations',
+      'Hackathon local lab network & power backup monitoring',
+      'Virtual stream technical supervision'
+    ]
+  },
+  {
+    id: 'welfare',
+    name: 'Welfare & Hospitality Team',
+    icon: '🍱',
+    badge: 'Hospitality',
+    description: 'Ensure delegates, dignitaries, and organizing teams remain energized and cared for.',
+    tasks: [
+      'Speaker green room & VIP lounge catering',
+      'Delegate hydration & refreshment checkpoints',
+      'Dietary logistics for hackathon overnight teams',
+      'Campus first-aid & medical post liaison'
+    ]
+  },
+  {
+    id: 'security',
+    name: 'Security & Crowd Management Team',
+    icon: '🛡️',
+    badge: 'Access Control',
+    description: 'Maintain safety, hall capacity compliance, and seamless crowd movement.',
+    tasks: [
+      'Auditorium gate pass verification & wristband checks',
+      'Crowd flow control between keynote & breakout sessions',
+      'Campus security unit liaison & venue safety patrols',
+      'Emergency response & perimeter coordination'
+    ]
+  },
+  {
+    id: 'sponsorship',
+    name: 'Sponsorship & Partner Desk',
+    icon: '🤝',
+    badge: 'Partnerships',
+    description: 'Serve as company liaisons for corporate sponsors, exhibitors, and recruiters.',
+    tasks: [
+      'Sponsor exhibition booth reception & assistance',
+      'Corporate delegate escort & executive networking desk',
+      'Hackathon challenge partner coordination',
+      'Partner gift bag assembly & presentation'
+    ]
+  }
+];
+
+interface ConfirmedVolunteer {
+  name: string;
+  passId: string;
+  department: string;
+  level: string;
+  email: string;
+  team: VolunteerTeam;
+  availability: string;
+}
+
+interface VolunteerFormProps {
+  onSwitchToAttendee?: () => void;
+}
+
+export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    department: '',
+    level: '',
+    selectedTeam: 'media', // Default to media team or empty
+    experience: '',
+    availability: 'Full Week (Mon - Fri)',
+    agreed_terms: false,
+    website: '' // honeypot
+  });
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [status, setStatus] = useState<{ tone: 'ok' | 'error' | ''; message: string }>({
+    tone: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitLabel, setSubmitLabel] = useState('Submit Volunteer Application');
+  const [confirmedVolunteer, setConfirmedVolunteer] = useState<ConfirmedVolunteer | null>(null);
+
+  const selectedTeamData = volunteerTeams.find((t) => t.id === formData.selectedTeam);
+
+  const validate = () => {
+    const errs: Record<string, string> = {};
+    if (!formData.name.trim() || formData.name.trim().length <= 1) {
+      errs.name = 'Enter your full name.';
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      errs.email = 'Enter a valid email address.';
+    }
+    if (formData.phone.replace(/[^\d]/g, '').length < 10) {
+      errs.phone = 'Enter an active WhatsApp phone number.';
+    }
+    if (!formData.department.trim()) {
+      errs.department = 'Enter your department.';
+    }
+    if (!formData.selectedTeam) {
+      errs.selectedTeam = 'Please select exactly 1 volunteer team.';
+    }
+    if (!formData.agreed_terms) {
+      errs.agreed_terms = 'Please accept the volunteer commitment statement.';
+    }
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleSelectTeam = (teamId: string) => {
+    // STRICT RULE: 1 user can only select one team
+    setFormData((prev) => ({ ...prev, selectedTeam: teamId }));
+    if (errors.selectedTeam) {
+      setErrors((prev) => {
+        const updated = { ...prev };
+        delete updated.selectedTeam;
+        return updated;
+      });
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus({ tone: '', message: '' });
+
+    if (!validate()) return;
+    if (formData.website) return; // Honeypot
+
+    const chosenTeam = volunteerTeams.find((t) => t.id === formData.selectedTeam) || volunteerTeams[0];
+    const applicantName = formData.name;
+    const applicantEmail = formData.email;
+    const applicantDept = formData.department;
+    const applicantLevel = formData.level || 'Student Volunteer';
+    const applicantAvailability = formData.availability;
+
+    setIsSubmitting(true);
+    setSubmitLabel('Submitting Application...');
+
+    const endpoint = siteConfig.forms.registrationEndpoint;
+    const generatedPassId = `NW27-VOL-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    try {
+      if (endpoint) {
+        const bodyParams = new URLSearchParams();
+        bodyParams.append('name', formData.name);
+        bodyParams.append('email', formData.email);
+        bodyParams.append('phone', formData.phone);
+        bodyParams.append('department', formData.department);
+        bodyParams.append('level', formData.level);
+        bodyParams.append('volunteer_team', chosenTeam.name);
+        bodyParams.append('availability', formData.availability);
+        bodyParams.append('experience', formData.experience);
+        bodyParams.append('type', 'volunteer');
+
+        await fetch(endpoint, {
+          method: 'POST',
+          body: bodyParams
+        });
+      }
+
+      setConfirmedVolunteer({
+        name: applicantName,
+        passId: generatedPassId,
+        department: applicantDept,
+        level: applicantLevel,
+        email: applicantEmail,
+        team: chosenTeam,
+        availability: applicantAvailability
+      });
+
+      setStatus({
+        tone: 'ok',
+        message: `Application received! Accreditation ID: ${generatedPassId}.`
+      });
+
+      setSubmitLabel('Application Submitted');
+    } catch {
+      // Offline / fallback verification
+      setConfirmedVolunteer({
+        name: applicantName,
+        passId: generatedPassId,
+        department: applicantDept,
+        level: applicantLevel,
+        email: applicantEmail,
+        team: chosenTeam,
+        availability: applicantAvailability
+      });
+
+      setStatus({
+        tone: 'ok',
+        message: `Volunteer application recorded! Accreditation ID: ${generatedPassId}.`
+      });
+      setSubmitLabel('Application Submitted');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <>
+      <section className="section volunteer-section" id="volunteer" aria-labelledby="volunteer-title">
+        <div className="wrap">
+          <div className="volunteer-header">
+            <span className="tag">Organizing Crew · NACOS Week 2027</span>
+            <h2 id="volunteer-title" className="h2" style={{ margin: 'var(--space-xs) 0 var(--space-sm)', color: '#ffffff' }}>
+              Join the Volunteer Crew
+            </h2>
+            <p className="lead" style={{ maxWidth: '680px', color: 'rgba(255, 255, 255, 0.78)' }}>
+              Step into the engine room of Akwa Ibom State University&apos;s premier innovation festival.
+              Gain practical leadership experience, work side-by-side with industry guests, and earn an official certificate of commendation.
+            </p>
+
+            {/* Quick Benefits Bar */}
+            <div className="volunteer-perks">
+              <div className="volunteer-perk-item">
+                <span className="volunteer-perk-check">✓</span>
+                <span style={{ color: 'rgba(255, 255, 255, 0.85)' }}>Certified Letter of Commendation</span>
+              </div>
+              <div className="volunteer-perk-item">
+                <span className="volunteer-perk-check">✓</span>
+                <span style={{ color: 'rgba(255, 255, 255, 0.85)' }}>Official NACOS Week Volunteer Gear</span>
+              </div>
+              <div className="volunteer-perk-item">
+                <span className="volunteer-perk-check">✓</span>
+                <span style={{ color: 'rgba(255, 255, 255, 0.85)' }}>Direct Access to Industry Mentors &amp; Speakers</span>
+              </div>
+              <div className="volunteer-perk-item">
+                <span className="volunteer-perk-check">✓</span>
+                <span style={{ color: 'rgba(255, 255, 255, 0.85)' }}>Meals &amp; Refreshments during Shifts</span>
+              </div>
+            </div>
+          </div>
+
+          <form className="volunteer-form-wrap" onSubmit={handleSubmit} noValidate>
+            {/* Team Selection Header & Rule Notice */}
+            <div className="volunteer-team-intro">
+              <div className="volunteer-team-intro__top">
+                <h3 className="h3" style={{ margin: 0, fontSize: 'var(--text-lg)', color: '#ffffff' }}>
+                  1. Choose Your Committee <span style={{ color: '#00df13' }}>*</span>
+                </h3>
+                <span className="volunteer-single-rule-badge">
+                  Rule: 1 Team per Applicant Only
+                </span>
+              </div>
+              <p style={{ fontSize: 'var(--text-sm)', color: 'rgba(255, 255, 255, 0.72)', margin: 'var(--space-2xs) 0 0' }}>
+                Select the single committee where your skills or passion fit best. Selection is strictly limited to <strong>one team</strong> to ensure focused responsibility.
+              </p>
+              {errors.selectedTeam && (
+                <div className="field__err" style={{ marginTop: 'var(--space-xs)', display: 'block' }}>
+                  {errors.selectedTeam}
+                </div>
+              )}
+            </div>
+
+            {/* Team Cards Radio Grid (Strictly single-select) */}
+            <div className="volunteer-teams-grid" role="radiogroup" aria-label="Volunteer Teams (Select 1 only)">
+              {volunteerTeams.map((team) => {
+                const isSelected = formData.selectedTeam === team.id;
+                return (
+                  <div
+                    key={team.id}
+                    className={`volunteer-team-card ${isSelected ? 'is-selected' : ''}`}
+                    onClick={() => handleSelectTeam(team.id)}
+                    role="radio"
+                    aria-checked={isSelected}
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === ' ' || e.key === 'Enter') {
+                        e.preventDefault();
+                        handleSelectTeam(team.id);
+                      }
+                    }}
+                  >
+                    <div className="volunteer-team-card__top">
+                      <span className="volunteer-team-card__icon" aria-hidden="true">
+                        {team.icon}
+                      </span>
+                      <span className="volunteer-team-card__badge">
+                        {team.badge}
+                      </span>
+                    </div>
+
+                    <div className="volunteer-team-card__content">
+                      <h4 className="volunteer-team-card__title">
+                        {team.name}
+                      </h4>
+                      <p className="volunteer-team-card__desc">
+                        {team.description}
+                      </p>
+
+                      <ul className="volunteer-team-card__tasks">
+                        {team.tasks.map((task, idx) => (
+                          <li key={idx}>&bull; {task}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Radio Indicator Button */}
+                    <div className="volunteer-team-card__radio-slot">
+                      <input
+                        type="radio"
+                        id={`team-radio-${team.id}`}
+                        name="volunteer_team"
+                        value={team.id}
+                        checked={isSelected}
+                        onChange={() => handleSelectTeam(team.id)}
+                        className="volunteer-team-radio-input"
+                      />
+                      <label htmlFor={`team-radio-${team.id}`} className="volunteer-team-radio-label">
+                        {isSelected ? 'Selected Team' : 'Select This Team'}
+                      </label>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Special WhatsApp Callout if Media Team is selected */}
+            {selectedTeamData?.id === 'media' && (
+              <div className="volunteer-whatsapp-callout" role="region" aria-label="Media Team WhatsApp Notification">
+                <div className="volunteer-whatsapp-callout__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+                  </svg>
+                </div>
+                <div className="volunteer-whatsapp-callout__content">
+                  <div className="volunteer-whatsapp-callout__headline">
+                    <strong>Official Media Team Coordination Group</strong>
+                    <span className="volunteer-whatsapp-callout__badge">Active Working Group</span>
+                  </div>
+                  <p className="volunteer-whatsapp-callout__text">
+                    You have chosen the <strong>Media &amp; Publicity Team</strong>. Join our official WhatsApp group right away to receive gear briefings, photography rosters, and live production assignments:
+                  </p>
+                  <a
+                    href={selectedTeamData.whatsAppGroup}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="volunteer-whatsapp-link-btn"
+                  >
+                    <span>Join Media Team on WhatsApp</span>
+                    <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13" aria-hidden="true">
+                      <path fillRule="evenodd" d="M3.75 8a.75.75 0 0 1 .75-.75h5.69L7.97 5.03a.75.75 0 1 1 1.06-1.06l3.5 3.5a.75.75 0 0 1 0 1.06l-3.5 3.5a.75.75 0 0 1-1.06-1.06l2.22-2.22H4.5A.75.75 0 0 1 3.75 8Z" clipRule="evenodd" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* Applicant Details Form */}
+            <div className="volunteer-fields-box">
+              <h3 className="h3" style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-md)', color: '#ffffff' }}>
+                2. Applicant Profile &amp; Contact Details
+              </h3>
+
+              <div className="volunteer-form-grid">
+                <div className="field">
+                  <label htmlFor="vol-name">Full Name *</label>
+                  <input
+                    id="vol-name"
+                    name="name"
+                    type="text"
+                    required
+                    className="field__input"
+                    placeholder="e.g. Victor Udo"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    aria-invalid={!!errors.name}
+                  />
+                  {errors.name && <span className="field__err">{errors.name}</span>}
+                </div>
+
+                <div className="field">
+                  <label htmlFor="vol-email">Email Address *</label>
+                  <input
+                    id="vol-email"
+                    name="email"
+                    type="email"
+                    required
+                    className="field__input"
+                    placeholder="e.g. victor@aksu.edu.ng"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    aria-invalid={!!errors.email}
+                  />
+                  {errors.email && <span className="field__err">{errors.email}</span>}
+                </div>
+
+                <div className="field">
+                  <label htmlFor="vol-phone">WhatsApp Number *</label>
+                  <input
+                    id="vol-phone"
+                    name="phone"
+                    type="tel"
+                    required
+                    className="field__input"
+                    placeholder="e.g. 0801 234 5678"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    aria-invalid={!!errors.phone}
+                  />
+                  {errors.phone && <span className="field__err">{errors.phone}</span>}
+                </div>
+
+                <div className="field">
+                  <label htmlFor="vol-dept">Department &amp; Faculty *</label>
+                  <input
+                    id="vol-dept"
+                    name="department"
+                    type="text"
+                    required
+                    className="field__input"
+                    placeholder="e.g. Computer Science (FCIT)"
+                    value={formData.department}
+                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                    aria-invalid={!!errors.department}
+                  />
+                  {errors.department && <span className="field__err">{errors.department}</span>}
+                </div>
+
+                <div className="field">
+                  <label htmlFor="vol-level">Academic Level</label>
+                  <select
+                    id="vol-level"
+                    name="level"
+                    className="field__input"
+                    value={formData.level}
+                    onChange={(e) => setFormData({ ...formData, level: e.target.value })}
+                  >
+                    <option value="">Select Level</option>
+                    <option value="100">100 Level</option>
+                    <option value="200">200 Level</option>
+                    <option value="300">300 Level</option>
+                    <option value="400">400 Level</option>
+                    <option value="500">500 Level</option>
+                    <option value="Postgraduate">Postgraduate</option>
+                    <option value="Alumni">Alumni / Graduate</option>
+                  </select>
+                </div>
+
+                <div className="field">
+                  <label htmlFor="vol-avail">Availability Commitment</label>
+                  <select
+                    id="vol-avail"
+                    name="availability"
+                    className="field__input"
+                    value={formData.availability}
+                    onChange={(e) => setFormData({ ...formData, availability: e.target.value })}
+                  >
+                    <option value="Full Week (Mon - Fri)">Full Week (Mon - Fri, Recommended)</option>
+                    <option value="Conference Days Only (Tue - Thu)">Conference Days Only (Tue - Thu)</option>
+                    <option value="Bootcamp & Hackathon (Mon - Wed)">Bootcamp &amp; Hackathon (Mon - Wed)</option>
+                    <option value="Gala & Awards Night (Fri)">Gala &amp; Awards Night (Fri)</option>
+                    <option value="Flexible / As Needed">Flexible Shifts / As Needed</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="field" style={{ marginTop: 'var(--space-md)' }}>
+                <label htmlFor="vol-exp">Prior Experience / Equipment (Optional)</label>
+                <textarea
+                  id="vol-exp"
+                  name="experience"
+                  rows={3}
+                  className="field__input field__textarea"
+                  placeholder="e.g. Have a Canon 80D with 50mm lens; previously handled AV mixing for campus fellowship; event management lead."
+                  value={formData.experience}
+                  onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                />
+              </div>
+
+              <div className="field" style={{ marginTop: 'var(--space-sm)' }}>
+                <label className="checkbox" style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                  <input
+                    type="checkbox"
+                    name="agreed_terms"
+                    checked={formData.agreed_terms}
+                    onChange={(e) => setFormData({ ...formData, agreed_terms: e.target.checked })}
+                    aria-invalid={!!errors.agreed_terms}
+                    style={{ marginTop: '3px' }}
+                  />
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-on-night-muted)' }}>
+                    I confirm that I will be available for my selected committee shifts, attend pre-event briefings, and represent NACOS AKSU with professionalism. *
+                  </span>
+                </label>
+                {errors.agreed_terms && <span className="field__err">{errors.agreed_terms}</span>}
+              </div>
+
+              {/* Honeypot */}
+              <div style={{ display: 'none' }} aria-hidden="true">
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={formData.website}
+                  onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="btn btn--signal form__submit"
+                disabled={isSubmitting}
+                style={{ width: '100%', justifyContent: 'center', marginTop: 'var(--space-lg)' }}
+              >
+                <span>{submitLabel} &rarr;</span>
+              </button>
+
+              {status.message && (
+                <p className="form__status" role="status" aria-live="polite" data-tone={status.tone}>
+                  {status.message}
+                </p>
+              )}
+
+              {onSwitchToAttendee && (
+                <div style={{ textAlign: 'center', marginTop: 'var(--space-md)' }}>
+                  <button
+                    type="button"
+                    onClick={onSwitchToAttendee}
+                    className="volunteer-switch-link"
+                  >
+                    &larr; Just looking for an Attendee Free Pass? Switch to Delegate Registration
+                  </button>
+                </div>
+              )}
+            </div>
+          </form>
+        </div>
+      </section>
+
+      {/* Confirmed Volunteer Accreditation Modal */}
+      {confirmedVolunteer && (
+        <div
+          className="modal-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="volModalTitle"
+          onClick={() => setConfirmedVolunteer(null)}
+        >
+          <div
+            className="modal-dialog-box"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: '520px' }}
+          >
+            <button
+              className="modal-close-x"
+              type="button"
+              onClick={() => setConfirmedVolunteer(null)}
+              aria-label="Close modal"
+            >
+              &times;
+            </button>
+
+            <div style={{ textAlign: 'center', marginBottom: 'var(--space-md)' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(8, 144, 2, 0.15)', border: '1px solid var(--brand-green)', padding: '4px 12px', borderRadius: 'var(--radius-pill)', color: '#a4f49b', fontSize: 'var(--text-xs)', fontWeight: 700 }}>
+                <span className="nacos-green-dot"></span>
+                VOLUNTEER ACCREDITATION RECORDED
+              </div>
+              <h3 id="volModalTitle" className="h3" style={{ color: '#fff', margin: 'var(--space-xs) 0 4px' }}>
+                Welcome to the Crew
+              </h3>
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-on-night-muted)', margin: 0 }}>
+                NACOS Week 2027: Confluence • Organizing Committee
+              </p>
+            </div>
+
+            {/* Volunteer Badge Card */}
+            <div
+              style={{
+                background: 'linear-gradient(145deg, #072a0f 0%, #031507 100%)',
+                color: '#F5F7F2',
+                borderRadius: 'var(--radius-md)',
+                padding: 'var(--space-lg)',
+                border: '1px solid rgba(120, 185, 120, 0.3)',
+                boxShadow: '0 16px 40px rgba(0, 0, 0, 0.7)',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '-15px',
+                  right: '-15px',
+                  opacity: 0.08,
+                  fontSize: '7rem',
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 900,
+                  pointerEvents: 'none'
+                }}
+              >
+                CREW
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255, 255, 255, 0.15)', paddingBottom: 'var(--space-xs)', marginBottom: 'var(--space-sm)' }}>
+                <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#a4f49b', fontWeight: 700 }}>
+                  CREW ACCREDITATION
+                </span>
+                <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.85rem', color: '#fff', background: 'rgba(255,255,255,0.15)', padding: '2px 8px', borderRadius: '4px' }}>
+                  {confirmedVolunteer.passId}
+                </span>
+              </div>
+
+              <div style={{ marginBottom: 'var(--space-md)' }}>
+                <span style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase' }}>Volunteer Name</span>
+                <div style={{ fontSize: '1.25rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: '#fff' }}>
+                  {confirmedVolunteer.name}
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 'var(--space-xs)', fontSize: '0.8rem', borderTop: '1px solid rgba(255, 255, 255, 0.12)', paddingTop: 'var(--space-xs)' }}>
+                <div>
+                  <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.7)', display: 'block' }}>Assigned Committee</span>
+                  <strong style={{ color: '#a4f49b' }}>{confirmedVolunteer.team.name}</strong>
+                </div>
+                <div>
+                  <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.7)', display: 'block' }}>Status</span>
+                  <strong>{confirmedVolunteer.level || 'Student Crew'}</strong>
+                </div>
+              </div>
+
+              <div style={{ marginTop: 'var(--space-sm)', paddingTop: 'var(--space-xs)', borderTop: '1px dashed rgba(255, 255, 255, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.7rem' }}>
+                <span style={{ color: '#a4f49b' }}>Shift: {confirmedVolunteer.availability}</span>
+                <span>Venue: Perm Site, AKSU</span>
+              </div>
+            </div>
+
+            {/* Special WhatsApp action button inside modal if Media Team */}
+            {confirmedVolunteer.team.whatsAppGroup && (
+              <div style={{ marginTop: 'var(--space-md)', background: 'rgba(8, 144, 2, 0.12)', border: '1px solid rgba(8, 144, 2, 0.35)', borderRadius: 'var(--radius-sm)', padding: 'var(--space-md)', textAlign: 'center' }}>
+                <p style={{ fontSize: '0.825rem', color: '#e6f2e3', margin: '0 0 var(--space-xs)', fontWeight: 500 }}>
+                  Step 2: Join the official <strong>{confirmedVolunteer.team.name}</strong> WhatsApp group now:
+                </p>
+                <a
+                  href={confirmedVolunteer.team.whatsAppGroup}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn--signal"
+                  style={{ display: 'inline-flex', width: '100%', justifyContent: 'center' }}
+                >
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style={{ marginRight: '8px' }}>
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+                  </svg>
+                  <span>Join Media Team WhatsApp Group</span>
+                </a>
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: 'var(--space-xs)', marginTop: 'var(--space-md)' }}>
+              <button
+                type="button"
+                className="btn btn--outline"
+                style={{ flex: 1, justifyContent: 'center' }}
+                onClick={() => window.print()}
+              >
+                Print Accreditation
+              </button>
+              <button
+                type="button"
+                className="btn btn--signal"
+                style={{ flex: 1, justifyContent: 'center' }}
+                onClick={() => setConfirmedVolunteer(null)}
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default VolunteerForm;

@@ -23,6 +23,7 @@ export interface LinksConfig {
   generalEmail: string;
   phone: string;
   whatsapp: string;
+  mediaTeamWhatsApp?: string;
   instagram: string;
   x: string;
   linkedin: string;
