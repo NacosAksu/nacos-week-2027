@@ -18,3 +18,6 @@ vite.config.js
 
 # Temporary & Log Files
 *.log
+
+# Raw assets
+NACOS AKSU Pitch Deck Presentation.pdf

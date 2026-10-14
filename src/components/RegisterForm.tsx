@@ -212,14 +212,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
       <section className="section register" id="register" aria-labelledby="register-title">
         <div className="wrap register__grid">
           <div className="register__intro">
-            <span className="tag">Official Delegate Portal</span>
-            <h2 id="register-title" className="h2" style={{ margin: 'var(--space-xs) 0 var(--space-sm)', color: '#ffffff' }}>
+            <span className="deck-eyebrow">Delegate Registration</span>
+            <h2 id="register-title" className="h2" style={{ margin: 'var(--space-xs) 0 var(--space-sm)', color: 'var(--brand-black)' }}>
               Reserve Your Pass
             </h2>
-            <p className="lead" style={{ color: 'rgba(255, 255, 255, 0.78)' }}>
-              Tell us which events and tracks you want to be part of. We will send you priority access badges, hackathon team portal access, and session schedules.
+            <p className="lead" style={{ color: 'var(--color-ink-muted)' }}>
+              Select which events and tracks you want to participate in. We will issue your official delegate badge ID, send you session schedules, and enable hackathon team portal access.
             </p>
-            <div className="register__benefits" style={{ marginTop: 'var(--space-md)', display: 'grid', gap: 'var(--space-sm)', fontSize: 'var(--text-sm)', color: 'rgba(255, 255, 255, 0.85)' }}>
+            <div className="register__benefits" style={{ marginTop: 'var(--space-md)', display: 'grid', gap: 'var(--space-sm)', fontSize: 'var(--text-sm)', color: 'var(--brand-black)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ color: 'var(--brand-green)', fontWeight: 800 }}>✓</span>
                 <span>Free admission for all AKSU students across all faculties</span>
@@ -234,12 +234,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
               </div>
             </div>
 
-            {/* Holographic Badge Preview on Left Column */}
+            {/* Minimalist Physical Badge Preview */}
             <div className="pass-preview-card" style={{ marginTop: 'var(--space-lg)' }}>
               <div className="pass-preview-card__header">
                 <div className="pass-preview-card__live-indicator">
-                  <span className="nacos-green-dot" />
-                  <span>OFFICIAL BADGE ACCREDITATION</span>
+                  <span>OFFICIAL ACCREDITATION</span>
                 </div>
                 <span className="pass-preview-card__year">FEB 2027</span>
               </div>
@@ -264,14 +263,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
             </div>
 
             {onSwitchToSignIn && (
-              <div style={{ marginTop: 'var(--space-md)', padding: 'var(--space-sm)', background: 'rgba(255, 255, 255, 0.05)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                <span style={{ fontSize: 'var(--text-xs)', color: 'rgba(255, 255, 255, 0.8)' }}>
+              <div style={{ marginTop: 'var(--space-md)', padding: 'var(--space-sm) var(--space-md)', background: '#ffffff', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-ink-border)' }}>
+                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>
                   Already registered for NACOS Week 2027?{' '}
                 </span>
                 <button
                   type="button"
                   onClick={onSwitchToSignIn}
-                  style={{ background: 'none', border: 'none', color: '#a4f49b', fontWeight: 700, fontSize: 'var(--text-xs)', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+                  style={{ background: 'none', border: 'none', color: 'var(--brand-deep)', fontWeight: 700, fontSize: 'var(--text-xs)', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
                 >
                   Sign In / Find Your Pass &rarr;
                 </button>
@@ -502,77 +501,63 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
             </button>
 
             <div style={{ textAlign: 'center', marginBottom: 'var(--space-md)' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(8, 144, 2, 0.15)', border: '1px solid var(--brand-green)', padding: '4px 12px', borderRadius: 'var(--radius-pill)', color: 'var(--brand-deep)', fontSize: 'var(--text-xs)', fontWeight: 700 }}>
-                <span className="nacos-green-dot"></span>
-                OFFICIAL DELEGATE PASS CONFIRMED
-              </div>
-              <h3 id="passModalTitle" className="h3" style={{ color: 'var(--brand-deep)', margin: 'var(--space-xs) 0 4px' }}>
-                Seat Reserved
+              <span className="deck-eyebrow">Seat Reserved</span>
+              <h3 id="passModalTitle" className="h3" style={{ color: 'var(--brand-black)', margin: 'var(--space-xs) 0 4px' }}>
+                Delegate Pass Confirmed
               </h3>
               <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)', margin: 0 }}>
-                NACOS Week 2027: Confluence • Akwa Ibom State University
+                NACOS Week 2027: Confluence &bull; Akwa Ibom State University
               </p>
             </div>
 
             {/* Pass Card Component */}
-            <div
-              style={{
-                background: 'linear-gradient(145deg, #005012 0%, #042409 100%)',
-                color: '#F5F7F2',
-                borderRadius: 'var(--radius-md)',
-                padding: 'var(--space-lg)',
-                border: '1px solid var(--brand-soft)',
-                boxShadow: '0 12px 30px rgba(0, 80, 18, 0.3)',
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-            >
-              {/* Decorative Watermark */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '-20px',
-                  right: '-20px',
-                  opacity: 0.08,
-                  fontSize: '8rem',
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 900,
-                  pointerEvents: 'none'
-                }}
-              >
-                27
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255, 255, 255, 0.15)', paddingBottom: 'var(--space-xs)', marginBottom: 'var(--space-sm)' }}>
-                <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brand-soft)' }}>
+            <div className="pass-preview-card" style={{ boxShadow: '0 8px 24px rgba(11, 15, 12, 0.08)' }}>
+              <div className="pass-preview-card__header">
+                <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#a4f49b', fontWeight: 700 }}>
                   DELEGATE PASS
                 </span>
-                <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.85rem', color: '#fff', background: 'rgba(255,255,255,0.15)', padding: '2px 8px', borderRadius: '4px' }}>
+                <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.85rem', color: '#fff', background: 'rgba(255,255,255,0.18)', padding: '2px 8px', borderRadius: '4px' }}>
                   {confirmedPass.passId}
                 </span>
               </div>
 
-              <div style={{ marginBottom: 'var(--space-md)' }}>
-                <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase' }}>Attendee Name</span>
-                <div style={{ fontSize: '1.25rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: '#fff' }}>
-                  {confirmedPass.name}
+              <div className="pass-preview-card__body">
+                <div style={{ marginBottom: 'var(--space-md)' }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--color-ink-muted)', textTransform: 'uppercase' }}>Attendee Name</span>
+                  <div style={{ fontSize: '1.25rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-black)' }}>
+                    {confirmedPass.name}
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-xs)', fontSize: '0.8rem', borderTop: '1px solid var(--color-ink-border)', paddingTop: 'var(--space-xs)' }}>
+                  <div>
+                    <span style={{ fontSize: '0.65rem', color: 'var(--color-ink-muted)', display: 'block' }}>Department</span>
+                    <strong style={{ color: 'var(--brand-deep)' }}>{confirmedPass.department}</strong>
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.65rem', color: 'var(--color-ink-muted)', display: 'block' }}>Status</span>
+                    <strong>{confirmedPass.level || 'Student Delegate'}</strong>
+                  </div>
+                </div>
+
+                <div style={{ marginTop: 'var(--space-sm)', paddingTop: 'var(--space-xs)', borderTop: '1px dashed var(--color-ink-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.7rem' }}>
+                  <span style={{ color: 'var(--brand-deep)', fontWeight: 600 }}>Venue: Conference Centre, AKSU</span>
+                  <span style={{ color: 'var(--color-ink-muted)' }}>Prompt 10:00 AM Daily</span>
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-xs)', fontSize: '0.8rem', borderTop: '1px solid rgba(255, 255, 255, 0.15)', paddingTop: 'var(--space-xs)' }}>
-                <div>
-                  <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.7)', display: 'block' }}>Department</span>
-                  <strong>{confirmedPass.department}</strong>
+              <div className="pass-preview-card__footer">
+                <div className="pass-preview-barcode">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
                 </div>
-                <div>
-                  <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.7)', display: 'block' }}>Status</span>
-                  <strong>{confirmedPass.level || 'Student Delegate'}</strong>
-                </div>
-              </div>
-
-              <div style={{ marginTop: 'var(--space-sm)', paddingTop: 'var(--space-xs)', borderTop: '1px dashed rgba(255, 255, 255, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.7rem' }}>
-                <span style={{ color: 'var(--brand-soft)' }}>Venue: Conference Centre, AKSU</span>
-                <span>Prompt 10:00 AM Daily</span>
+                <span className="pass-preview-card__id">{confirmedPass.passId}</span>
               </div>
             </div>
 

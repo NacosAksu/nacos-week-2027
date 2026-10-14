@@ -18,7 +18,7 @@ const tracksData = [
     n: '03',
     name: 'Oil & Gas',
     tag: 'Exploration & Industrial IoT',
-    desc: 'Exploration telemetry, pipeline safety monitoring, and logistical automation. Modern software modernizing the Niger Delta’s backbone.'
+    desc: 'Exploration telemetry, pipeline safety monitoring, and logistical automation. Modern software modernizing the Niger Delta infrastructure.'
   },
   {
     n: '04',
@@ -29,22 +29,25 @@ const tracksData = [
   {
     n: '05',
     name: 'Technology',
-    tag: 'AI, Cloud & Cyber Security',
-    desc: 'Frontier AI models, distributed cloud infrastructure, and proactive security. The foundational engineering every sector builds upon.'
+    tag: 'Software, Cloud & Cyber Security',
+    desc: 'Distributed cloud infrastructure, proactive cybersecurity, and foundational software engineering every sector builds upon.'
   }
 ];
 
 export const Tracks: React.FC = () => {
   return (
-    <section className="section tracks on-dark" id="tracks" aria-labelledby="tracks-title">
+    <section className="section tracks" id="tracks" aria-labelledby="tracks-title">
       <div className="wrap">
         <header className="section__head section__head--split">
           <div>
-            <span className="tag">Sector Specializations</span>
+            <div className="deck-eyebrow">
+              <span className="deck-eyebrow__num">03</span>
+              <span className="deck-eyebrow__text">Sector Specializations</span>
+            </div>
             <h2 id="tracks-title" className="h2">Five tracks. One university.</h2>
           </div>
           <p className="lead">
-            Every pillar of the week—from the hackathon problem briefs to the Tech Conference panels—is organised around five sectors that shape the regional and national economy.
+            Every pillar of the week, from the hackathon problem briefs to the Tech Conference panels, is organised around five sectors that shape the regional and national economy.
           </p>
         </header>
 
@@ -63,7 +66,7 @@ export const Tracks: React.FC = () => {
 
         <div className="tracks__footer">
           <p className="tracks__note">
-            Track partners set real-world problem statements for the hackathon. Partner announcements ongoing.
+            Track partners set real-world problem statements for the hackathon. Partner announcements are ongoing.
           </p>
           <Link to="/tracks" className="btn btn--outline tracks__btn">
             Explore All Track Problem Statements &rarr;

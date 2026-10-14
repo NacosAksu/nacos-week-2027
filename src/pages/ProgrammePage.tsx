@@ -68,7 +68,7 @@ const scheduleData: ScheduleDay[] = [
       },
       {
         time: "10:00 AM - 11:30 AM",
-        title: "Keynote Address: Confluence — Tech Across Traditional Industries",
+        title: "Keynote Address: Confluence: Tech Across Traditional Industries",
         venue: "Main Conference Auditorium (500-seat)",
         category: "Keynote",
         speaker: "Distinguished Guest & Keynote Speaker",
@@ -165,10 +165,10 @@ const scheduleData: ScheduleDay[] = [
       },
       {
         time: "08:30 PM - 10:30 PM",
-        title: "Presentation of Honours, Hackathon Trophies & Valedictory",
+        title: "Presentation of Honours, Faculty Citations & Valedictory",
         venue: "Grand Banquet Hall",
         category: "Gala",
-        description: "Announcement of Hackathon Winners, Student Developer of the Year, Outstanding Executive Awards, and celebration."
+        description: "Department honours, Student Developer of the Year, Outstanding Executive Awards, and celebration."
       }
     ]
   }

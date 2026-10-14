@@ -11,11 +11,14 @@ export const Programme: React.FC = () => {
       <div className="wrap">
         <header className="section__head section__head--split">
           <div>
-            <p className="tag">Convention Pillars</p>
+            <div className="deck-eyebrow">
+              <span className="deck-eyebrow__num">04</span>
+              <span className="deck-eyebrow__text">The Five Pillars</span>
+            </div>
             <h2 id="programme-title" className="h2">Five Events. One Flagship Week.</h2>
           </div>
           <p className="lead">
-            A comprehensive festival combining deep technical problem-solving, ecosystem dialogue, sports, creative pageantry, and celebration.
+            A comprehensive festival combining deep technical problem-solving, industry dialogue, campus sports, creative pageantry, and celebration.
           </p>
         </header>
 
@@ -30,13 +33,14 @@ export const Programme: React.FC = () => {
               className="pillar__media"
             />
             <div className="pillar__body">
+              <div className="pillar__num">01 / Flagship Product</div>
               <p className="pillar__when">
                 {programme.hackathon || "Starts 3 weeks prior"}
               </p>
-              <h3 className="pillar__name">Hackathon</h3>
-              <p className="pillar__sub">Innovation Bootcamp &amp; Demo Day</p>
+              <h3 className="pillar__name">Hackathon (Innovation Bootcamp)</h3>
+              <p className="pillar__sub">Multi-week build across 5 industry tracks</p>
               <p>
-                Three weeks of intensive problem solving around the five tracks with industry mentors. Top finalist teams pitch live on stage at the Annual Tech Conference before a panel of sector judges.
+                Student teams build real solutions against briefs set by sector sponsors. Final projects are judged live on stage at the Tech Conference, where the winners are decided.
               </p>
               <Link to="/hackathon" className="link" style={{ fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginTop: 'var(--space-xs)' }}>
                 How the hackathon works &rarr;
@@ -54,11 +58,12 @@ export const Programme: React.FC = () => {
               className="pillar__media"
             />
             <div className="pillar__body">
+              <div className="pillar__num">02 / Conference</div>
               <p className="pillar__when">
-                {programme.conference || "Day 2 • Main Auditorium"}
+                {programme.conference || "Day 2 • Conference Centre"}
               </p>
-              <h3 className="pillar__name">Annual Tech Conference</h3>
-              <p>Keynotes, plenary sessions, sector panels in Energy, FinTech, Oil &amp; Gas, Medicine, and Technology. Product showcases and live career networking.</p>
+              <h3 className="pillar__name">Tech Conference Day</h3>
+              <p>Keynotes, plenary panels in Energy, FinTech, Oil &amp; Gas, Medicine, and Technology. Hackathon project exhibition and live judging.</p>
               <Link to="/programme" className="link" style={{ fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginTop: 'var(--space-xs)' }}>
                 View conference agenda &rarr;
               </Link>
@@ -75,11 +80,12 @@ export const Programme: React.FC = () => {
               className="pillar__media"
             />
             <div className="pillar__body">
+              <div className="pillar__num">03 / Sports</div>
               <p className="pillar__when">
                 {programme.football || "Day 3 • Campus Stadium"}
               </p>
-              <h3 className="pillar__name">Football Championship</h3>
-              <p>Inter-departmental and inter-faculty clash of titans. Uniting the entire campus student body in high-energy sports and tech carnival culture.</p>
+              <h3 className="pillar__name">Football Tournament</h3>
+              <p>Open-crowd inter-faculty tournament drawing from the wider 30,000 student body across campus. Sportsmanship, community, and energy.</p>
             </div>
           </article>
 
@@ -93,15 +99,16 @@ export const Programme: React.FC = () => {
               className="pillar__media"
             />
             <div className="pillar__body">
+              <div className="pillar__num">04 / Culture</div>
               <p className="pillar__when">
-                {programme.fashion || "Day 4 • Open Amphitheatre"}
+                {programme.fashion || "Day 4 • Open Pavilion"}
               </p>
               <h3 className="pillar__name">Fashion &amp; Pageantry</h3>
-              <p>Runway elegance, creative computing aesthetics, and the coronation of Mr. &amp; Miss NACOS AKSU Royal Council.</p>
+              <p>Crowns the Royal Council of NACOS AKSU. Runway elegance, student creativity, and selection of brand campus ambassadors.</p>
             </div>
           </article>
 
-          <article className="pillar pillar--dark">
+          <article className="pillar">
             <ImageSlot
               src="/assets/photos/pillar-dinner.jpg"
               srcSet="/assets/photos/pillar-dinner-800.jpg 800w, /assets/photos/pillar-dinner.jpg 1600w"
@@ -111,11 +118,12 @@ export const Programme: React.FC = () => {
               className="pillar__media"
             />
             <div className="pillar__body">
+              <div className="pillar__num">05 / Celebration</div>
               <p className="pillar__when">
                 {programme.dinner || "Day 5 • Banquet Hall"}
               </p>
-              <h3 className="pillar__name">Gala Dinner &amp; Award Night</h3>
-              <p>A black-tie evening celebrating departmental excellence, honoring graduating seniors, and presenting hackathon trophies and leadership honours.</p>
+              <h3 className="pillar__name">Dinner &amp; Award Night</h3>
+              <p>A formal evening to dine, network, and honour students who have shown exceptional character, conduct, academic contribution, and leadership.</p>
             </div>
           </article>
         </div>

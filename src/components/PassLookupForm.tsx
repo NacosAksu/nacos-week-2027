@@ -133,16 +133,16 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
       <div className="wrap register__grid">
         {/* Left Column: Accreditation Overview */}
         <div className="register__intro">
-          <span className="tag">Official Accreditation Portal</span>
-          <h2 id="auth-title" className="h2" style={{ margin: 'var(--space-xs) 0 var(--space-sm)', color: '#ffffff' }}>
-            {isCrewMode ? 'Crew & Desk Sign In' : 'Delegate Pass Authentication'}
+          <span className="deck-eyebrow">Accreditation Retrieval</span>
+          <h2 id="auth-title" className="h2" style={{ margin: 'var(--space-xs) 0 var(--space-sm)', color: 'var(--brand-black)' }}>
+            {isCrewMode ? 'Crew & Desk Sign In' : 'Delegate Pass Verification'}
           </h2>
-          <p className="lead" style={{ color: 'rgba(255, 255, 255, 0.78)' }}>
+          <p className="lead" style={{ color: 'var(--color-ink-muted)' }}>
             Already reserved your seat? Verify your accreditation, retrieve your digital badge with barcode, or confirm your event check-in eligibility.
           </p>
 
           {/* Quick Accreditation Perks */}
-          <div className="register__benefits" style={{ marginTop: 'var(--space-md)', display: 'grid', gap: 'var(--space-sm)', fontSize: 'var(--text-sm)', color: 'rgba(255, 255, 255, 0.85)' }}>
+          <div className="register__benefits" style={{ marginTop: 'var(--space-md)', display: 'grid', gap: 'var(--space-sm)', fontSize: 'var(--text-sm)', color: 'var(--brand-black)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ color: 'var(--brand-green)', fontWeight: 800 }}>✓</span>
               <span>Instant retrieval with your registered email or Pass ID</span>
@@ -157,11 +157,10 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
             </div>
           </div>
 
-          {/* Holographic Delegate Badge Preview */}
+          {/* Minimalist Physical Delegate Badge Preview */}
           <div className="pass-preview-card" style={{ marginTop: 'var(--space-lg)' }}>
             <div className="pass-preview-card__header">
               <div className="pass-preview-card__live-indicator">
-                <span className="nacos-green-dot" />
                 <span>OFFICIAL BADGE PREVIEW</span>
               </div>
               <span className="pass-preview-card__year">FEB 2027</span>
@@ -190,12 +189,12 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
         {/* Right Column: Interactive Sign In / Lookup Card */}
         <div className="form auth-card">
           {/* Header Mode Switcher inside card */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(0,0,0,0.08)', paddingBottom: 'var(--space-sm)', marginBottom: 'var(--space-md)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-ink-border)', paddingBottom: 'var(--space-sm)', marginBottom: 'var(--space-md)' }}>
             <div>
               <h3 style={{ margin: 0, fontSize: 'var(--text-lg)', color: 'var(--brand-black)', fontWeight: 700 }}>
                 {isCrewMode ? 'Staff Desk Access' : 'Find Your Pass'}
               </h3>
-              <p style={{ margin: '2px 0 0', fontSize: 'var(--text-xs)', color: '#4b5563' }}>
+              <p style={{ margin: '2px 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>
                 {isCrewMode ? 'Authorized personnel authentication' : 'Verify accreditation by Email or Pass ID'}
               </p>
             </div>
@@ -208,7 +207,7 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
                 setVerifiedPass(null);
               }}
             >
-              {isCrewMode ? '← Delegate Mode' : 'Crew Portal 🛡️'}
+              {isCrewMode ? '← Delegate Mode' : 'Crew Portal'}
             </button>
           </div>
 
@@ -216,12 +215,14 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
           {savedPass && !verifiedPass && !isCrewMode && (
             <div className="saved-pass-banner">
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '1.25rem' }}>🎟️</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--brand-deep)' }}>
+                  <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path>
+                </svg>
                 <div>
                   <strong style={{ display: 'block', fontSize: 'var(--text-sm)', color: 'var(--brand-deep)' }}>
                     Saved Pass Detected: {savedPass.passId}
                   </strong>
-                  <span style={{ fontSize: 'var(--text-xs)', color: '#4b5563' }}>
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>
                     {savedPass.name} ({savedPass.email})
                   </span>
                 </div>
@@ -324,35 +325,45 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
                 <span className="verified-pass-id">{verifiedPass.passId}</span>
               </div>
 
-              <div className="verified-pass-hero-card">
-                <div className="verified-pass-watermark">NW27</div>
-                <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--brand-soft)' }}>
-                  Official Delegate Pass
-                </div>
-                <div style={{ fontSize: '1.4rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: '#ffffff', margin: '4px 0 var(--space-xs)' }}>
-                  {verifiedPass.name}
-                </div>
-                <div style={{ fontSize: '0.825rem', color: 'rgba(255, 255, 255, 0.85)' }}>
-                  {verifiedPass.email}
+              <div className="pass-preview-card">
+                <div className="pass-preview-card__header">
+                  <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#a4f49b', fontWeight: 700 }}>
+                    DELEGATE ACCREDITATION
+                  </span>
+                  <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.85rem', color: '#fff', background: 'rgba(255,255,255,0.18)', padding: '2px 8px', borderRadius: '4px' }}>
+                    {verifiedPass.passId}
+                  </span>
                 </div>
 
-                <div className="verified-pass-meta-grid">
-                  <div>
-                    <span>Faculty / Department</span>
-                    <strong>{verifiedPass.department}</strong>
+                <div className="pass-preview-card__body">
+                  <div style={{ marginBottom: 'var(--space-md)' }}>
+                    <span style={{ fontSize: '0.68rem', color: 'var(--color-ink-muted)', textTransform: 'uppercase' }}>Attendee Name</span>
+                    <div style={{ fontSize: '1.35rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-black)' }}>
+                      {verifiedPass.name}
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--color-ink-muted)' }}>
+                      {verifiedPass.email}
+                    </div>
                   </div>
-                  <div>
-                    <span>Status</span>
-                    <strong>{verifiedPass.level || 'Confirmed Delegate'}</strong>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-xs)', fontSize: '0.8rem', borderTop: '1px solid var(--color-ink-border)', paddingTop: 'var(--space-xs)' }}>
+                    <div>
+                      <span style={{ fontSize: '0.65rem', color: 'var(--color-ink-muted)', display: 'block' }}>Faculty / Department</span>
+                      <strong style={{ color: 'var(--brand-deep)' }}>{verifiedPass.department}</strong>
+                    </div>
+                    <div>
+                      <span style={{ fontSize: '0.65rem', color: 'var(--color-ink-muted)', display: 'block' }}>Status</span>
+                      <strong>{verifiedPass.level || 'Confirmed Delegate'}</strong>
+                    </div>
                   </div>
                 </div>
 
-                <div className="verified-pass-barcode-row">
-                  <div className="barcode-graphic">
+                <div className="pass-preview-card__footer">
+                  <div className="pass-preview-barcode">
                     <span /><span /><span /><span /><span /><span /><span /><span /><span /><span />
                   </div>
-                  <span style={{ fontSize: '0.7rem', color: 'rgba(255, 255, 255, 0.7)' }}>
-                    Gate Verification Verified
+                  <span style={{ fontSize: '0.72rem', color: 'var(--color-ink-muted)' }}>
+                    Gate Accreditation Verified
                   </span>
                 </div>
               </div>

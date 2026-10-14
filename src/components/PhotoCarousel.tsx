@@ -232,11 +232,14 @@ export const PhotoCarousel: React.FC = () => {
         <div className="wrap">
           <header className="section__head section__head--split">
             <div>
-              <p className="tag">Documented Heritage</p>
-              <h2 id="archive-title" className="h2">Years in the Making</h2>
+              <div className="deck-eyebrow">
+                <span className="deck-eyebrow__num">07</span>
+                <span className="deck-eyebrow__text">NACOS AKSU Gallery</span>
+              </div>
+              <h2 id="archive-title" className="h2">Over a Decade of Community</h2>
             </div>
             <p className="lead">
-              NACOS Week has run for over a decade under the Computer Science department. These are captured moments from earlier editions across campus.
+              NACOS Week has run for over a decade at Akwa Ibom State University. Captured moments of innovation, teamwork, and celebration across campus.
             </p>
           </header>
 

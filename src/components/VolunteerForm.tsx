@@ -258,7 +258,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
 
       setStatus({
         tone: 'ok',
-        message: `Volunteer application recorded! Accreditation ID: ${generatedPassId}.`
+        message: `Volunteer application recorded! Accreditation ID: ${finalPassId}.`
       });
       setSubmitLabel('Application Submitted');
     } finally {
@@ -271,11 +271,11 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
       <section className="section volunteer-section" id="volunteer" aria-labelledby="volunteer-title">
         <div className="wrap">
           <div className="volunteer-header">
-            <span className="tag">Organizing Crew · NACOS Week 2027</span>
-            <h2 id="volunteer-title" className="h2" style={{ margin: 'var(--space-xs) 0 var(--space-sm)', color: '#ffffff' }}>
+            <span className="deck-eyebrow">Organizing Committee</span>
+            <h2 id="volunteer-title" className="h2" style={{ margin: 'var(--space-xs) 0 var(--space-sm)', color: 'var(--brand-black)' }}>
               Join the Volunteer Crew
             </h2>
-            <p className="lead" style={{ maxWidth: '680px', color: 'rgba(255, 255, 255, 0.78)' }}>
+            <p className="lead" style={{ maxWidth: '680px', color: 'var(--color-ink-muted)' }}>
               Step into the engine room of Akwa Ibom State University&apos;s premier innovation festival.
               Gain practical leadership experience, work side-by-side with industry guests, and earn an official certificate of commendation.
             </p>
@@ -284,19 +284,19 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
             <div className="volunteer-perks">
               <div className="volunteer-perk-item">
                 <span className="volunteer-perk-check">✓</span>
-                <span style={{ color: 'rgba(255, 255, 255, 0.85)' }}>Certified Letter of Commendation</span>
+                <span>Certified Letter of Commendation</span>
               </div>
               <div className="volunteer-perk-item">
                 <span className="volunteer-perk-check">✓</span>
-                <span style={{ color: 'rgba(255, 255, 255, 0.85)' }}>Official NACOS Week Volunteer Gear</span>
+                <span>Official NACOS Week Volunteer Gear</span>
               </div>
               <div className="volunteer-perk-item">
                 <span className="volunteer-perk-check">✓</span>
-                <span style={{ color: 'rgba(255, 255, 255, 0.85)' }}>Direct Access to Industry Mentors &amp; Speakers</span>
+                <span>Direct Access to Industry Mentors &amp; Speakers</span>
               </div>
               <div className="volunteer-perk-item">
                 <span className="volunteer-perk-check">✓</span>
-                <span style={{ color: 'rgba(255, 255, 255, 0.85)' }}>Meals &amp; Refreshments during Shifts</span>
+                <span>Meals &amp; Refreshments during Shifts</span>
               </div>
             </div>
           </div>
@@ -305,14 +305,14 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
             {/* Team Selection Header & Rule Notice */}
             <div className="volunteer-team-intro">
               <div className="volunteer-team-intro__top">
-                <h3 className="h3" style={{ margin: 0, fontSize: 'var(--text-lg)', color: '#ffffff' }}>
-                  1. Choose Your Committee <span style={{ color: '#00df13' }}>*</span>
+                <h3 className="h3" style={{ margin: 0, fontSize: 'var(--text-lg)', color: 'var(--brand-black)' }}>
+                  1. Choose Your Committee <span style={{ color: 'var(--brand-green)' }}>*</span>
                 </h3>
                 <span className="volunteer-single-rule-badge">
                   Rule: 1 Team per Applicant Only
                 </span>
               </div>
-              <p style={{ fontSize: 'var(--text-sm)', color: 'rgba(255, 255, 255, 0.72)', margin: 'var(--space-2xs) 0 0' }}>
+              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-muted)', margin: 'var(--space-2xs) 0 0' }}>
                 Select the single committee where your skills or passion fit best. Selection is strictly limited to <strong>one team</strong> to ensure focused responsibility.
               </p>
               {errors.selectedTeam && (
@@ -386,8 +386,8 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
             </div>
 
             {/* Applicant Details Form */}
-            <div className="volunteer-fields-box">
-              <h3 className="h3" style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-md)', color: '#ffffff' }}>
+            <div className="volunteer-fields-box form">
+              <h3 className="h3" style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-md)', color: 'var(--brand-black)' }}>
                 2. Applicant Profile &amp; Contact Details
               </h3>
 
@@ -517,7 +517,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
                     aria-invalid={!!errors.agreed_terms}
                     style={{ marginTop: '3px' }}
                   />
-                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-on-night-muted)' }}>
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>
                     I confirm that I will be available for my selected committee shifts, attend pre-event briefings, and represent NACOS AKSU with professionalism. *
                   </span>
                 </label>
@@ -591,83 +591,70 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
             </button>
 
             <div style={{ textAlign: 'center', marginBottom: 'var(--space-md)' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(8, 144, 2, 0.15)', border: '1px solid var(--brand-green)', padding: '4px 12px', borderRadius: 'var(--radius-pill)', color: '#a4f49b', fontSize: 'var(--text-xs)', fontWeight: 700 }}>
-                <span className="nacos-green-dot"></span>
-                VOLUNTEER ACCREDITATION RECORDED
-              </div>
-              <h3 id="volModalTitle" className="h3" style={{ color: '#fff', margin: 'var(--space-xs) 0 4px' }}>
-                Welcome to the Crew
+              <span className="deck-eyebrow">Accreditation Recorded</span>
+              <h3 id="volModalTitle" className="h3" style={{ color: 'var(--brand-black)', margin: 'var(--space-xs) 0 4px' }}>
+                Welcome to the Organizing Crew
               </h3>
-              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-on-night-muted)', margin: 0 }}>
-                NACOS Week 2027: Confluence • Organizing Committee
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)', margin: 0 }}>
+                NACOS Week 2027: Confluence &bull; Organizing Committee
               </p>
             </div>
 
             {/* Volunteer Badge Card */}
-            <div
-              style={{
-                background: 'linear-gradient(145deg, #072a0f 0%, #031507 100%)',
-                color: '#F5F7F2',
-                borderRadius: 'var(--radius-md)',
-                padding: 'var(--space-lg)',
-                border: '1px solid rgba(120, 185, 120, 0.3)',
-                boxShadow: '0 16px 40px rgba(0, 0, 0, 0.7)',
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-            >
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '-15px',
-                  right: '-15px',
-                  opacity: 0.08,
-                  fontSize: '7rem',
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 900,
-                  pointerEvents: 'none'
-                }}
-              >
-                CREW
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255, 255, 255, 0.15)', paddingBottom: 'var(--space-xs)', marginBottom: 'var(--space-sm)' }}>
+            <div className="pass-preview-card" style={{ boxShadow: '0 8px 24px rgba(11, 15, 12, 0.08)' }}>
+              <div className="pass-preview-card__header">
                 <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#a4f49b', fontWeight: 700 }}>
                   CREW ACCREDITATION
                 </span>
-                <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.85rem', color: '#fff', background: 'rgba(255,255,255,0.15)', padding: '2px 8px', borderRadius: '4px' }}>
+                <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.85rem', color: '#fff', background: 'rgba(255,255,255,0.18)', padding: '2px 8px', borderRadius: '4px' }}>
                   {confirmedVolunteer.passId}
                 </span>
               </div>
 
-              <div style={{ marginBottom: 'var(--space-md)' }}>
-                <span style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase' }}>Volunteer Name</span>
-                <div style={{ fontSize: '1.25rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: '#fff' }}>
-                  {confirmedVolunteer.name}
+              <div className="pass-preview-card__body">
+                <div style={{ marginBottom: 'var(--space-md)' }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--color-ink-muted)', textTransform: 'uppercase' }}>Volunteer Name</span>
+                  <div style={{ fontSize: '1.25rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-black)' }}>
+                    {confirmedVolunteer.name}
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 'var(--space-xs)', fontSize: '0.8rem', borderTop: '1px solid var(--color-ink-border)', paddingTop: 'var(--space-xs)' }}>
+                  <div>
+                    <span style={{ fontSize: '0.65rem', color: 'var(--color-ink-muted)', display: 'block' }}>Assigned Committee</span>
+                    <strong style={{ color: 'var(--brand-deep)' }}>{confirmedVolunteer.team.name}</strong>
+                  </div>
+                  <div>
+                    <span style={{ fontSize: '0.65rem', color: 'var(--color-ink-muted)', display: 'block' }}>Status</span>
+                    <strong>{confirmedVolunteer.level || 'Student Crew'}</strong>
+                  </div>
+                </div>
+
+                <div style={{ marginTop: 'var(--space-sm)', paddingTop: 'var(--space-xs)', borderTop: '1px dashed var(--color-ink-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.7rem' }}>
+                  <span style={{ color: 'var(--brand-deep)', fontWeight: 600 }}>Shift: {confirmedVolunteer.availability}</span>
+                  <span style={{ color: 'var(--color-ink-muted)' }}>Venue: Perm Site, AKSU</span>
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 'var(--space-xs)', fontSize: '0.8rem', borderTop: '1px solid rgba(255, 255, 255, 0.12)', paddingTop: 'var(--space-xs)' }}>
-                <div>
-                  <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.7)', display: 'block' }}>Assigned Committee</span>
-                  <strong style={{ color: '#a4f49b' }}>{confirmedVolunteer.team.name}</strong>
+              <div className="pass-preview-card__footer">
+                <div className="pass-preview-barcode">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                  <span />
                 </div>
-                <div>
-                  <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.7)', display: 'block' }}>Status</span>
-                  <strong>{confirmedVolunteer.level || 'Student Crew'}</strong>
-                </div>
-              </div>
-
-              <div style={{ marginTop: 'var(--space-sm)', paddingTop: 'var(--space-xs)', borderTop: '1px dashed rgba(255, 255, 255, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.7rem' }}>
-                <span style={{ color: '#a4f49b' }}>Shift: {confirmedVolunteer.availability}</span>
-                <span>Venue: Perm Site, AKSU</span>
+                <span className="pass-preview-card__id">{confirmedVolunteer.passId}</span>
               </div>
             </div>
 
-            {/* Private WhatsApp invitation: strictly visible ONLY after submission to applicants of that specific team */}
+            {/* Private WhatsApp invitation */}
             {confirmedVolunteer.team.whatsAppGroup && (
-              <div style={{ marginTop: 'var(--space-md)', background: 'rgba(8, 144, 2, 0.12)', border: '1px solid rgba(8, 144, 2, 0.35)', borderRadius: 'var(--radius-sm)', padding: 'var(--space-md)', textAlign: 'center' }}>
-                <p style={{ fontSize: '0.825rem', color: '#e6f2e3', margin: '0 0 var(--space-xs)', fontWeight: 500 }}>
+              <div style={{ marginTop: 'var(--space-md)', background: '#ffffff', border: '1px solid var(--color-ink-border)', borderRadius: 'var(--radius-sm)', padding: 'var(--space-md)', textAlign: 'center' }}>
+                <p style={{ fontSize: '0.825rem', color: 'var(--brand-black)', margin: '0 0 var(--space-xs)', fontWeight: 500 }}>
                   Step 2: Join the private <strong>{confirmedVolunteer.team.name}</strong> WhatsApp working group now:
                 </p>
                 <a

@@ -14,34 +14,33 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 15);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <div className={`nav-floating-wrapper ${isScrolled ? 'is-scrolled' : ''}`}>
-      <header className="nav-pill" aria-label="Main Navigation">
+    <header className={`site-header ${isScrolled ? 'site-header--scrolled' : ''}`} aria-label="Main Navigation">
+      <div className="wrap site-header__inner">
         {/* Brand / Logo */}
-        <Link to="/" className="nav-pill__brand" aria-label="NACOS Week 2027 Home">
+        <Link to="/" className="site-header__brand" aria-label="NACOS Week 2027 Home">
           <img
-            src="/assets/brand/nw27-wordmark-v3-reversed.png"
+            src="/assets/brand/nw27-wordmark-v3.png"
             alt="NACOS Week 2027"
-            width="1180"
-            height="240"
+            width="280"
+            height="56"
             fetchPriority="high"
             decoding="async"
-            className="nav-pill__logo"
+            className="site-header__logo"
           />
-          <span className="nav-pill__status" aria-hidden="true">
-            <span className="nav-pill__dot" />
-            <span className="nav-pill__status-text">Feb &apos;27</span>
+          <span className="site-header__badge">
+            Confluence &apos;27
           </span>
         </Link>
 
         {/* Center Navigation Links (Desktop) */}
-        <nav className="nav-pill__links" aria-label="Primary">
+        <nav className="site-header__nav" aria-label="Primary">
           <NavLink to="/" end className={({ isActive }) => (isActive ? 'is-active' : '')}>
             Home
           </NavLink>
@@ -66,58 +65,48 @@ export const Navbar: React.FC = () => {
         </nav>
 
         {/* Right CTA Actions */}
-        <div className="nav-pill__actions">
-          <Link to="/register" className="nav-pill__cta">
-            <span>Register Pass</span>
-            <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12" aria-hidden="true">
-              <path fillRule="evenodd" d="M3.75 8a.75.75 0 0 1 .75-.75h5.69L7.97 5.03a.75.75 0 1 1 1.06-1.06l3.5 3.5a.75.75 0 0 1 0 1.06l-3.5 3.5a.75.75 0 0 1-1.06-1.06l2.22-2.22H4.5A.75.75 0 0 1 3.75 8Z" clipRule="evenodd" />
-            </svg>
+        <div className="site-header__actions">
+          <Link to="/register" className="btn btn--header-cta">
+            Register Pass
           </Link>
 
           {/* Mobile Hamburger Toggle */}
           <button
             type="button"
-            className={`nav-pill__toggle ${isOpen ? 'is-active' : ''}`}
+            className={`site-header__toggle ${isOpen ? 'is-open' : ''}`}
             aria-expanded={isOpen}
             aria-label="Toggle navigation menu"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span className="nav-pill__toggle-bar" />
-            <span className="nav-pill__toggle-bar" />
+            <span className="site-header__toggle-line" />
+            <span className="site-header__toggle-line" />
           </button>
         </div>
-      </header>
+      </div>
 
-      {/* Mobile Drawer Floating Panel */}
+      {/* Mobile Navigation Drawer */}
       {isOpen && (
-        <div className="nav-pill__mobile-drawer" role="dialog" aria-modal="true">
-          <div className="nav-pill__mobile-header">
-            <span className="nav-pill__mobile-badge">
-              <span className="nav-pill__dot" /> NACOS AKSU &bull; Confluence 2027
-            </span>
-          </div>
-
-          <nav className="nav-pill__mobile-links">
-            <NavLink to="/" end onClick={closeMenu}>Home</NavLink>
-            <NavLink to="/tracks" onClick={closeMenu}>Tracks</NavLink>
-            <NavLink to="/programme" onClick={closeMenu}>Programme</NavLink>
-            <NavLink to="/hackathon" onClick={closeMenu}>Hackathon</NavLink>
-            <NavLink to="/partner" onClick={closeMenu}>Partner &amp; Sponsor</NavLink>
-            <NavLink to="/booth" onClick={closeMenu}>Exhibition Booths</NavLink>
-            <NavLink to="/auth" onClick={closeMenu}>Sign In / My Pass</NavLink>
-            <NavLink to="/register?tab=volunteer" onClick={closeMenu}>Join as Volunteer</NavLink>
-            <NavLink to="/about" onClick={closeMenu}>About NACOS</NavLink>
-            <NavLink to="/faq" onClick={closeMenu}>Venue &amp; FAQ</NavLink>
-          </nav>
-
-          <div className="nav-pill__mobile-bottom">
-            <Link to="/register" className="nav-pill__mobile-cta" onClick={closeMenu}>
-              Register for Free Pass &rarr;
-            </Link>
+        <div className="site-header__mobile-menu" role="dialog" aria-modal="true">
+          <div className="wrap site-header__mobile-inner">
+            <nav className="site-header__mobile-nav">
+              <NavLink to="/" end onClick={closeMenu}>Home</NavLink>
+              <NavLink to="/tracks" onClick={closeMenu}>5 Industry Tracks</NavLink>
+              <NavLink to="/programme" onClick={closeMenu}>5 Flagship Pillars</NavLink>
+              <NavLink to="/hackathon" onClick={closeMenu}>Innovation Hackathon</NavLink>
+              <NavLink to="/partner" onClick={closeMenu}>Sponsorship &amp; Partnerships</NavLink>
+              <NavLink to="/about" onClick={closeMenu}>About NACOS AKSU</NavLink>
+              <NavLink to="/faq" onClick={closeMenu}>Venue &amp; FAQ</NavLink>
+              <NavLink to="/auth" onClick={closeMenu}>My Pass / Sign In</NavLink>
+            </nav>
+            <div className="site-header__mobile-action">
+              <Link to="/register" className="btn btn--header-cta" style={{ width: '100%' }} onClick={closeMenu}>
+                Register for Free Pass &rarr;
+              </Link>
+            </div>
           </div>
         </div>
       )}
-    </div>
+    </header>
   );
 };
 

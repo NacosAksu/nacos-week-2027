@@ -32,140 +32,140 @@ export const Hero: React.FC = () => {
 
   return (
     <>
-      <section className="hero on-dark" aria-labelledby="hero-title">
-        {/* Background Image: AKSU Convention Photo */}
-        <img
-          className="hero__bg"
-          src="/assets/hero/IMG_0427.jpg.jpeg"
-          alt="NACOS AKSU Convention Confluence Delegates"
-          fetchPriority="high"
-          decoding="async"
-        />
-
-        {/* Ambient Overlay Layer */}
-        <div className="hero__overlay" aria-hidden="true" />
-
-        <div className="wrap hero__inner">
-          {/* Institutional Status Badge */}
-          <div className="hero__badge">
-            <span className="hero__pulse-dot" aria-hidden="true" />
-            <span>NACOS AKSU &bull; CONFLUENCE 2027 &bull; ANNUAL FLAGSHIP CONVENTION</span>
+      <section className="deck-hero" aria-labelledby="hero-title">
+        <div className="wrap deck-hero__inner">
+          {/* Eyebrow kicker from Pitch Deck */}
+          <div className="deck-hero__kicker">
+            <span className="deck-hero__tag">NACOS AKSU</span>
+            <span className="deck-hero__sep">/</span>
+            <span>Faculty of Computing &amp; Information Technology</span>
+            <span className="deck-hero__sep">/</span>
+            <span>February 2027</span>
           </div>
 
-          {/* Grand Main Title */}
-          <h1 id="hero-title" className="hero__title">
-            Confluence<span className="hero__dot">.</span>
+          {/* Bold Editorial Headline */}
+          <h1 id="hero-title" className="deck-hero__title">
+            Where Computing Meets Industry.
           </h1>
 
-          {/* Kicker / Subtitle */}
-          <p className="hero__kicker">
-            Where Computing, Energy &amp; Future Industries Converge
+          {/* Theme Anchor */}
+          <p className="deck-hero__theme">
+            NACOS Week 2027: <strong>Confluence</strong>
           </p>
 
-          {/* Metadata Chips Bar */}
-          <div className="hero__meta">
-            <div className="hero__meta-chip">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" aria-hidden="true">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="3" y1="10" x2="21" y2="10" />
-              </svg>
-              <span className="hero__when">{event.datesLabel || 'February 2027'}</span>
-            </div>
+          {/* Narrative Pitch Deck Description */}
+          <p className="deck-hero__lead">
+            Technology is no longer confined to the computing sector. It powers financial transactions, drives energy systems, transforms healthcare delivery, and strengthens oil and gas operations. Confluence brings students, innovators, and industry leaders into one shared ecosystem.
+          </p>
 
-            <div className="hero__meta-chip">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" aria-hidden="true">
-                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              <span className="hero__where">
-                {event.venue || 'Conference Centre, Perm Site'}, Akwa Ibom State University
-              </span>
+          {/* Editorial Metadata Chips */}
+          <div className="deck-hero__meta">
+            <div className="deck-hero__chip">
+              <span className="deck-hero__chip-label">When</span>
+              <span className="deck-hero__chip-val">{event.datesLabel || 'February 2027'}</span>
             </div>
-
-            <div className="hero__meta-chip hero__meta-chip--highlight">
-              <span>Open to All Students</span>
+            <div className="deck-hero__chip">
+              <span className="deck-hero__chip-label">Where</span>
+              <span className="deck-hero__chip-val">{event.venue || 'Conference Centre'}, AKSU Perm Site</span>
+            </div>
+            <div className="deck-hero__chip">
+              <span className="deck-hero__chip-label">Audience</span>
+              <span className="deck-hero__chip-val">Open to all AKSU students</span>
             </div>
           </div>
-
-          {/* Enterprise Deck Summary */}
-          <p className="hero__deck">
-            Akwa Ibom State University&apos;s premier computing convention uniting 1,000+ student innovators, researchers, and tech founders across Energy, Finance, Oil &amp; Gas, Medicine, and Software.
-          </p>
 
           {/* Action CTAs */}
-          <div className="hero__actions">
-            <Link to="/register" className="btn btn--signal hero__btn-primary" data-register-link>
-              <span>Register for Free Pass</span>
-              <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
-                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
+          <div className="deck-hero__actions">
+            <Link to="/register" className="btn btn--deep">
+              Register for Free Pass
             </Link>
-            <Link to="/partner" className="btn btn--ghost-night hero__btn-secondary">
-              <span>Partner With Us</span>
+            <Link to="/partner" className="btn btn--outline">
+              Partner With Us
             </Link>
-            <Link to="/tracks" className="btn hero__btn-tertiary">
-              <span>Explore 5 Tracks &rarr;</span>
+            <Link to="/tracks" className="deck-hero__link">
+              Explore 5 Tracks &rarr;
             </Link>
           </div>
 
-          {/* Countdown Component */}
-          {timeLeft ? (
-            <div className="countdown" data-countdown aria-live="off">
-              <p className="countdown__label">Convention Kickoff In</p>
-              <ol className="countdown__units">
-                <li><span data-cd="d">{String(timeLeft.days).padStart(2, '0')}</span>days</li>
-                <li><span data-cd="h">{String(timeLeft.hours).padStart(2, '0')}</span>hours</li>
-                <li><span data-cd="m">{String(timeLeft.mins).padStart(2, '0')}</span>minutes</li>
-                <li><span data-cd="s">{String(timeLeft.secs).padStart(2, '0')}</span>seconds</li>
-              </ol>
-            </div>
-          ) : (
-            <div className="countdown" data-countdown hidden aria-live="off">
-              <p className="countdown__label">Convention Kickoff In</p>
-              <ol className="countdown__units">
-                <li><span data-cd="d">00</span>days</li>
-                <li><span data-cd="h">00</span>hours</li>
-                <li><span data-cd="m">00</span>minutes</li>
-                <li><span data-cd="s">00</span>seconds</li>
-              </ol>
+          {/* Minimalist Countdown */}
+          {timeLeft && (
+            <div className="deck-countdown" aria-label="Event countdown">
+              <span className="deck-countdown__label">Kickoff In</span>
+              <div className="deck-countdown__grid">
+                <div className="deck-countdown__item">
+                  <span className="deck-countdown__val">{String(timeLeft.days).padStart(2, '0')}</span>
+                  <span className="deck-countdown__unit">Days</span>
+                </div>
+                <div className="deck-countdown__item">
+                  <span className="deck-countdown__val">{String(timeLeft.hours).padStart(2, '0')}</span>
+                  <span className="deck-countdown__unit">Hours</span>
+                </div>
+                <div className="deck-countdown__item">
+                  <span className="deck-countdown__val">{String(timeLeft.mins).padStart(2, '0')}</span>
+                  <span className="deck-countdown__unit">Mins</span>
+                </div>
+                <div className="deck-countdown__item">
+                  <span className="deck-countdown__val">{String(timeLeft.secs).padStart(2, '0')}</span>
+                  <span className="deck-countdown__unit">Secs</span>
+                </div>
+              </div>
             </div>
           )}
         </div>
       </section>
 
-      {/* Enterprise Metrics Strip */}
-      <div className="nacos-metric-strip">
-        <div className="wrap nacos-metric-strip__grid">
-          <div className="nacos-metric-item">
-            <span className="nacos-metric-val">5</span>
-            <span className="nacos-metric-lbl">Industry Tracks</span>
+      {/* Editorial Key Metrics Grid */}
+      <section className="deck-metrics" aria-label="Key Numbers">
+        <div className="wrap deck-metrics__grid">
+          <div className="deck-metrics__card">
+            <span className="deck-metrics__num">05</span>
+            <span className="deck-metrics__title">Industry Tracks</span>
+            <span className="deck-metrics__desc">Energy, Finance, Oil &amp; Gas, Medicine, Technology</span>
           </div>
-          <div className="nacos-metric-item">
-            <span className="nacos-metric-val">5</span>
-            <span className="nacos-metric-lbl">Flagship Pillars</span>
+          <div className="deck-metrics__card">
+            <span className="deck-metrics__num">05</span>
+            <span className="deck-metrics__title">Flagship Pillars</span>
+            <span className="deck-metrics__desc">Hackathon, Conference, Football, Pageantry, Dinner</span>
           </div>
-          <div className="nacos-metric-item">
-            <span className="nacos-metric-val">48h</span>
-            <span className="nacos-metric-lbl">Build Hackathon</span>
+          <div className="deck-metrics__card">
+            <span className="deck-metrics__num">3 Wks</span>
+            <span className="deck-metrics__title">Innovation Bootcamp</span>
+            <span className="deck-metrics__desc">Teams race the clock on real industry problems</span>
           </div>
-          <div className="nacos-metric-item">
-            <span className="nacos-metric-val">1,000+</span>
-            <span className="nacos-metric-lbl">Expected Attendees</span>
+          <div className="deck-metrics__card">
+            <span className="deck-metrics__num">500+</span>
+            <span className="deck-metrics__title">Conference Hall Seats</span>
+            <span className="deck-metrics__desc">Industry keynotes, live final pitches, panel debates</span>
           </div>
-          <div className="nacos-metric-item">
-            <span className="nacos-metric-val">30,000+</span>
-            <span className="nacos-metric-lbl">Campus Community Reach</span>
+          <div className="deck-metrics__card">
+            <span className="deck-metrics__num">30,000+</span>
+            <span className="deck-metrics__title">Campus Student Reach</span>
+            <span className="deck-metrics__desc">Akwa Ibom State University community-wide festival</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Ticker marquee */}
-      <div className="ticker" aria-hidden="true">
-        <div className="ticker__track">
-          <span>Confluence</span><span>Technology</span><span>Energy</span><span>Finance</span><span>Oil &amp; Gas</span><span>Healthcare</span><span>Innovation</span><span>Community</span><span>AKSU</span>
-          <span>Confluence</span><span>Technology</span><span>Energy</span><span>Finance</span><span>Oil &amp; Gas</span><span>Healthcare</span><span>Innovation</span><span>Community</span><span>AKSU</span>
+      {/* Refined Brand Ticker */}
+      <div className="deck-ticker" aria-hidden="true">
+        <div className="deck-ticker__track">
+          <span>CONFLUENCE</span><span>&bull;</span>
+          <span>ENERGY</span><span>&bull;</span>
+          <span>FINANCE</span><span>&bull;</span>
+          <span>OIL &amp; GAS</span><span>&bull;</span>
+          <span>MEDICINE</span><span>&bull;</span>
+          <span>TECHNOLOGY</span><span>&bull;</span>
+          <span>INNOVATION</span><span>&bull;</span>
+          <span>COLLABORATION</span><span>&bull;</span>
+          <span>NACOS AKSU</span><span>&bull;</span>
+          <span>CONFLUENCE</span><span>&bull;</span>
+          <span>ENERGY</span><span>&bull;</span>
+          <span>FINANCE</span><span>&bull;</span>
+          <span>OIL &amp; GAS</span><span>&bull;</span>
+          <span>MEDICINE</span><span>&bull;</span>
+          <span>TECHNOLOGY</span><span>&bull;</span>
+          <span>INNOVATION</span><span>&bull;</span>
+          <span>COLLABORATION</span><span>&bull;</span>
+          <span>NACOS AKSU</span><span>&bull;</span>
         </div>
       </div>
     </>
