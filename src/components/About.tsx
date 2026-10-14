@@ -19,29 +19,6 @@ export const About: React.FC = () => {
             <p>
               NACOS Week is the flagship annual initiative of NACOS AKSU (Nigeria Association of Computing Students, Akwa Ibom State University). The Computer Science department has hosted it for over a decade. In 2027, the Faculty of Computing &amp; Information Technology (FCIT) hosts it, expanding participation beyond computing students to the entire university community across all faculties.
             </p>
-            <ul className="deck-feature-list" aria-label="Key highlights">
-              <li>
-                <span className="deck-feature-list__num">01</span>
-                <div>
-                  <strong>Hosted by FCIT</strong>
-                  <span>Faculty of Computing and Information Technology, AKSU</span>
-                </div>
-              </li>
-              <li>
-                <span className="deck-feature-list__num">02</span>
-                <div>
-                  <strong>Open to All Faculties</strong>
-                  <span>Uniting 30,000+ students across every department</span>
-                </div>
-              </li>
-              <li>
-                <span className="deck-feature-list__num">03</span>
-                <div>
-                  <strong>Built with Industry</strong>
-                  <span>Real sector problems set by leading corporate partners</span>
-                </div>
-              </li>
-            </ul>
           </div>
           <div className="about__media-wrap">
             <ImageSlot

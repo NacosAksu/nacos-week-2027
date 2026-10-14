@@ -83,9 +83,6 @@ export const Navbar: React.FC = () => {
             decoding="async"
             className="site-header__logo"
           />
-          <span className="site-header__badge">
-            Confluence &apos;27
-          </span>
         </Link>
 
         {/* Center Navigation Links (Desktop with Clean Dropdowns) */}

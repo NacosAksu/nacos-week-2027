@@ -218,7 +218,7 @@ END:VCALENDAR`;
       {/* Overview Pillars with photography */}
       <Programme />
 
-      {/* Interactive Schedule Timetable Section */}
+      {/* Interactive Schedule Timetable Section (Commented Out)
       <section className="section nacos-schedule-section" id="schedule-explorer">
         <div className="wrap">
           <header className="section__head section__head--split">
@@ -244,7 +244,7 @@ END:VCALENDAR`;
             </div>
           </header>
 
-          {/* Day Tabs */}
+          Day Tabs
           <div className="nacos-schedule-tabs" role="tablist" aria-label="Schedule days">
             {scheduleData.map((d) => (
               <button
@@ -261,7 +261,7 @@ END:VCALENDAR`;
             ))}
           </div>
 
-          {/* Active Day Header */}
+          Active Day Header
           <div className="nacos-schedule-day-banner">
             <div>
               <h3 className="h3" style={{ color: 'var(--brand-deep)', marginBottom: 'var(--space-2xs)' }}>
@@ -272,7 +272,7 @@ END:VCALENDAR`;
               </p>
             </div>
 
-            {/* Filter pills */}
+            Filter pills
             <div className="nacos-filter-pills" role="toolbar" aria-label="Filter events">
               {['All', 'Keynote', 'Workshop & Hacking', 'Social & Sports'].map((cat) => (
                 <button
@@ -287,7 +287,7 @@ END:VCALENDAR`;
             </div>
           </div>
 
-          {/* Sessions List */}
+          Sessions List
           <div className="nacos-sessions-grid">
             {filteredSessions.map((s, idx) => (
               <article key={idx} className="nacos-session-card">
@@ -324,6 +324,7 @@ END:VCALENDAR`;
           </div>
         </div>
       </section>
+      */}
 
       {/* Confirmed Keynotes & Voices */}
       <Speakers />

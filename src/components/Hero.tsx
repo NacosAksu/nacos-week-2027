@@ -111,29 +111,11 @@ export const Hero: React.FC = () => {
         <div className="hero__overlay" aria-hidden="true" />
 
         <div className="wrap hero__inner">
-          {/* Eyebrow kicker from Pitch Deck */}
-          <div className="hero__kicker-row">
-            <div className="hero__badge">
-              <span className="hero__pulse-dot" aria-hidden="true" />
-              <span>NACOS AKSU &bull; CONFLUENCE 2027</span>
-            </div>
-            <span className="hero__kicker-sub">Faculty of Computing &amp; Information Technology</span>
-          </div>
 
           {/* Bold Editorial Headline */}
           <h1 id="hero-title" className="hero__title">
-            Where Computing Meets Industry<span className="hero__dot">.</span>
+            CONFLUENCE 27<span className="hero__dot">.</span>
           </h1>
-
-          {/* Theme Anchor */}
-          <p className="hero__theme">
-            NACOS Week 2027: <strong>Confluence</strong>
-          </p>
-
-          {/* Narrative Pitch Deck Description */}
-          <p className="hero__lead">
-            Technology is no longer confined to the computing sector. It powers financial transactions, drives energy systems, transforms healthcare delivery, and strengthens oil and gas operations. Confluence brings students, innovators, and industry leaders into one shared ecosystem.
-          </p>
 
           {/* Clean Frosted Metadata Strip */}
           <div className="hero__meta" aria-label="Key event details">
@@ -143,11 +125,7 @@ export const Hero: React.FC = () => {
             </div>
             <div className="hero__meta-chip">
               <span className="hero__meta-chip-label">Where</span>
-              <span className="hero__meta-chip-val">{event.venue || 'Conference Centre, Perm Site'}</span>
-            </div>
-            <div className="hero__meta-chip hero__meta-chip--highlight">
-              <span className="hero__meta-chip-label">Audience</span>
-              <span className="hero__meta-chip-val">Open to all AKSU students</span>
+              <span className="hero__meta-chip-val">{event.venue || 'test Conference Centre, Perm Site'}</span>
             </div>
           </div>
 
@@ -222,37 +200,6 @@ export const Hero: React.FC = () => {
                 </svg>
               </button>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Editorial Key Metrics Grid */}
-      <section className="deck-metrics" aria-label="Key Numbers">
-        <div className="wrap deck-metrics__grid">
-          <div className="deck-metrics__card">
-            <span className="deck-metrics__num">05</span>
-            <span className="deck-metrics__title">Industry Tracks</span>
-            <span className="deck-metrics__desc">Energy, Finance, Oil &amp; Gas, Medicine, Technology</span>
-          </div>
-          <div className="deck-metrics__card">
-            <span className="deck-metrics__num">05</span>
-            <span className="deck-metrics__title">Flagship Pillars</span>
-            <span className="deck-metrics__desc">Hackathon, Conference, Football, Pageantry, Dinner</span>
-          </div>
-          <div className="deck-metrics__card">
-            <span className="deck-metrics__num">3 Wks</span>
-            <span className="deck-metrics__title">Innovation Bootcamp</span>
-            <span className="deck-metrics__desc">Teams race the clock on real industry problems</span>
-          </div>
-          <div className="deck-metrics__card">
-            <span className="deck-metrics__num">500+</span>
-            <span className="deck-metrics__title">Conference Hall Seats</span>
-            <span className="deck-metrics__desc">Industry keynotes, live final pitches, panel debates</span>
-          </div>
-          <div className="deck-metrics__card">
-            <span className="deck-metrics__num">30,000+</span>
-            <span className="deck-metrics__title">Campus Student Reach</span>
-            <span className="deck-metrics__desc">Akwa Ibom State University community-wide festival</span>
           </div>
         </div>
       </section>
