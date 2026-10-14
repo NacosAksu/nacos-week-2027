@@ -21,10 +21,11 @@ export const siteConfig: SiteConfig = {
   links: {
     register: "",
     hackathonRegister: "",
-    brochure: "",
+    brochure: "/assets/docs/nacos-aksu-pitch-deck-2027.pdf",
     sponsorEmail: "nacosfcitaksu@gmail.com",
     generalEmail: "nacosfcitaksu@gmail.com",
     phone: "09035056134",
+    phoneSecondary: "09064847152",
     whatsapp: "https://whatsapp.com/channel/0029Vb87N0c9Bb5utsX0yk2R",
     mediaTeamWhatsApp: "https://chat.whatsapp.com/JJNaojZl0Oj4EDQM9LhsMN?s=sw&p=a&mlu=4&ilr=4",
     protocolTeamWhatsApp: "https://chat.whatsapp.com/GKUcXY31wpmDEjJvExnUre?s=sw&p=a&mlu=4&ilr=4",

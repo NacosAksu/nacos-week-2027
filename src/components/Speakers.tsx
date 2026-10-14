@@ -31,21 +31,24 @@ const speakersList: SpeakerItem[] = [
     name: "Industry Lead (Offshore Tech)",
     role: "Computer Vision & Pipeline Telemetry Engineer",
     track: "Oil & Gas",
-    isRevealed: false,
+    photo: "/assets/speakers/speaker-03.jpg",
+    isRevealed: true,
     topic: "Robotics and Hazard Telemetry in Offshore Operations"
   },
   {
     name: "Health-Tech Lead",
     role: "Clinical Data Systems & AI Diagnostics Researcher",
     track: "Medicine",
-    isRevealed: false,
+    photo: "/assets/speakers/speaker-04.jpg",
+    isRevealed: true,
     topic: "Offline-First Healthcare Synchronization in Primary Clinics"
   },
   {
     name: "Cybersecurity & Cloud Director",
     role: "Zero-Trust Infrastructure & Agentic AI Specialist",
     track: "Technology",
-    isRevealed: false,
+    photo: "/assets/speakers/speaker-05.jpg",
+    isRevealed: true,
     topic: "Autonomous Threat Detection and Secure Campus Networks"
   }
 ];

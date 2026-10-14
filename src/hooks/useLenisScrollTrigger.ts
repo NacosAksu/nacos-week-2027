@@ -1,81 +1,146 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
 export function useLenisScrollTrigger() {
+  const { pathname } = useLocation();
+  const lenisRef = useRef<Lenis | null>(null);
+  const pageCtxRef = useRef<gsap.Context | null>(null);
+
+  // 1. Initialize Lenis + GSAP ticker on mount
   useEffect(() => {
     const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (calm) return;
 
-    let lenis: Lenis | null = null;
-    let ctx: gsap.Context | null = null;
+    // Register plugin
+    gsap.registerPlugin(ScrollTrigger);
+    document.documentElement.classList.add('has-gsap');
 
-    if (!calm) {
-      lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1,
-        touchMultiplier: 1.6,
-        infinite: false,
+    // Create Lenis instance
+    const lenis = new Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.5,
+      infinite: false,
+    });
+    lenisRef.current = lenis;
+
+    // Expose for debugging or external calls
+    // @ts-expect-error global lenis
+    window.lenis = lenis;
+
+    // Connect Lenis to GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+    const updateTicker = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(updateTicker);
+    gsap.ticker.lagSmoothing(0);
+
+    // Smooth anchor link click handling
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      const anchor = target?.closest('a[href^="#"]') as HTMLAnchorElement | null;
+      if (!anchor) return;
+      const href = anchor.getAttribute('href');
+      if (!href || href === '#') return;
+
+      const targetEl = (href === '#top' || href === '#') ? document.body : document.querySelector(href);
+      if (targetEl && lenis) {
+        e.preventDefault();
+        const navEl = (document.querySelector('.site-header') || document.querySelector('[data-nav]')) as HTMLElement | null;
+        const offset = href === '#top' ? 0 : (navEl ? -navEl.offsetHeight : -70);
+        lenis.scrollTo(targetEl as HTMLElement, { offset, duration: 1.15 });
+        if (window.history.pushState) window.history.pushState(null, '', href);
+      }
+    };
+
+    document.addEventListener('click', handleAnchorClick);
+
+    // Resync triggers on document resize or font load
+    const resync = () => {
+      lenis.resize();
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener('load', () => setTimeout(resync, 80));
+    window.addEventListener('pageshow', () => setTimeout(resync, 80));
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(resync);
+    }
+
+    let resizeObserver: ResizeObserver | null = null;
+    if ('ResizeObserver' in window) {
+      let lastH = 0;
+      let resizeTimer: ReturnType<typeof setTimeout> | null = null;
+      resizeObserver = new ResizeObserver(() => {
+        const h = document.documentElement.scrollHeight;
+        if (Math.abs(h - lastH) < 4) return;
+        lastH = h;
+        if (resizeTimer) clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          lenis.resize();
+          ScrollTrigger.refresh();
+        }, 150);
       });
+      resizeObserver.observe(document.body);
+    }
 
-      // @ts-expect-error global access for debugging
-      window.lenis = lenis;
+    return () => {
+      document.removeEventListener('click', handleAnchorClick);
+      window.removeEventListener('load', resync);
+      window.removeEventListener('pageshow', resync);
+      resizeObserver?.disconnect();
+      gsap.ticker.remove(updateTicker);
+      lenis.destroy();
+      lenisRef.current = null;
+    };
+  }, []);
 
-      // Handle anchor links
-      const handleAnchorClick = (e: MouseEvent) => {
-        const target = e.target as HTMLElement | null;
-        const anchor = target?.closest('a[href^="#"]') as HTMLAnchorElement | null;
-        if (!anchor) return;
-        const href = anchor.getAttribute('href');
-        if (!href || href === '#') return;
+  // 2. Setup GSAP Entrance & ScrollTrigger animations on every route navigation
+  useEffect(() => {
+    const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (calm) return;
 
-        const targetEl = (href === '#top' || href === '#') ? document.body : document.querySelector(href);
-        if (targetEl && lenis) {
-          e.preventDefault();
-          const navEl = document.querySelector('[data-nav]') as HTMLElement | null;
-          const offset = href === '#top' ? 0 : (navEl ? -navEl.offsetHeight : -68);
-          lenis.scrollTo(targetEl as HTMLElement, { offset, duration: 1.2 });
-          if (window.history.pushState) window.history.pushState(null, '', href);
-        }
-      };
+    // Scroll to top immediately on new page
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo(0, 0);
+    }
 
-      document.addEventListener('click', handleAnchorClick);
+    // Clean up previous page's GSAP triggers and tweens
+    if (pageCtxRef.current) {
+      pageCtxRef.current.revert();
+      pageCtxRef.current = null;
+    }
 
-      // GSAP ScrollTrigger Integration
-      gsap.registerPlugin(ScrollTrigger);
-      document.documentElement.classList.add('has-gsap');
-
-      lenis.on('scroll', ScrollTrigger.update);
-      const updateTicker = (time: number) => {
-        lenis?.raf(time * 1000);
-      };
-      gsap.ticker.add(updateTicker);
-      gsap.ticker.lagSmoothing(0);
-
-      // Use gsap.context to ensure React StrictMode cleanup never leaves elements at 0 opacity
-      ctx = gsap.context(() => {
-        // 1. Hero entrance with explicit fromTo so opacity is never stuck at 0
+    // Small delay to allow React to paint DOM elements
+    const timer = setTimeout(() => {
+      const ctx = gsap.context(() => {
+        // --- A. Hero entrance animations ---
         const heroTitle = document.querySelector('#hero-title');
         const heroMeta = document.querySelector('.hero__meta');
-        const heroBtns = document.querySelectorAll('.hero__actions .btn');
+        const heroBtns = document.querySelectorAll('.hero__actions .btn, .hero__btn-primary, .hero__btn-secondary');
         const heroCountdown = document.querySelector('.hero .countdown');
 
         if (heroTitle) {
           gsap.fromTo(
             heroTitle,
             { y: 35, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.9, delay: 0.1, ease: 'power3.out' }
+            { y: 0, opacity: 1, duration: 0.85, delay: 0.1, ease: 'power3.out' }
           );
         }
         if (heroMeta) {
           gsap.fromTo(
             heroMeta,
             { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.8, delay: 0.25, ease: 'power3.out' }
+            { y: 0, opacity: 1, duration: 0.75, delay: 0.25, ease: 'power3.out' }
           );
         }
         if (heroBtns.length) {
@@ -95,9 +160,9 @@ export function useLenisScrollTrigger() {
 
         const heroBg = document.querySelector('.hero__bg');
         if (heroBg) {
-          gsap.fromTo(heroBg, { scale: 1.1 }, { scale: 1, duration: 1.5, ease: 'power2.out' });
+          gsap.fromTo(heroBg, { scale: 1.08 }, { scale: 1, duration: 1.4, ease: 'power2.out' });
           gsap.to(heroBg, {
-            yPercent: 15,
+            yPercent: 12,
             ease: 'none',
             scrollTrigger: {
               trigger: '.hero',
@@ -108,7 +173,7 @@ export function useLenisScrollTrigger() {
           });
         }
 
-        // 2. Numbers count-up animation
+        // --- B. Live Numbers Count-Up ---
         const numbersSec = document.querySelector('.numbers');
         const numberItems = document.querySelectorAll('.numbers__grid li');
         if (numbersSec && numberItems.length) {
@@ -127,7 +192,7 @@ export function useLenisScrollTrigger() {
                 const obj = { val: 0 };
                 const tw = gsap.to(obj, {
                   val: targetVal,
-                  duration: 1.8,
+                  duration: 1.6,
                   ease: 'power2.out',
                   onUpdate: () => {
                     const str = Math.floor(obj.val).toLocaleString('en-US');
@@ -145,26 +210,24 @@ export function useLenisScrollTrigger() {
 
           gsap.fromTo(
             numberItems,
-            { y: 35, opacity: 0 },
+            { y: 30, opacity: 0 },
             {
               y: 0,
               opacity: 1,
-              duration: 0.85,
+              duration: 0.8,
               stagger: 0.1,
               ease: 'power3.out',
               scrollTrigger: {
                 trigger: numbersSec,
                 start: 'top 85%',
-                end: 'bottom top',
-                toggleActions: 'play reverse play reverse',
+                once: true,
                 onEnter: runCountUp,
-                onEnterBack: runCountUp,
               },
             }
           );
         }
 
-        // 3. Section headers and intro grids
+        // --- C. Section headers & intros ---
         document
           .querySelectorAll(
             '.section__head, .about__grid, .hack__intro, .register__intro, .form, .venue__grid, .closer__inner'
@@ -172,23 +235,22 @@ export function useLenisScrollTrigger() {
           .forEach((el) => {
             gsap.fromTo(
               el,
-              { y: 35, opacity: 0 },
+              { y: 30, opacity: 0 },
               {
                 y: 0,
                 opacity: 1,
-                duration: 0.9,
+                duration: 0.85,
                 ease: 'power3.out',
                 scrollTrigger: {
                   trigger: el,
                   start: 'top 88%',
-                  end: 'bottom top',
-                  toggleActions: 'play reverse play reverse',
+                  once: true,
                 },
               }
             );
           });
 
-        // 4. Sector Track cards
+        // --- D. Sector Track cards ---
         const tracksList = document.querySelector('.tracks__list');
         if (tracksList) {
           gsap.fromTo(
@@ -197,42 +259,40 @@ export function useLenisScrollTrigger() {
             {
               y: 0,
               opacity: 1,
-              duration: 0.85,
-              stagger: 0.12,
+              duration: 0.8,
+              stagger: 0.1,
               ease: 'power3.out',
               scrollTrigger: {
                 trigger: tracksList,
                 start: 'top 85%',
-                end: 'bottom top',
-                toggleActions: 'play reverse play reverse',
+                once: true,
               },
             }
           );
         }
 
-        // 5. Programme Pillars
+        // --- E. Programme Pillars ---
         const pillars = document.querySelector('.pillars');
         if (pillars) {
           gsap.fromTo(
             pillars.querySelectorAll('.pillar'),
-            { y: 40, opacity: 0 },
+            { y: 35, opacity: 0 },
             {
               y: 0,
               opacity: 1,
-              duration: 0.9,
-              stagger: 0.12,
+              duration: 0.85,
+              stagger: 0.1,
               ease: 'power3.out',
               scrollTrigger: {
                 trigger: pillars,
                 start: 'top 85%',
-                end: 'bottom top',
-                toggleActions: 'play reverse play reverse',
+                once: true,
               },
             }
           );
         }
 
-        // 6. Hackathon timeline steps
+        // --- F. Hackathon timeline steps ---
         const steps = document.querySelector('.steps');
         if (steps) {
           gsap.fromTo(
@@ -241,58 +301,56 @@ export function useLenisScrollTrigger() {
             {
               x: 0,
               opacity: 1,
-              duration: 0.8,
-              stagger: 0.12,
+              duration: 0.75,
+              stagger: 0.1,
               ease: 'power2.out',
               scrollTrigger: {
                 trigger: steps,
                 start: 'top 85%',
-                end: 'bottom top',
-                toggleActions: 'play reverse play reverse',
+                once: true,
               },
             }
           );
         }
 
-        // 7. Speakers & Mentors
+        // --- G. Speakers & Mentors cards ---
         const speakers = document.querySelector('.people--speakers');
         if (speakers) {
           gsap.fromTo(
             speakers.querySelectorAll('.person'),
-            { scale: 0.9, opacity: 0 },
+            { scale: 0.94, opacity: 0, y: 25 },
             {
               scale: 1,
               opacity: 1,
-              duration: 0.8,
-              stagger: 0.1,
-              ease: 'back.out(1.2)',
+              y: 0,
+              duration: 0.75,
+              stagger: 0.08,
+              ease: 'back.out(1.15)',
               scrollTrigger: {
                 trigger: speakers,
                 start: 'top 85%',
-                end: 'bottom top',
-                toggleActions: 'play reverse play reverse',
+                once: true,
               },
             }
           );
         }
 
-        // 8. Outcomes & Sponsorship Tiers
+        // --- H. Outcomes & Sponsorship Tiers ---
         const outcomes = document.querySelector('.outcomes');
         if (outcomes) {
           gsap.fromTo(
             outcomes.querySelectorAll('li'),
-            { y: 30, opacity: 0 },
+            { y: 25, opacity: 0 },
             {
               y: 0,
               opacity: 1,
-              duration: 0.8,
-              stagger: 0.1,
+              duration: 0.75,
+              stagger: 0.08,
               ease: 'power2.out',
               scrollTrigger: {
                 trigger: outcomes,
                 start: 'top 85%',
-                end: 'bottom top',
-                toggleActions: 'play reverse play reverse',
+                once: true,
               },
             }
           );
@@ -309,64 +367,54 @@ export function useLenisScrollTrigger() {
               barEl.style.width = '0%';
               gsap.to(barEl, {
                 width: targetW,
-                duration: 1.2,
-                delay: 0.2,
+                duration: 1.1,
+                delay: 0.15,
                 ease: 'power2.out',
               });
-            });
-          };
-          const resetBars = () => {
-            tierBars.forEach((bar) => {
-              (bar as HTMLElement).style.width = '0%';
             });
           };
 
           gsap.fromTo(
             tierItems,
-            { y: 35, opacity: 0 },
+            { y: 30, opacity: 0 },
             {
               y: 0,
               opacity: 1,
-              duration: 0.85,
-              stagger: 0.12,
+              duration: 0.8,
+              stagger: 0.1,
               ease: 'power3.out',
               scrollTrigger: {
                 trigger: tiers,
                 start: 'top 85%',
-                end: 'bottom top',
-                toggleActions: 'play reverse play reverse',
+                once: true,
                 onEnter: animateBars,
-                onEnterBack: animateBars,
-                onLeave: resetBars,
-                onLeaveBack: resetBars,
               },
             }
           );
         }
 
-        // 9. Sponsor slots
+        // --- I. Sponsor slots & wall ---
         const sponsorWall = document.querySelector('.sponsor-wall__grid');
         if (sponsorWall) {
           gsap.fromTo(
             sponsorWall.querySelectorAll('.sponsor-slot'),
-            { scale: 0.92, opacity: 0 },
+            { scale: 0.94, opacity: 0 },
             {
               scale: 1,
               opacity: 1,
-              duration: 0.75,
-              stagger: 0.1,
+              duration: 0.7,
+              stagger: 0.08,
               ease: 'power2.out',
               scrollTrigger: {
                 trigger: sponsorWall,
                 start: 'top 85%',
-                end: 'bottom top',
-                toggleActions: 'play reverse play reverse',
+                once: true,
               },
             }
           );
         }
 
-        // 10. FAQ accordion items
+        // --- J. FAQ Accordion Items ---
         const faqList = document.querySelector('.faq__list');
         if (faqList) {
           gsap.fromTo(
@@ -375,55 +423,53 @@ export function useLenisScrollTrigger() {
             {
               y: 0,
               opacity: 1,
-              duration: 0.7,
-              stagger: 0.08,
+              duration: 0.65,
+              stagger: 0.07,
               ease: 'power2.out',
               scrollTrigger: {
                 trigger: faqList,
                 start: 'top 88%',
-                end: 'bottom top',
-                toggleActions: 'play reverse play reverse',
+                once: true,
+              },
+            }
+          );
+        }
+
+        // --- K. Booth Section cards ---
+        const boothGrid = document.querySelector('.booth-grid');
+        if (boothGrid) {
+          gsap.fromTo(
+            boothGrid.querySelectorAll('.booth-card'),
+            { y: 25, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.75,
+              stagger: 0.1,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: boothGrid,
+                start: 'top 85%',
+                once: true,
               },
             }
           );
         }
       });
 
-      // Resync when heights adjust
-      const resync = () => {
-        window.dispatchEvent(new Event('scroll'));
-        ScrollTrigger.refresh();
-      };
-      window.addEventListener('load', () => setTimeout(resync, 60));
-      window.addEventListener('pageshow', () => setTimeout(resync, 60));
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(resync);
+      pageCtxRef.current = ctx;
 
-      let resizeObserver: ResizeObserver | null = null;
-      if ('ResizeObserver' in window) {
-        let lastH = 0;
-        let resizeTimer: ReturnType<typeof setTimeout> | null = null;
-        resizeObserver = new ResizeObserver(() => {
-          const h = document.documentElement.scrollHeight;
-          if (Math.abs(h - lastH) < 4) return;
-          lastH = h;
-          if (resizeTimer) clearTimeout(resizeTimer);
-          resizeTimer = setTimeout(() => {
-            ScrollTrigger.refresh();
-          }, 200);
-        });
-        resizeObserver.observe(document.body);
+      // Resync ScrollTrigger coordinates
+      lenisRef.current?.resize();
+      ScrollTrigger.refresh();
+    }, 60);
+
+    return () => {
+      clearTimeout(timer);
+      if (pageCtxRef.current) {
+        pageCtxRef.current.revert();
+        pageCtxRef.current = null;
       }
-
-      return () => {
-        document.removeEventListener('click', handleAnchorClick);
-        window.removeEventListener('load', resync);
-        window.removeEventListener('pageshow', resync);
-        resizeObserver?.disconnect();
-        gsap.ticker.remove(updateTicker);
-        ctx?.revert();
-        lenis?.destroy();
-        ScrollTrigger.getAll().forEach((st) => st.kill());
-      };
-    }
-  }, []);
+    };
+  }, [pathname]);
 }

@@ -22,6 +22,7 @@ export interface LinksConfig {
   sponsorEmail: string;
   generalEmail: string;
   phone: string;
+  phoneSecondary?: string;
   whatsapp: string;
   mediaTeamWhatsApp?: string;
   protocolTeamWhatsApp?: string;

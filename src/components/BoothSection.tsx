@@ -252,11 +252,119 @@ export const BoothSection: React.FC = () => {
           </div>
         </div>
 
+        {/* Official Pitch Deck Showcase Banner */}
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #ffffff 0%, #f4f8f4 100%)',
+            border: '1.5px solid rgba(8, 144, 2, 0.35)',
+            borderRadius: 'var(--radius-md)',
+            padding: 'clamp(1.25rem, 3vw, 2rem)',
+            marginBottom: 'var(--space-2xl)',
+            boxShadow: '0 8px 30px rgba(8, 144, 2, 0.08)',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+            gap: 'var(--space-lg)',
+            alignItems: 'center'
+          }}
+        >
+          <div>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'rgba(8, 144, 2, 0.12)',
+                color: 'var(--brand-deep)',
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                padding: '3px 10px',
+                borderRadius: 'var(--radius-pill)',
+                marginBottom: 'var(--space-xs)'
+              }}
+            >
+              <span>📄</span> Official Documentation
+            </div>
+            <h3 className="h3" style={{ margin: '0 0 var(--space-xs)', color: 'var(--brand-black)', fontSize: 'clamp(1.25rem, 2vw, 1.65rem)' }}>
+              NACOS AKSU Pitch Deck Presentation
+            </h3>
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-muted)', margin: '0 0 var(--space-md)', lineHeight: 1.55 }}>
+              Review the complete Confluence 2027 vision, stakeholder benefits, audience projections, festival timeline, and detailed exhibition booth architecture directly in the official pitch deck.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', fontSize: '0.75rem', color: 'var(--color-ink-muted)', marginBottom: 'var(--space-md)' }}>
+              <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                ✓ 3,000+ Footfall
+              </span>
+              <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                ✓ 5 Sector Tracks
+              </span>
+              <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                ✓ Category Exclusivity
+              </span>
+              <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                ✓ Perm Site Venue Map
+              </span>
+            </div>
+          </div>
+
+          <div
+            style={{
+              background: '#0B0F0C',
+              color: '#ffffff',
+              borderRadius: 'var(--radius-sm)',
+              padding: 'var(--space-lg)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: 'var(--space-md)',
+              border: '1px solid rgba(255, 255, 255, 0.12)'
+            }}
+          >
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-xs)' }}>
+                <span style={{ fontSize: '0.7rem', color: '#a4f49b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  PDF PROSPECTUS
+                </span>
+                <span style={{ fontSize: '0.65rem', background: 'rgba(255, 255, 255, 0.15)', padding: '2px 8px', borderRadius: 'var(--radius-pill)' }}>
+                  26.6 MB
+                </span>
+              </div>
+              <strong style={{ display: 'block', fontSize: 'var(--text-base)', color: '#ffffff', fontFamily: 'var(--font-display)', marginBottom: '4px' }}>
+                NACOS AKSU Pitch Deck Presentation.pdf
+              </strong>
+              <span style={{ fontSize: 'var(--text-xs)', color: 'rgba(255, 255, 255, 0.7)', display: 'block' }}>
+                Approved by Faculty of Computing &amp; Information Technology, AKSU
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', gap: 'var(--space-xs)', flexWrap: 'wrap' }}>
+              <a
+                href="/assets/docs/nacos-aksu-pitch-deck-2027.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn--signal"
+                style={{ flex: 1, minWidth: '140px', justifyContent: 'center', padding: '0.6rem 1rem', fontSize: 'var(--text-sm)' }}
+              >
+                <span>View Deck Online &rarr;</span>
+              </a>
+              <a
+                href="/assets/docs/nacos-aksu-pitch-deck-2027.pdf"
+                download="NACOS-AKSU-Pitch-Deck-2027.pdf"
+                className="btn btn--outline"
+                style={{ flex: 1, minWidth: '140px', justifyContent: 'center', padding: '0.6rem 1rem', fontSize: 'var(--text-sm)', color: '#ffffff', borderColor: 'rgba(255, 255, 255, 0.3)' }}
+              >
+                <span>Download PDF 📥</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
         {/* Booth Pricing Cards Grid */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
             gap: 'var(--space-lg)',
             marginBottom: 'var(--space-2xl)'
           }}
