@@ -565,7 +565,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
               Please take a screenshot or print this pass. You can present this code at the registration desk for your physical badge and badge lanyard.
             </p>
 
-            <div style={{ display: 'flex', gap: 'var(--space-xs)', marginTop: 'var(--space-md)' }}>
+            <div className="modal-actions-row">
               <button
                 type="button"
                 className="btn btn--outline"

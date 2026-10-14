@@ -10,6 +10,7 @@
   --brand-pale: #E6F2E3;
   --brand-soft: #78B978;
   --brand-black: #0B0F0C;
+  --brand-accent: var(--brand-green);
 
   /* Semantic colours */
   --color-paper: var(--brand-off);

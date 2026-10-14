@@ -672,7 +672,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
               </div>
             )}
 
-            <div style={{ display: 'flex', gap: 'var(--space-xs)', marginTop: 'var(--space-md)' }}>
+            <div className="modal-actions-row">
               <button
                 type="button"
                 className="btn btn--outline"
