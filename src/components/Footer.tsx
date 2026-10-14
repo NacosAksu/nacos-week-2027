@@ -73,17 +73,31 @@ export const Footer: React.FC = () => {
         <div className="footer__body">
           {/* Brand & Organization */}
           <div className="footer__brand">
-            <Link to="/" className="footer__logo-link" aria-label="NACOS Week 27 home">
-              <img
-                src="/assets/brand/nw27-wordmark-v3-reversed.png"
-                alt="NACOS Week 27"
-                width="1180"
-                height="240"
-                loading="lazy"
-                decoding="async"
-                className="footer__logo"
-              />
-            </Link>
+            <div className="footer__logo-lockup">
+              <Link to="/" className="footer__crest-link" aria-label="NACOS AKSU Chapter Seal">
+                <img
+                  src="/assets/brand/nacos-logo.png"
+                  alt="NACOS AKSU Chapter Seal"
+                  width="52"
+                  height="52"
+                  loading="lazy"
+                  decoding="async"
+                  className="footer__crest"
+                />
+              </Link>
+              <div className="footer__logo-divider" aria-hidden="true" />
+              <Link to="/" className="footer__logo-link" aria-label="NACOS Week 2027 home">
+                <img
+                  src="/assets/brand/nw27-wordmark-v3-reversed.png"
+                  alt="NACOS Week 2027"
+                  width="1180"
+                  height="240"
+                  loading="lazy"
+                  decoding="async"
+                  className="footer__logo"
+                />
+              </Link>
+            </div>
 
             <p className="footer__tagline">
               Confluence &bull; {event.datesLabel || 'February 2027'}
