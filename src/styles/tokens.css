@@ -13,47 +13,48 @@
 
   /* Semantic colours */
   --color-paper: var(--brand-off);
+  --color-paper-card: #FFFFFF;
   --color-paper-2: var(--brand-pale);
   --color-ink: var(--brand-black);
-  --color-ink-muted: color-mix(in oklab, var(--brand-black) 68%, var(--brand-off));
-  --color-ink-faint: color-mix(in oklab, var(--brand-black) 45%, var(--brand-off));
-  --color-rule: color-mix(in oklab, var(--brand-deep) 22%, var(--brand-off));
+  --color-ink-muted: #4A554E;
+  --color-ink-faint: #738077;
+  --color-rule: rgba(11, 15, 12, 0.10);
+  --color-rule-subtle: rgba(11, 15, 12, 0.05);
+  --color-rule-green: rgba(0, 80, 18, 0.14);
+  
   --color-night: var(--brand-black);
-  --color-night-2: color-mix(in oklab, var(--brand-black) 88%, var(--brand-deep));
-  --color-night-rule: color-mix(in oklab, var(--brand-off) 14%, var(--brand-black));
+  --color-night-card: #121814;
+  --color-night-2: #162019;
+  --color-night-rule: rgba(245, 247, 242, 0.12);
   --color-on-night: var(--brand-off);
-  --color-on-night-muted: color-mix(in oklab, var(--brand-off) 68%, var(--brand-black));
+  --color-on-night-muted: #B8C4BA;
+  
   --color-forest: var(--brand-deep);
-  --color-forest-rule: color-mix(in oklab, var(--brand-off) 22%, var(--brand-deep));
-  --color-on-forest-muted: color-mix(in oklab, var(--brand-off) 75%, var(--brand-deep));
+  --color-forest-card: #043810;
+  --color-forest-rule: rgba(245, 247, 242, 0.16);
+  --color-on-forest-muted: #D1E5D3;
+  
   --color-signal: var(--brand-green);
   --color-signal-soft: var(--brand-soft);
-  --color-signal-on-dark: color-mix(in oklab, var(--brand-green) 72%, var(--brand-off)); /* brand green, lifted for legibility on photos */
-  --color-focus: var(--brand-soft);
-  --color-placeholder: color-mix(in oklab, var(--brand-pale) 70%, var(--brand-off));
-  --color-placeholder-night: color-mix(in oklab, var(--brand-black) 80%, var(--brand-deep));
-  --color-error: #A3241B;      /* form errors only */
-  --color-mystery-figure: color-mix(in oklab, var(--brand-soft) 85%, var(--brand-off));
-  --color-mystery-glow: color-mix(in oklab, var(--brand-green) 35%, transparent);
-  --color-mystery-tag: color-mix(in oklab, var(--brand-black) 55%, transparent);
-  --hero-scrim-strong: color-mix(in oklab, var(--brand-black) 94%, transparent);
-  --hero-scrim-mid: color-mix(in oklab, var(--brand-black) 74%, transparent);
-  --hero-scrim-light: color-mix(in oklab, var(--brand-black) 22%, transparent);
-  --hero-scrim-clear: color-mix(in oklab, var(--brand-black) 0%, transparent);
+  --color-signal-on-dark: #8DE085;
+  --color-focus: var(--brand-deep);
+  --color-placeholder: #EBF2E9;
+  --color-placeholder-night: #141D16;
+  --color-error: #B91C1C;
 
   /* Type */
-  --font-display: "Montserrat", system-ui, sans-serif;
-  --font-body: "Poppins", system-ui, sans-serif;
+  --font-display: "Montserrat", system-ui, -apple-system, sans-serif;
+  --font-body: "Poppins", system-ui, -apple-system, sans-serif;
 
-  --text-xs: 0.8125rem;
-  --text-sm: 0.9375rem;
-  --text-base: 1.0625rem;
-  --text-lg: 1.25rem;
-  --text-xl: clamp(1.375rem, 1.1rem + 0.9vw, 1.75rem);
-  --text-2xl: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
-  --text-3xl: clamp(2.25rem, 1.5rem + 3vw, 3.75rem);
-  --text-display: clamp(3.5rem, 1rem + 11vw, 11rem);
-  --text-stat: clamp(3rem, 2rem + 4vw, 5.5rem);
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: clamp(1.25rem, 1.1rem + 0.8vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.3rem + 1.2vw, 2.25rem);
+  --text-3xl: clamp(2rem, 1.5rem + 2.5vw, 3.25rem);
+  --text-display: clamp(2.75rem, 1.5rem + 6vw, 6.5rem);
+  --text-stat: clamp(2.5rem, 1.8rem + 3.5vw, 4.5rem);
 
   /* Space (4pt) */
   --space-2xs: 0.25rem;
@@ -64,24 +65,26 @@
   --space-xl: 2rem;
   --space-2xl: 3rem;
   --space-3xl: 4.5rem;
-  --space-4xl: 7rem;
+  --space-4xl: 6.5rem;
   --gutter: clamp(1rem, 4vw, 3rem);
-  --measure: 62ch;
-  --max: 80rem;
+  --measure: 65ch;
+  --max: 76rem;
 
-  /* Shape */
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-pill: 999px;
+  /* Shape & Borders */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 9999px;
   --rule: 1px solid var(--color-rule);
   --rule-night: 1px solid var(--color-night-rule);
+  --shadow-subtle: 0 1px 2px rgba(11, 15, 12, 0.04);
+  --shadow-card: 0 4px 12px -2px rgba(11, 15, 12, 0.04);
+  --shadow-elevated: 0 12px 28px -6px rgba(11, 15, 12, 0.08);
 
   /* Motion */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --dur-short: 160ms;
-  --dur-med: 320ms;
-  --dur-long: 1600ms;
+  --dur-short: 180ms;
+  --dur-med: 300ms;
 }

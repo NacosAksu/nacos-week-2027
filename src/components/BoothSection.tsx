@@ -610,7 +610,7 @@ export const BoothSection: React.FC = () => {
                     >
                       {boothTiers.map((t) => (
                         <option key={t.id} value={t.id}>
-                          {t.name} — {t.price} ({t.spaceSize})
+                          {t.name} - {t.price} ({t.spaceSize})
                         </option>
                       ))}
                     </select>

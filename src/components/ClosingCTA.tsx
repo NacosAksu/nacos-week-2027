@@ -3,22 +3,31 @@ import { Link } from 'react-router-dom';
 
 export const ClosingCTA: React.FC = () => {
   return (
-    <section className="closer on-dark" aria-labelledby="closer-title">
+    <section className="closer" aria-labelledby="closer-title">
       <div className="wrap closer__inner">
-        <p className="closer__tag">Confluence 2027 &bull; February 2027</p>
+        <p className="closer__tag">NACOS Week 2027 &bull; Confluence</p>
         <h2 id="closer-title" className="closer__title">
-          Be in the room where the streams meet.
+          Be part of the Confluence.
         </h2>
         <p className="closer__desc">
-          Four days of hands-on building, competition, and connection across Akwa Ibom State University.
+          Connect your organisation with emerging talent, practical innovation, and the next generation of technology-enabled professionals at Akwa Ibom State University.
         </p>
         <div className="closer__actions">
-          <Link to="/register" className="btn btn--signal closer__btn-primary">
-            <span>Register Free Pass &rarr;</span>
+          <Link to="/register" className="btn btn--deep">
+            Register for Free Pass &rarr;
           </Link>
-          <Link to="/partner" className="btn btn--ghost-night closer__btn-secondary">
-            <span>Partner with Us</span>
+          <Link to="/partner" className="btn btn--outline">
+            Partner with Us
           </Link>
+        </div>
+        <div className="closer__contacts">
+          <span>0903 505 6134</span>
+          <span>&bull;</span>
+          <span>0906 484 7152</span>
+          <span>&bull;</span>
+          <span>nacosfcitaksu@gmail.com</span>
+          <span>&bull;</span>
+          <span>Ikot Akpaden, Akwa Ibom State</span>
         </div>
       </div>
     </section>
