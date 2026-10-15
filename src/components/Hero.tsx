@@ -75,14 +75,6 @@ export const Hero: React.FC = () => {
     return () => clearInterval(interval);
   }, [event.start]);
 
-  const prevSlide = () => {
-    setActiveSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
-  };
-
-  const nextSlide = () => {
-    setActiveSlide((prev) => (prev + 1) % heroSlides.length);
-  };
-
   return (
     <>
       <section className="hero on-dark" aria-labelledby="hero-title">
@@ -112,37 +104,44 @@ export const Hero: React.FC = () => {
 
         <div className="wrap hero__inner">
 
+          <p className="hero__eyebrow">NACOS Week 2027</p>
+
           {/* Bold Editorial Headline */}
           <h1 id="hero-title" className="hero__title">
-            CONFLUENCE 27<span className="hero__dot">.</span>
+            CONFLUENCE<span className="hero__dot">.</span>
           </h1>
 
-          {/* Clean Frosted Metadata Strip */}
+          <p className="hero__sectors">Energy, Finance, Oil &amp; Gas, Medicine and Technology, converging with computing.</p>
+
+          {/* When / where */}
           <div className="hero__meta" aria-label="Key event details">
-            <div className="hero__meta-chip">
-              <span className="hero__meta-chip-label">When</span>
-              <span className="hero__meta-chip-val">{event.datesLabel || 'February 2027'}</span>
-            </div>
-            <div className="hero__meta-chip">
-              <span className="hero__meta-chip-label">Where</span>
-              <span className="hero__meta-chip-val">{event.venue || 'test Conference Centre, Perm Site'}</span>
-            </div>
+            <p className="hero__date">{event.datesLabel || 'February 2027'}</p>
+            <p className="hero__venue">{event.venue || 'Conference Centre, Perm Site'}</p>
           </div>
 
           {/* High-Contrast Action CTAs */}
           <div className="hero__actions">
             <Link to="/register" className="hero__btn-primary">
-              <span>Register for Free Pass</span>
+              <span>Register</span>
               <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true">
                 <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
             </Link>
-            <Link to="/partner" className="hero__btn-secondary">
-              <span>Partner With Us</span>
-            </Link>
-            <Link to="/tracks" className="hero__btn-tertiary">
-              <span>Explore 5 Tracks &rarr;</span>
-            </Link>
+            <div className="hero__actions-pair">
+              <Link to="/partner" className="hero__btn-secondary">
+                <span>Partner With Us</span>
+              </Link>
+              <a
+                href={siteConfig.links.brochure || '/assets/docs/nacos-aksu-pitch-deck-2027.pdf'}
+                className="hero__btn-secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Partnership brochure (PDF, opens in a new tab)"
+              >
+                <span className="hero__label-long">Partnership Brochure</span>
+                <span className="hero__label-short">Brochure (PDF)</span>
+              </a>
+            </div>
           </div>
 
           {/* Minimalist Countdown */}
@@ -171,37 +170,6 @@ export const Hero: React.FC = () => {
           )}
         </div>
 
-        {/* Sleek Floating Background Photo Accreditation & Nav */}
-        <div className="hero__bg-controls" aria-label="Background image switcher">
-          <div className="hero__bg-controls-card">
-            <span className="hero__bg-tag">{heroSlides[activeSlide].tag}</span>
-            <div className="hero__bg-nav">
-              <button
-                type="button"
-                className="hero__bg-btn"
-                onClick={prevSlide}
-                aria-label="Previous background photo"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13" aria-hidden="true">
-                  <polyline points="15 18 9 12 15 6" />
-                </svg>
-              </button>
-              <span className="hero__bg-counter">
-                0{activeSlide + 1} / 0{heroSlides.length}
-              </span>
-              <button
-                type="button"
-                className="hero__bg-btn"
-                onClick={nextSlide}
-                aria-label="Next background photo"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="13" height="13" aria-hidden="true">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Refined Brand Ticker */}

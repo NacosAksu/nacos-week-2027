@@ -122,7 +122,6 @@ export const Navbar: React.FC = () => {
                 <Link to="/hackathon" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
                   <div className="nav-dropdown__item-title">
                     Innovation Hackathon
-                    <span className="nav-dropdown__item-badge">48H</span>
                   </div>
                   <div className="nav-dropdown__item-desc">Student developer sprint, mentorship &amp; cash prizes</div>
                 </Link>
@@ -218,8 +217,8 @@ export const Navbar: React.FC = () => {
 
         {/* Right CTA Actions */}
         <div className="site-header__actions">
-          <Link to="/register" className="btn btn--header-cta">
-            Register Pass
+          <Link to="/register" className="btn btn--header-cta" onClick={closeMenu}>
+            Register<span className="btn--header-cta__extra"> Pass</span>
           </Link>
 
           {/* Mobile Hamburger Toggle */}
@@ -247,7 +246,7 @@ export const Navbar: React.FC = () => {
                 <div className="site-header__mobile-group-title">Programme &amp; Tracks</div>
                 <NavLink to="/tracks" onClick={closeMenu}>5 Industry Tracks</NavLink>
                 <NavLink to="/programme" onClick={closeMenu}>Flagship Programme</NavLink>
-                <NavLink to="/hackathon" onClick={closeMenu}>Innovation Hackathon (48H)</NavLink>
+                <NavLink to="/hackathon" onClick={closeMenu}>Innovation Hackathon</NavLink>
               </div>
 
               <div className="site-header__mobile-group">

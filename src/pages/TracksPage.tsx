@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 interface TrackItem {
@@ -88,6 +88,16 @@ const trackDetails: TrackItem[] = [
 export const TracksPage: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>('all');
 
+  // Phones: track details start collapsed so five long cards don't fill ten screens
+  const phoneQuery = '(max-width: 640px)';
+  const [isPhone, setIsPhone] = useState(() => typeof window !== 'undefined' && window.matchMedia(phoneQuery).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(phoneQuery);
+    const onChange = () => setIsPhone(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
   const filteredTracks = selectedFilter === 'all'
     ? trackDetails
     : trackDetails.filter((t) => t.id === selectedFilter);
@@ -148,31 +158,35 @@ export const TracksPage: React.FC = () => {
                   {t.summary}
                 </p>
 
-                <div className="deck-track-card__section">
-                  <h3 className="deck-track-card__kicker">
-                    Challenge Problem Statements
-                  </h3>
-                  <ul className="deck-track-card__challenges">
-                    {t.challenges.map((c, i) => (
-                      <li key={i}>{c}</li>
-                    ))}
-                  </ul>
-                </div>
+                <details className="deck-track-card__more" open={!isPhone || selectedFilter !== 'all'} key={`${t.n}-${isPhone}-${selectedFilter}`}>
+                  <summary className="deck-track-card__toggle">See problem statements &amp; skills</summary>
 
-                <div className="deck-track-card__meta">
-                  <div>
-                    <span className="deck-track-card__kicker">Target Participant Profiles</span>
-                    <p>{t.roles}</p>
-                  </div>
-                  <div style={{ marginTop: 'var(--space-sm)' }}>
-                    <span className="deck-track-card__kicker">Relevant Technologies</span>
-                    <div className="deck-track-card__stack">
-                      {t.techStack.map((tech, i) => (
-                        <span key={i} className="deck-track-card__stack-pill">{tech}</span>
+                  <div className="deck-track-card__section">
+                    <h3 className="deck-track-card__kicker">
+                      Challenge Problem Statements
+                    </h3>
+                    <ul className="deck-track-card__challenges">
+                      {t.challenges.map((c, i) => (
+                        <li key={i}>{c}</li>
                       ))}
+                    </ul>
+                  </div>
+
+                  <div className="deck-track-card__meta">
+                    <div>
+                      <span className="deck-track-card__kicker">Target Participant Profiles</span>
+                      <p>{t.roles}</p>
+                    </div>
+                    <div style={{ marginTop: 'var(--space-sm)' }}>
+                      <span className="deck-track-card__kicker">Relevant Technologies</span>
+                      <div className="deck-track-card__stack">
+                        {t.techStack.map((tech, i) => (
+                          <span key={i} className="deck-track-card__stack-pill">{tech}</span>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </details>
 
                 <div className="deck-track-card__footer">
                   <Link to="/register" className="btn btn--outline" style={{ fontSize: 'var(--text-xs)', padding: '0.5rem 1rem' }}>

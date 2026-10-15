@@ -10,47 +10,14 @@ interface SpeakerItem {
   topic?: string;
 }
 
+// Speakers are not confirmed yet: blurred placeholders, no names, roles or topics.
+// When one is confirmed, set name, role and topic and add the real photo.
 const speakersList: SpeakerItem[] = [
-  {
-    name: "Keynote: Energy Systems",
-    role: "Power Infrastructure & Grid Analytics Specialist",
-    track: "Energy",
-    photo: "/assets/speakers/speaker-01.jpg",
-    isRevealed: true,
-    topic: "Building Resilient Digital Grids for Emerging Economies"
-  },
-  {
-    name: "Keynote: Fintech Architecture",
-    role: "Distributed Payments & Financial Security Director",
-    track: "Finance",
-    photo: "/assets/speakers/speaker-02.jpg",
-    isRevealed: true,
-    topic: "Decentralized Financial Pipelines & High-Throughput Verification"
-  },
-  {
-    name: "Industry Lead (Offshore Tech)",
-    role: "Computer Vision & Pipeline Telemetry Engineer",
-    track: "Oil & Gas",
-    photo: "/assets/speakers/speaker-03.jpg",
-    isRevealed: true,
-    topic: "Robotics and Hazard Telemetry in Offshore Operations"
-  },
-  {
-    name: "Health-Tech Lead",
-    role: "Clinical Data Systems & AI Diagnostics Researcher",
-    track: "Medicine",
-    photo: "/assets/speakers/speaker-04.jpg",
-    isRevealed: true,
-    topic: "Offline-First Healthcare Synchronization in Primary Clinics"
-  },
-  {
-    name: "Cybersecurity & Cloud Director",
-    role: "Zero-Trust Infrastructure & Agentic AI Specialist",
-    track: "Technology",
-    photo: "/assets/speakers/speaker-05.jpg",
-    isRevealed: true,
-    topic: "Autonomous Threat Detection and Secure Campus Networks"
-  }
+  { name: "To be announced", role: "", track: "Energy", photo: "/assets/speakers/speaker-01.jpg", isRevealed: false },
+  { name: "To be announced", role: "", track: "Finance", photo: "/assets/speakers/speaker-02.jpg", isRevealed: false },
+  { name: "To be announced", role: "", track: "Oil & Gas", photo: "/assets/speakers/speaker-03.jpg", isRevealed: false },
+  { name: "To be announced", role: "", track: "Medicine", photo: "/assets/speakers/speaker-04.jpg", isRevealed: false },
+  { name: "To be announced", role: "", track: "Technology", photo: "/assets/speakers/speaker-05.jpg", isRevealed: false }
 ];
 
 export const Speakers: React.FC = () => {
@@ -63,15 +30,42 @@ export const Speakers: React.FC = () => {
     reason: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Saves to the "Speaker Suggestions" tab of the registrations sheet (backend/registration.gs)
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setModalOpen(false);
-      setSubmitted(false);
-      setSuggestForm({ name: '', role: '', track: 'Technology', link: '', reason: '' });
-    }, 2000);
+    const endpoint = siteConfig.forms.registrationEndpoint;
+    if (!endpoint) {
+      setSendError(`Suggestions are not open yet. Email ${siteConfig.links.generalEmail} instead.`);
+      return;
+    }
+    setSending(true);
+    setSendError('');
+    try {
+      const body = new URLSearchParams({
+        type: 'speaker_suggestion',
+        nominee: suggestForm.name,
+        role: suggestForm.role,
+        track: suggestForm.track,
+        link: suggestForm.link,
+        reason: suggestForm.reason
+      });
+      const response = await fetch(endpoint, { method: 'POST', body });
+      const res = await response.json();
+      if (res.result !== 'success') throw new Error(res.error || 'rejected');
+      setSubmitted(true);
+      setTimeout(() => {
+        setModalOpen(false);
+        setSubmitted(false);
+        setSuggestForm({ name: '', role: '', track: 'Technology', link: '', reason: '' });
+      }, 2500);
+    } catch {
+      setSendError(`That didn't go through. Please try again, or email ${siteConfig.links.generalEmail}.`);
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -90,11 +84,11 @@ export const Speakers: React.FC = () => {
         <ul className="people people--speakers">
           {speakersList.map((s, idx) => (
             <li className="person" key={idx}>
-              {s.isRevealed && s.photo ? (
-                <div className="person__photo-wrap">
+              {s.photo ? (
+                <div className={`person__photo-wrap${s.isRevealed ? '' : ' person__photo-wrap--hidden'}`}>
                   <img
                     src={s.photo}
-                    alt={s.name}
+                    alt={s.isRevealed ? s.name : `${s.track} speaker, to be announced`}
                     className="person__photo-img"
                     loading="lazy"
                   />
@@ -113,9 +107,11 @@ export const Speakers: React.FC = () => {
               <h3 className="person__name" style={{ fontSize: 'var(--text-base)', marginTop: 'var(--space-xs)' }}>
                 {s.name}
               </h3>
-              <p className="person__role" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>
-                {s.role}
-              </p>
+              {s.role && (
+                <p className="person__role" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>
+                  {s.role}
+                </p>
+              )}
               {s.topic && (
                 <p className="person__topic" style={{ fontSize: '0.78rem', color: 'var(--brand-deep)', fontWeight: 500, marginTop: 'var(--space-2xs)' }}>
                   Topic: {s.topic}
@@ -237,6 +233,12 @@ export const Speakers: React.FC = () => {
                   />
                 </div>
 
+                {sendError && (
+                  <p role="alert" style={{ marginTop: 'var(--space-sm)', fontSize: 'var(--text-sm)', color: 'var(--color-error)' }}>
+                    {sendError}
+                  </p>
+                )}
+
                 <div style={{ marginTop: 'var(--space-md)', display: 'flex', gap: 'var(--space-sm)', justifyContent: 'flex-end' }}>
                   <button
                     type="button"
@@ -245,8 +247,8 @@ export const Speakers: React.FC = () => {
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn--signal">
-                    Submit Nomination
+                  <button type="submit" className="btn btn--signal" disabled={sending}>
+                    {sending ? 'Sending...' : 'Submit Nomination'}
                   </button>
                 </div>
               </form>

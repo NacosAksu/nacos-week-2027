@@ -16,6 +16,7 @@
 // ---------- Settings ----------
 var SHEET_NAME = "Registrations";
 var VOLUNTEER_SHEET_NAME = "Volunteers";
+var SUGGESTION_SHEET_NAME = "Speaker Suggestions";
 var FROM_NAME = "NACOS AKSU";
 var REPLY_TO = "nacosfcitaksu@gmail.com";
 var ID_PREFIX = "NW27-";
@@ -42,6 +43,8 @@ var HEADERS = ["Reg ID", "Timestamp", "Full name", "Email", "WhatsApp", "Departm
                "Interests", "Contact consent", "Share with partners", "Email status"];
 var VOL_HEADERS = ["Volunteer ID", "Timestamp", "Full name", "Email", "WhatsApp", "Department", "Level",
                    "Committee / Team", "Availability", "Prior experience", "Email status"];
+var SUGGESTION_HEADERS = ["Timestamp", "Nominee", "Role & organisation", "Track", "Profile link",
+                          "Why they fit", "Committee notified"];
 var COL = { id: 1, email: 4, status: 11 };
 var VOL_COL = { id: 1, email: 4, status: 11 };
 
@@ -49,6 +52,7 @@ var VOL_COL = { id: 1, email: 4, status: 11 };
 function setup() {
   getSheet_();
   getVolunteerSheet_();
+  getSuggestionSheet_();
   ScriptApp.getProjectTriggers().forEach(function (t) {
     if (t.getHandlerFunction() === "sendPending") ScriptApp.deleteTrigger(t);
   });
@@ -66,6 +70,8 @@ function doPost(e) {
 
   // Spam trap: the hidden "website" field is only ever filled by bots.
   if (p.website) return json_({ result: "success", id: ID_PREFIX + "0000" });
+
+  if (p.type === "speaker_suggestion") return saveSuggestion_(p);
 
   var isVolunteer = p.type === "volunteer" || !!p.volunteer_team;
   var name = text_(p.name, 120);
@@ -134,6 +140,55 @@ function doPost(e) {
 
   sendRow_(sheet, row);
   return json_({ result: "success", id: id });
+}
+
+// ---------- Speaker / judge suggestions ----------
+// Saved to the "Speaker Suggestions" tab. The committee inbox gets a short notice for each one.
+function saveSuggestion_(p) {
+  var nominee = text_(p.nominee, 120);
+  var role = text_(p.role, 160);
+  if (nominee.length < 2 || role.length < 2) return json_({ result: "error", error: "invalid" });
+
+  var link = text_(p.link, 300);
+  if (link && !/^https?:\/\//i.test(link)) link = "";
+  var track = text_(p.track, 40);
+  var reason = text_(p.reason, 600);
+
+  var sheet, row;
+  var lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    sheet = getSuggestionSheet_();
+    sheet.appendRow([new Date(), cell_(nominee), cell_(role), cell_(track), cell_(link), cell_(reason), "no"]);
+    row = sheet.getLastRow();
+  } finally {
+    lock.releaseLock();
+  }
+
+  if (MailApp.getRemainingDailyQuota() > 0) {
+    try {
+      MailApp.sendEmail({
+        to: REPLY_TO,
+        subject: "Speaker suggestion: " + nominee + " (" + (track || "no track") + ")",
+        name: FROM_NAME + " website",
+        body: [
+          "A new speaker / judge suggestion came in from the website.",
+          "",
+          "Nominee: " + nominee,
+          "Role & organisation: " + role,
+          "Track: " + (track || "-"),
+          "Profile: " + (link || "-"),
+          "Why they fit: " + (reason || "-"),
+          "",
+          "All suggestions are in the '" + SUGGESTION_SHEET_NAME + "' tab of the registrations sheet."
+        ].join("\n")
+      });
+      sheet.getRange(row, SUGGESTION_HEADERS.length).setValue("yes");
+    } catch (err) {
+      sheet.getRange(row, SUGGESTION_HEADERS.length).setValue("failed: " + String(err.message || err).slice(0, 80));
+    }
+  }
+  return json_({ result: "success" });
 }
 
 // ---------- Emails ----------
@@ -249,6 +304,8 @@ function htmlEmail_(p) {
         "NACOS AKSU, Akwa Ibom State University. You received this because you registered at " + link(EVENT.site, EVENT.site.replace("https://", "")) + "." +
       "</td></tr>" +
     "</table></div>";
+}
+
 function getTeamWhatsAppLink_(teamName) {
   if (!teamName) return "";
   var t = String(teamName).toLowerCase();
@@ -347,6 +404,17 @@ function getVolunteerSheet_() {
     sheet.appendRow(VOL_HEADERS);
     sheet.setFrozenRows(1);
     sheet.getRange(1, 1, 1, VOL_HEADERS.length).setFontWeight("bold").setBackground(BRAND.pale);
+  }
+  return sheet;
+}
+
+function getSuggestionSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SUGGESTION_SHEET_NAME) || ss.insertSheet(SUGGESTION_SHEET_NAME);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(SUGGESTION_HEADERS);
+    sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, SUGGESTION_HEADERS.length).setFontWeight("bold").setBackground(BRAND.pale);
   }
   return sheet;
 }
