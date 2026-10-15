@@ -51,8 +51,13 @@ Commit and push. Then register once on the live site with your own email to test
   tab with pass IDs (`NW27-0001`...). Volunteer applications go directly to the
   **Volunteers** tab with accreditation IDs (`NW27-VOL-0001`...), their selected
   committee, availability, and experience.
+- **Sending from noreply@nacosaksu.com.ng (Resend).** In the Apps Script editor open
+  **Project Settings → Script Properties** and add `RESEND_API_KEY` with the Resend key
+  (sending access, nacosaksu.com.ng only). Never paste the key into the code. With the key set,
+  emails go through Resend; if Resend fails or hits its limit, Gmail sends instead. The
+  **Email status** column shows which one was used, e.g. `sent 3 Feb 14:02 (resend)`.
 - **Speaker suggestions.** The "Suggest a Speaker / Judge" form on the site saves to the
-  **Speaker Suggestions** tab and emails a short notice to nacosfcitaksu@gmail.com.
+  **Speaker Suggestions** tab and emails a short notice to hello@nacosaksu.com.ng.
 - **Daily email limit.** A free Gmail account can send about 100 script emails a
   day. Every registration is saved straight away. If the limit is reached, the
   row shows `pending` in the **Email status** column and the email goes out

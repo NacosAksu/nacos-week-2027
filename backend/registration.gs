@@ -18,14 +18,17 @@ var SHEET_NAME = "Registrations";
 var VOLUNTEER_SHEET_NAME = "Volunteers";
 var SUGGESTION_SHEET_NAME = "Speaker Suggestions";
 var FROM_NAME = "NACOS AKSU";
-var REPLY_TO = "nacosfcitaksu@gmail.com";
+var REPLY_TO = "hello@nacosaksu.com.ng";
+// Emails go out through Resend from this address when the RESEND_API_KEY script property is set
+// (Project Settings > Script Properties). Never paste the key into this file. Without it, Gmail sends.
+var RESEND_FROM = "NACOS Week 2027 <noreply@nacosaksu.com.ng>";
 var ID_PREFIX = "NW27-";
 var VOL_ID_PREFIX = "NW27-VOL-";
 var EVENT = {
   name: "NACOS Week 2027: Confluence",
   when: "February 2027 (exact dates to be announced)",
   where: "Conference Centre, Perm Site, Akwa Ibom State University, Ikot Akpaden, Mkpat Enin",
-  site: "https://nw27.vercel.app", // CHANGE to the live website address
+  site: "https://nw27.nacosaksu.com.ng",
   whatsapp: "https://whatsapp.com/channel/0029Vb87N0c9Bb5utsX0yk2R",
   teamWhatsApp: {
     media: "https://chat.whatsapp.com/JJNaojZl0Oj4EDQM9LhsMN?s=sw&p=a&mlu=4&ilr=4",
@@ -165,13 +168,12 @@ function saveSuggestion_(p) {
     lock.releaseLock();
   }
 
-  if (MailApp.getRemainingDailyQuota() > 0) {
+  if (canSend_()) {
     try {
-      MailApp.sendEmail({
+      sendMail_({
         to: REPLY_TO,
         subject: "Speaker suggestion: " + nominee + " (" + (track || "no track") + ")",
-        name: FROM_NAME + " website",
-        body: [
+        text: [
           "A new speaker / judge suggestion came in from the website.",
           "",
           "Nominee: " + nominee,
@@ -201,14 +203,14 @@ function sendPending() {
     var statuses = sheet.getRange(2, statusCol, last - 1, 1).getValues();
     for (var i = 0; i < statuses.length; i++) {
       if (statuses[i][0] !== "pending") continue;
-      if (MailApp.getRemainingDailyQuota() < 1) return;
+      if (!canSend_()) return;
       sendRow_(sheet, i + 2);
     }
   });
 }
 
 function sendRow_(sheet, row) {
-  if (MailApp.getRemainingDailyQuota() < 1) return; // stays "pending" for sendPending()
+  if (!canSend_()) return; // stays "pending" for sendPending()
   var isVolunteer = (sheet.getName() === VOLUNTEER_SHEET_NAME);
   var v = sheet.getRange(row, 1, 1, isVolunteer ? VOL_HEADERS.length : HEADERS.length).getValues()[0];
   var person = {
@@ -220,21 +222,75 @@ function sendRow_(sheet, row) {
     availability: isVolunteer ? String(v[8]) : ""
   };
   try {
-    MailApp.sendEmail({
+    var via = sendMail_({
       to: person.email,
       subject: isVolunteer
         ? "Volunteer Application Received (" + person.id + ") · NACOS Week 2027"
         : "You're registered for NACOS Week 2027 (" + person.id + ")",
-      name: FROM_NAME,
-      replyTo: REPLY_TO,
-      body: isVolunteer ? plainVolunteerEmail_(person) : plainEmail_(person),
-      htmlBody: isVolunteer ? htmlVolunteerEmail_(person) : htmlEmail_(person),
-      inlineImages: { nw27logo: logoBlob_() }
+      text: isVolunteer ? plainVolunteerEmail_(person) : plainEmail_(person),
+      html: isVolunteer ? htmlVolunteerEmail_(person) : htmlEmail_(person),
+      withLogo: true
     });
-    sheet.getRange(row, COL.status).setValue("sent " + Utilities.formatDate(new Date(), "Africa/Lagos", "d MMM HH:mm"));
+    sheet.getRange(row, COL.status).setValue("sent " + Utilities.formatDate(new Date(), "Africa/Lagos", "d MMM HH:mm") + " (" + via + ")");
   } catch (err) {
+    if (String(err.message) === "NO_QUOTA") return; // stays "pending" for sendPending()
     sheet.getRange(row, COL.status).setValue("failed: " + String(err.message || err).slice(0, 120));
   }
+}
+
+// ---------- Sending: Resend first, Gmail as fallback ----------
+function resendKey_() {
+  return PropertiesService.getScriptProperties().getProperty("RESEND_API_KEY") || "";
+}
+
+// Resend's free plan allows 100 a day; the script cannot see that count, so it just tries.
+function canSend_() {
+  return !!resendKey_() || MailApp.getRemainingDailyQuota() > 0;
+}
+
+// Returns "resend" or "gmail". Throws NO_QUOTA when neither can send right now.
+function sendMail_(m) {
+  var key = resendKey_();
+  if (key) {
+    var payload = {
+      from: RESEND_FROM,
+      to: [m.to],
+      reply_to: REPLY_TO,
+      subject: m.subject,
+      text: m.text,
+      html: m.html
+    };
+    if (m.withLogo) {
+      payload.attachments = [{
+        filename: "nw27-logo.png",
+        content: LOGO_PNG_BASE64,
+        content_id: "nw27logo"
+      }];
+    }
+    var res = UrlFetchApp.fetch("https://api.resend.com/emails", {
+      method: "post",
+      contentType: "application/json",
+      headers: { Authorization: "Bearer " + key },
+      payload: JSON.stringify(payload),
+      muteHttpExceptions: true
+    });
+    var code = res.getResponseCode();
+    if (code >= 200 && code < 300) return "resend";
+    Logger.log("Resend " + code + ": " + res.getContentText().slice(0, 300) + ". Falling back to Gmail.");
+  }
+
+  if (MailApp.getRemainingDailyQuota() < 1) throw new Error("NO_QUOTA");
+  var opts = {
+    to: m.to,
+    subject: m.subject,
+    name: FROM_NAME,
+    replyTo: REPLY_TO,
+    body: m.text
+  };
+  if (m.html) opts.htmlBody = m.html;
+  if (m.withLogo) opts.inlineImages = { nw27logo: logoBlob_() };
+  MailApp.sendEmail(opts);
+  return "gmail";
 }
 
 function firstName_(name) {

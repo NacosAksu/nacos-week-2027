@@ -22,8 +22,8 @@ export const siteConfig: SiteConfig = {
     register: "",
     hackathonRegister: "",
     brochure: "/assets/docs/nacos-aksu-pitch-deck-2027.pdf",
-    sponsorEmail: "nacosfcitaksu@gmail.com",
-    generalEmail: "nacosfcitaksu@gmail.com",
+    sponsorEmail: "hello@nacosaksu.com.ng",
+    generalEmail: "hello@nacosaksu.com.ng",
     phone: "09035056134",
     phoneSecondary: "09064847152",
     whatsapp: "https://whatsapp.com/channel/0029Vb87N0c9Bb5utsX0yk2R",
@@ -36,7 +36,7 @@ export const siteConfig: SiteConfig = {
     x: "https://x.com/nacos_aksu",
     linkedin: "",
     tiktok: "",
-    facultySite: "https://fcitaksu.com.ng"
+    facultySite: "https://nacosaksu.com.ng"
   },
 
   forms: {

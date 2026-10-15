@@ -25,7 +25,7 @@ export const ClosingCTA: React.FC = () => {
           <span>&bull;</span>
           <span>0906 484 7152</span>
           <span>&bull;</span>
-          <span>nacosfcitaksu@gmail.com</span>
+          <span>hello@nacosaksu.com.ng</span>
           <span>&bull;</span>
           <span>Ikot Akpaden, Akwa Ibom State</span>
         </div>

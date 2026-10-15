@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const email = links.generalEmail || links.sponsorEmail || 'nacosfcitaksu@gmail.com';
+  const email = links.generalEmail || links.sponsorEmail || 'hello@nacosaksu.com.ng';
 
   const socialLinks = [
     {
@@ -199,7 +199,7 @@ export const Footer: React.FC = () => {
                 rel="noopener noreferrer"
                 className="footer__faculty-link"
               >
-                fcitaksu.com.ng &rarr;
+                nacosaksu.com.ng &rarr;
               </a>
             )}
             <button

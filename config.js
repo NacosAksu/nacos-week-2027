@@ -29,8 +29,8 @@ window.NW27 = {
     register: "",          // e.g. a cohort.fcitaksu.com.ng style portal. "" = use the on-page form
     hackathonRegister: "", // separate hackathon portal if any
     brochure: "",          // path or URL to the sponsorship PDF, e.g. "assets/docs/nw27-sponsorship.pdf"
-    sponsorEmail: "nacosfcitaksu@gmail.com", // official address only
-    generalEmail: "nacosfcitaksu@gmail.com",
+    sponsorEmail: "hello@nacosaksu.com.ng", // official address only
+    generalEmail: "hello@nacosaksu.com.ng",
     phone: "09035056134",
     whatsapp: "https://whatsapp.com/channel/0029Vb87N0c9Bb5utsX0yk2R",
     instagram: "https://www.instagram.com/nacos_aksu/",
