@@ -60,7 +60,7 @@ export const Programme: React.FC = () => {
             <div className="pillar__body">
               <div className="pillar__num">02 / Conference</div>
               <p className="pillar__when">
-                {programme.conference || "Day 2 • Conference Centre"}
+                {programme.conference || "Conference Centre"}
               </p>
               <h3 className="pillar__name">Tech Conference Day</h3>
               <p>Keynotes, plenary panels in Energy, FinTech, Oil &amp; Gas, Medicine, and Technology. Hackathon project exhibition and live judging.</p>
@@ -82,7 +82,7 @@ export const Programme: React.FC = () => {
             <div className="pillar__body">
               <div className="pillar__num">03 / Sports</div>
               <p className="pillar__when">
-                {programme.football || "Day 3 • Campus Stadium"}
+                {programme.football || "Open Pavilion / Football Stadium"}
               </p>
               <h3 className="pillar__name">Football Tournament</h3>
               <p>Open-crowd inter-faculty tournament drawing from the wider 30,000 student body across campus. Sportsmanship, community, and energy.</p>
@@ -101,7 +101,7 @@ export const Programme: React.FC = () => {
             <div className="pillar__body">
               <div className="pillar__num">04 / Culture</div>
               <p className="pillar__when">
-                {programme.fashion || "Day 4 • Open Pavilion"}
+                {programme.fashion || "February 2027"}
               </p>
               <h3 className="pillar__name">Fashion &amp; Pageantry</h3>
               <p>Crowns the Royal Council of NACOS AKSU. Runway elegance, student creativity, and selection of brand campus ambassadors.</p>
@@ -120,7 +120,7 @@ export const Programme: React.FC = () => {
             <div className="pillar__body">
               <div className="pillar__num">05 / Celebration</div>
               <p className="pillar__when">
-                {programme.dinner || "Day 5 • Banquet Hall"}
+                {programme.dinner || "February 2027"}
               </p>
               <h3 className="pillar__name">Dinner &amp; Award Night</h3>
               <p>A formal evening to dine, network, and honour students who have shown exceptional character, conduct, academic contribution, and leadership.</p>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
+import { siteConfig } from '../config/siteConfig';
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -161,7 +162,7 @@ export const Navbar: React.FC = () => {
                   <div className="nav-dropdown__item-desc">Reserve branded tech spaces &amp; hardware pavilions</div>
                 </Link>
                 <a
-                  href="/pitch-deck.pdf"
+                  href={siteConfig.links.brochure || '/assets/docs/nacos-aksu-pitch-deck-2027.pdf'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="nav-dropdown__item"
@@ -208,7 +209,7 @@ export const Navbar: React.FC = () => {
                 </Link>
                 <Link to="/auth" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
                   <div className="nav-dropdown__item-title">My Pass / Sign In</div>
-                  <div className="nav-dropdown__item-desc">Check your verified attendee or volunteer badge</div>
+                  <div className="nav-dropdown__item-desc">Get your registration ID emailed to you again</div>
                 </Link>
               </div>
             )}
@@ -253,7 +254,7 @@ export const Navbar: React.FC = () => {
                 <div className="site-header__mobile-group-title">Partners &amp; Exhibition</div>
                 <NavLink to="/partner" onClick={closeMenu}>Sponsorship Packages</NavLink>
                 <NavLink to="/booth" onClick={closeMenu}>Exhibition &amp; Vendor Booths</NavLink>
-                <a href="/pitch-deck.pdf" target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
+                <a href={siteConfig.links.brochure || '/assets/docs/nacos-aksu-pitch-deck-2027.pdf'} target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
                   Download Pitch Deck (PDF)
                 </a>
               </div>

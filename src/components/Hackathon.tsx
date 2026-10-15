@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { siteConfig } from '../config/siteConfig';
 
 export const Hackathon: React.FC = () => {
@@ -28,9 +29,10 @@ export const Hackathon: React.FC = () => {
                 Register for the Hackathon
               </a>
             ) : (
-              <span className="btn btn--outline" role="button" aria-disabled="true">
-                Registration Opening Soon
-              </span>
+              // No separate hackathon portal yet: the main form has a Hackathon option
+              <Link to="/register" className="btn btn--deep">
+                Register Your Interest &rarr;
+              </Link>
             )}
           </div>
         </div>

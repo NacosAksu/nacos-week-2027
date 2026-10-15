@@ -22,14 +22,11 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
   onSwitchToVolunteer
 }) => {
   const [lookupQuery, setLookupQuery] = useState('');
-  const [phoneLastDigits, setPhoneLastDigits] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
   const [verifiedPass, setVerifiedPass] = useState<VerifiedPassData | null>(null);
   const [savedPass, setSavedPass] = useState<VerifiedPassData | null>(null);
-  const [isCrewMode, setIsCrewMode] = useState(false);
-  const [crewPin, setCrewPin] = useState('');
-  const [crewAuthenticated, setCrewAuthenticated] = useState(false);
 
   // Check if a pass exists in local storage from a recent registration
   useEffect(() => {
@@ -49,82 +46,45 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
   const handleLookup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setNotice('');
 
     const query = lookupQuery.trim().toLowerCase();
     if (!query) {
-      setError('Enter your registered Email address or Pass ID (e.g. NW27-0012).');
+      setError('Enter the email you registered with, or your pass ID (e.g. NW27-0012).');
       return;
     }
 
+    // Registered on this device: show the saved pass straight away
+    if (savedPass && (savedPass.email.toLowerCase() === query || savedPass.passId.toLowerCase() === query)) {
+      setVerifiedPass(savedPass);
+      return;
+    }
+
+    const endpoint = siteConfig.forms.registrationEndpoint;
+    if (!endpoint) {
+      setError(`Pass lookup is not available yet. Email ${siteConfig.links.generalEmail} for help.`);
+      return;
+    }
+
+    // The sheet re-sends the confirmation to the email on file; no personal details come back
     setIsSearching(true);
-
     try {
-      // 1. Check local storage first
-      if (
-        savedPass &&
-        (savedPass.email.toLowerCase() === query ||
-          savedPass.passId.toLowerCase() === query)
-      ) {
-        setVerifiedPass(savedPass);
-        setIsSearching(false);
-        return;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        body: new URLSearchParams({ action: 'lookup', query })
+      });
+      const res = await response.json();
+      if (res.result === 'sent') {
+        setNotice(`Found it. We've sent your pass to ${res.to || 'your registered email'}. Check your inbox and spam folder.`);
+      } else if (res.result === 'not_found') {
+        setError('No registration found with that email or pass ID. Check the spelling, or register below.');
+      } else {
+        throw new Error('rejected');
       }
-
-      // 2. Query registration backend if available
-      const endpoint = siteConfig.forms.registrationEndpoint;
-      if (endpoint) {
-        try {
-          const bodyParams = new URLSearchParams();
-          bodyParams.append('action', 'lookup');
-          bodyParams.append('query', query);
-
-          // Attempt lookup query
-          await fetch(endpoint, {
-            method: 'POST',
-            body: bodyParams
-          });
-        } catch {
-          // If network / Apps Script query times out, proceed to deterministic verification
-        }
-      }
-
-      // 3. Fallback deterministic pass generation / resolution for registered attendees
-      let resolvedId = query.toUpperCase();
-      if (!resolvedId.startsWith('NW27-')) {
-        const hash = Array.from(query).reduce((acc, char) => acc + char.charCodeAt(0), 1000);
-        resolvedId = `NW27-${String(hash % 9000 + 1000)}`;
-      }
-
-      const inferredName = query.includes('@')
-        ? query.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
-        : 'Delegate Participant';
-
-      const foundPass: VerifiedPassData = {
-        passId: resolvedId,
-        name: inferredName,
-        email: query.includes('@') ? query : 'registered@aksu.edu.ng',
-        department: 'Computing / FCIT (AKSU)',
-        level: 'Delegate Accreditation',
-        interests: ['Hackathon', 'Tech Conference', 'Gala Dinner'],
-        registeredAt: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-        type: 'delegate'
-      };
-
-      setVerifiedPass(foundPass);
     } catch {
-      setError('Unable to verify pass details right now. Please check your spelling or register for a pass.');
+      setError(`We couldn't check right now. Please try again, or email ${siteConfig.links.generalEmail}.`);
     } finally {
       setIsSearching(false);
-    }
-  };
-
-  const handleCrewAuth = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (crewPin.trim() === '2027' || crewPin.trim() === 'nacos') {
-      setCrewAuthenticated(true);
-      setError('');
-    } else {
-      setError('Invalid Access Key. Contact the Planning Committee Chair.');
     }
   };
 
@@ -133,55 +93,45 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
       <div className="wrap register__grid">
         {/* Left Column: Accreditation Overview */}
         <div className="register__intro">
-          <span className="deck-eyebrow">Accreditation Retrieval</span>
+          <span className="deck-eyebrow">Lost Your Registration ID?</span>
           <h2 id="auth-title" className="h2" style={{ margin: 'var(--space-xs) 0 var(--space-sm)', color: 'var(--brand-black)' }}>
-            {isCrewMode ? 'Crew & Desk Sign In' : 'Delegate Pass Verification'}
+            Find Your Pass
           </h2>
           <p className="lead" style={{ color: 'var(--color-ink-muted)' }}>
-            Already reserved your seat? Verify your accreditation, retrieve your digital badge with barcode, or confirm your event check-in eligibility.
+            Already registered? Enter the email you used or your registration ID and we'll email your confirmation to you again.
           </p>
 
-          {/* Quick Accreditation Perks */}
           <div className="register__benefits" style={{ marginTop: 'var(--space-md)', display: 'grid', gap: 'var(--space-sm)', fontSize: 'var(--text-sm)', color: 'var(--brand-black)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ color: 'var(--brand-green)', fontWeight: 800 }}>✓</span>
-              <span>Instant retrieval with your registered email or Pass ID</span>
+              <span>Works with your registered email or registration ID</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ color: 'var(--brand-green)', fontWeight: 800 }}>✓</span>
-              <span>Fast-track QR code check-in at the Conference Centre</span>
+              <span>Show your registration ID (NW27-xxxx) at the registration desk</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ color: 'var(--brand-green)', fontWeight: 800 }}>✓</span>
-              <span>Printable badge for registration desk badge collection</span>
+              <span>Sent only to the email on file, so your details stay private</span>
             </div>
           </div>
 
-          {/* Minimalist Physical Delegate Badge Preview */}
+          {/* Sample of the confirmation people get (no barcode: check-in is by registration ID) */}
           <div className="pass-preview-card" style={{ marginTop: 'var(--space-lg)' }}>
             <div className="pass-preview-card__header">
               <div className="pass-preview-card__live-indicator">
-                <span>OFFICIAL BADGE PREVIEW</span>
+                <span>SAMPLE REGISTRATION</span>
               </div>
               <span className="pass-preview-card__year">FEB 2027</span>
             </div>
             <div className="pass-preview-card__body">
               <div className="pass-preview-card__theme">CONFLUENCE &bull; NACOS WEEK 27</div>
-              <div className="pass-preview-card__role">DELEGATE &bull; ALL-ACCESS</div>
+              <div className="pass-preview-card__role">YOUR NAME HERE</div>
               <div className="pass-preview-card__location">Conference Centre, Perm Site, AKSU</div>
             </div>
             <div className="pass-preview-card__footer">
-              <div className="pass-preview-barcode">
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-              </div>
-              <span className="pass-preview-card__id">NW27-SECURE-AUTH</span>
+              <span style={{ fontSize: '0.72rem', color: 'var(--color-ink-muted)' }}>Show this ID at the registration desk</span>
+              <span className="pass-preview-card__id">NW27-0001</span>
             </div>
           </div>
         </div>
@@ -192,27 +142,16 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-ink-border)', paddingBottom: 'var(--space-sm)', marginBottom: 'var(--space-md)' }}>
             <div>
               <h3 style={{ margin: 0, fontSize: 'var(--text-lg)', color: 'var(--brand-black)', fontWeight: 700 }}>
-                {isCrewMode ? 'Staff Desk Access' : 'Find Your Pass'}
+                Find Your Pass
               </h3>
               <p style={{ margin: '2px 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>
-                {isCrewMode ? 'Authorized personnel authentication' : 'Verify accreditation by Email or Pass ID'}
+                We'll re-send your confirmation email with your pass ID
               </p>
             </div>
-            <button
-              type="button"
-              className="auth-mode-toggle-btn"
-              onClick={() => {
-                setIsCrewMode(!isCrewMode);
-                setError('');
-                setVerifiedPass(null);
-              }}
-            >
-              {isCrewMode ? '← Delegate Mode' : 'Crew Portal'}
-            </button>
           </div>
 
           {/* Quick-found local storage banner */}
-          {savedPass && !verifiedPass && !isCrewMode && (
+          {savedPass && !verifiedPass && (
             <div className="saved-pass-banner">
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--brand-deep)' }}>
@@ -220,7 +159,7 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
                 </svg>
                 <div>
                   <strong style={{ display: 'block', fontSize: 'var(--text-sm)', color: 'var(--brand-deep)' }}>
-                    Saved Pass Detected: {savedPass.passId}
+                    Registered on this device: {savedPass.passId}
                   </strong>
                   <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>
                     {savedPass.name} ({savedPass.email})
@@ -238,97 +177,18 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
             </div>
           )}
 
-          {/* Crew Auth Mode */}
-          {isCrewMode ? (
-            crewAuthenticated ? (
-              <div className="crew-dashboard-box">
-                <div className="crew-authenticated-header">
-                  <span className="crew-badge-active">● CREW DESK UNLOCKED</span>
-                  <h4 style={{ margin: 'var(--space-xs) 0 4px', color: 'var(--brand-deep)' }}>
-                    Registration &amp; Check-In Scanner Ready
-                  </h4>
-                  <p style={{ fontSize: 'var(--text-xs)', color: '#4b5563', margin: 0 }}>
-                    Planning Committee &bull; FCIT Akwa Ibom State University
-                  </p>
-                </div>
-
-                <div className="crew-stats-grid">
-                  <div className="crew-stat-card">
-                    <span className="crew-stat-num">500+</span>
-                    <span className="crew-stat-lbl">Seating Capacity</span>
-                  </div>
-                  <div className="crew-stat-card">
-                    <span className="crew-stat-num">5</span>
-                    <span className="crew-stat-lbl">Industry Tracks</span>
-                  </div>
-                  <div className="crew-stat-card">
-                    <span className="crew-stat-num">Live</span>
-                    <span className="crew-stat-lbl">Backend Sync</span>
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gap: 'var(--space-xs)', marginTop: 'var(--space-md)' }}>
-                  <button
-                    type="button"
-                    className="btn btn--signal"
-                    style={{ width: '100%', justifyContent: 'center' }}
-                    onClick={() => {
-                      alert('Check-in scanner active. Point camera at delegate QR code at the registration gate.');
-                    }}
-                  >
-                    Open Fast Gate QR Scanner &rarr;
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn--outline"
-                    style={{ width: '100%', justifyContent: 'center' }}
-                    onClick={() => setCrewAuthenticated(false)}
-                  >
-                    Lock Desk Session
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleCrewAuth} noValidate style={{ display: 'grid', gap: 'var(--space-md)' }}>
-                <div className="field">
-                  <label htmlFor="crew-pin">Official Committee Access PIN *</label>
-                  <input
-                    id="crew-pin"
-                    type="password"
-                    required
-                    className="field__input"
-                    placeholder="Enter Desk PIN (hint: 2027)"
-                    value={crewPin}
-                    onChange={(e) => setCrewPin(e.target.value)}
-                  />
-                  <span style={{ fontSize: 'var(--text-xs)', color: '#6b7280' }}>
-                    Access reserved for NACOS Planning Committee &amp; Volunteer Leads.
-                  </span>
-                </div>
-
-                {error && <span className="field__err">{error}</span>}
-
-                <button
-                  type="submit"
-                  className="btn btn--signal"
-                  style={{ width: '100%', justifyContent: 'center' }}
-                >
-                  Authenticate Desk Session &rarr;
-                </button>
-              </form>
-            )
-          ) : verifiedPass ? (
+          {verifiedPass ? (
             /* Verified Pass Detail View */
             <div className="verified-pass-display">
               <div className="verified-pass-display__top">
-                <span className="verified-status-tag">✓ ACCREDITATION VERIFIED</span>
+                <span className="verified-status-tag">✓ REGISTERED ON THIS DEVICE</span>
                 <span className="verified-pass-id">{verifiedPass.passId}</span>
               </div>
 
               <div className="pass-preview-card">
                 <div className="pass-preview-card__header">
                   <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#a4f49b', fontWeight: 700 }}>
-                    DELEGATE ACCREDITATION
+                    REGISTRATION ID
                   </span>
                   <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.85rem', color: '#fff', background: 'rgba(255,255,255,0.18)', padding: '2px 8px', borderRadius: '4px' }}>
                     {verifiedPass.passId}
@@ -353,18 +213,16 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
                     </div>
                     <div>
                       <span style={{ fontSize: '0.65rem', color: 'var(--color-ink-muted)', display: 'block' }}>Status</span>
-                      <strong>{verifiedPass.level || 'Confirmed Delegate'}</strong>
+                      <strong>{verifiedPass.level || 'Registered'}</strong>
                     </div>
                   </div>
                 </div>
 
                 <div className="pass-preview-card__footer">
-                  <div className="pass-preview-barcode">
-                    <span /><span /><span /><span /><span /><span /><span /><span /><span /><span />
-                  </div>
                   <span style={{ fontSize: '0.72rem', color: 'var(--color-ink-muted)' }}>
-                    Gate Accreditation Verified
+                    Show this ID at the registration desk
                   </span>
+                  <span className="pass-preview-card__id">{verifiedPass.passId}</span>
                 </div>
               </div>
 
@@ -375,7 +233,7 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
                   style={{ flex: 1, justifyContent: 'center' }}
                   onClick={() => window.print()}
                 >
-                  Print / Save Badge
+                  Print / Save
                 </button>
                 <button
                   type="button"
@@ -403,23 +261,16 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
                   aria-invalid={!!error}
                 />
                 <span style={{ fontSize: 'var(--text-xs)', color: '#4b5563' }}>
-                  Use the email address you registered with to retrieve your seat badge.
+                  Your pass is sent to the email you registered with, never shown to whoever types it here.
                 </span>
               </div>
 
-              <div className="field">
-                <label htmlFor="lookup-phone">WhatsApp Digits (Optional verification)</label>
-                <input
-                  id="lookup-phone"
-                  type="tel"
-                  className="field__input"
-                  placeholder="e.g. Last 4 digits of your phone"
-                  value={phoneLastDigits}
-                  onChange={(e) => setPhoneLastDigits(e.target.value)}
-                />
-              </div>
-
-              {error && <span className="field__err">{error}</span>}
+              {error && <span className="field__err" role="alert">{error}</span>}
+              {notice && (
+                <p role="status" style={{ margin: 0, padding: 'var(--space-sm)', background: 'var(--brand-pale)', border: '1px solid var(--color-rule)', borderRadius: 'var(--radius-sm)', fontSize: 'var(--text-sm)', color: 'var(--brand-deep)' }}>
+                  {notice}
+                </p>
+              )}
 
               <button
                 type="submit"
@@ -427,7 +278,7 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
                 disabled={isSearching}
                 style={{ width: '100%', justifyContent: 'center' }}
               >
-                {isSearching ? 'Authenticating...' : 'Sign In & Retrieve Pass →'}
+                {isSearching ? 'Checking...' : 'Send Me My Pass →'}
               </button>
 
               {/* Bottom links */}

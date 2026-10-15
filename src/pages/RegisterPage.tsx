@@ -52,7 +52,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ defaultTab = 'attend
       {/* Portal Hero Banner */}
       <div className="wrap">
         <div className="register-portal-header">
-          <span className="deck-eyebrow">08 / Accreditation &amp; Access Portal</span>
+          <span className="deck-eyebrow">Registration</span>
           <h1 className="register-portal-title">
             Confluence 2027 Registration
           </h1>

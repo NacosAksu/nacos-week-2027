@@ -197,10 +197,11 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
     setSubmitLabel('Submitting Application...');
 
     const endpoint = siteConfig.forms.registrationEndpoint;
-    let finalPassId = `NW27-VOL-${Math.floor(1000 + Math.random() * 9000)}`;
+    let finalPassId = '';
 
     try {
-      if (endpoint) {
+      if (!endpoint) throw new Error('no endpoint');
+      {
         const bodyParams = new URLSearchParams();
         bodyParams.append('name', formData.name);
         bodyParams.append('email', formData.email);
@@ -220,12 +221,12 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
           body: bodyParams
         });
 
-        if (response.ok) {
-          const res = await response.json();
-          if (res && res.id) {
-            finalPassId = res.id;
-          }
+        // Only a saved row counts: "success" or "duplicate" (already applied), both carry the real ID
+        const res = await response.json();
+        if ((res.result !== 'success' && res.result !== 'duplicate') || !res.id) {
+          throw new Error(res.error || 'rejected');
         }
+        finalPassId = res.id;
       }
 
       setConfirmedVolunteer({
@@ -240,27 +241,17 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
 
       setStatus({
         tone: 'ok',
-        message: `Application received! Accreditation ID: ${finalPassId}.`
+        message: `Application received! Volunteer ID: ${finalPassId}.`
       });
 
       setSubmitLabel('Application Submitted');
     } catch {
-      // Offline / fallback verification
-      setConfirmedVolunteer({
-        name: applicantName,
-        passId: finalPassId,
-        department: applicantDept,
-        level: applicantLevel,
-        email: applicantEmail,
-        team: chosenTeam,
-        availability: applicantAvailability
-      });
-
+      // Nothing was saved: say so, keep what they typed, and let them try again
       setStatus({
-        tone: 'ok',
-        message: `Volunteer application recorded! Accreditation ID: ${finalPassId}.`
+        tone: 'error',
+        message: `Your application didn't go through. Check your connection and try again. If it keeps failing, email ${siteConfig.links.generalEmail}.`
       });
-      setSubmitLabel('Application Submitted');
+      setSubmitLabel('Try Again');
     } finally {
       setIsSubmitting(false);
     }
@@ -591,9 +582,9 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
             </button>
 
             <div style={{ textAlign: 'center', marginBottom: 'var(--space-md)' }}>
-              <span className="deck-eyebrow">Accreditation Recorded</span>
+              <span className="deck-eyebrow">Application Received</span>
               <h3 id="volModalTitle" className="h3" style={{ color: 'var(--brand-black)', margin: 'var(--space-xs) 0 4px' }}>
-                Welcome to the Organizing Crew
+                Thanks for Applying
               </h3>
               <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)', margin: 0 }}>
                 NACOS Week 2027: Confluence &bull; Organizing Committee
@@ -604,7 +595,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
             <div className="pass-preview-card" style={{ boxShadow: '0 8px 24px rgba(11, 15, 12, 0.08)' }}>
               <div className="pass-preview-card__header">
                 <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#a4f49b', fontWeight: 700 }}>
-                  CREW ACCREDITATION
+                  VOLUNTEER ID
                 </span>
                 <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.85rem', color: '#fff', background: 'rgba(255,255,255,0.18)', padding: '2px 8px', borderRadius: '4px' }}>
                   {confirmedVolunteer.passId}
@@ -621,7 +612,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 'var(--space-xs)', fontSize: '0.8rem', borderTop: '1px solid var(--color-ink-border)', paddingTop: 'var(--space-xs)' }}>
                   <div>
-                    <span style={{ fontSize: '0.65rem', color: 'var(--color-ink-muted)', display: 'block' }}>Assigned Committee</span>
+                    <span style={{ fontSize: '0.65rem', color: 'var(--color-ink-muted)', display: 'block' }}>Committee Applied For</span>
                     <strong style={{ color: 'var(--brand-deep)' }}>{confirmedVolunteer.team.name}</strong>
                   </div>
                   <div>
@@ -637,16 +628,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
               </div>
 
               <div className="pass-preview-card__footer">
-                <div className="pass-preview-barcode">
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </div>
+                <span style={{ fontSize: '0.72rem', color: 'var(--color-ink-muted)' }}>The committee will confirm your role by email</span>
                 <span className="pass-preview-card__id">{confirmedVolunteer.passId}</span>
               </div>
             </div>
@@ -679,7 +661,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
                 style={{ flex: 1, justifyContent: 'center' }}
                 onClick={() => window.print()}
               >
-                Print Accreditation
+                Print / Save
               </button>
               <button
                 type="button"

@@ -81,7 +81,7 @@ export const siteConfig: SiteConfig = {
         name: "Silver",
         price: 500000,
         slots: 3,
-        owns: "A crowd pillar: Football or Fashion & Pageantry.",
+        owns: "A crowd event: Football, Fashion & Pageantry, or the Trade Fair.",
         perks: [
           "Owns a crowd pillar",
           "Presence at the week's largest open crowds"

@@ -10,69 +10,45 @@ export interface BoothTier {
   priceNote: string;
   idealFor: string;
   spaceSize: string;
-  slots: number;
+  slots?: number;
   features: string[];
 }
 
+// Booth sizes and prices from the pitch deck (page 11). Anyone can book a booth on its own;
+// sponsors also get one with their package (see sponsorBoothNote). Add slots once the floor plan is fixed.
 export const boothTiers: BoothTier[] = [
   {
-    id: 'student-pod',
-    name: 'Student & Maker Pod',
-    badge: 'Subsidized Innovation',
-    price: '₦15,000',
-    priceNote: 'Entire Festival Week (Subsidized for verified student founders)',
-    idealFor: 'Student developers, final-year project teams, hardware prototypes, robotics & indie games.',
-    spaceSize: '1 Dedicated Workstation (Table + 2 Chairs)',
-    slots: 10,
-    features: [
-      '1 Station table with 2 exhibitor chairs',
-      'Dual standard power socket & surge protection',
-      'High-speed campus Wi-Fi network for live demos',
-      '2 Official Student Exhibitor Badges',
-      'Profile listing in official Confluence Week Guide',
-      '15-minute showcase pitch slot on Demo Stage'
-    ]
-  },
-  {
-    id: 'commercial-booth',
-    name: 'Commercial Vendor Booth',
-    badge: 'Most Popular · High Footfall',
+    id: 'booth-3x3',
+    name: 'Large Booth',
+    badge: 'Trade Fair',
     isPopular: true,
-    price: '₦45,000',
-    priceNote: 'Full 5-Day Festival Pass',
-    idealFor: 'Tech hubs, software agencies, gadget retailers, training institutes, apparel & campus merchants.',
-    spaceSize: '3m × 2m Marked Carpeted Exhibition Space',
-    slots: 12,
+    price: '₦250,000',
+    priceNote: 'Booth only, without a sponsorship package',
+    idealFor: 'Brands that want room to sell, demonstrate products and sign up students.',
+    spaceSize: '3m × 3m',
     features: [
-      '3m × 2m carpeted space in main conference hall',
-      '1 Display table with branded runner + 3 chairs',
-      'Dedicated uninterruptible generator power line',
-      'Exhibitor priority high-bandwidth Wi-Fi',
-      '2 Official Exhibitor Passes with daily lunch vouchers',
-      '1 Live auditorium PA broadcast announcement per day',
-      'Direct retail and student app install rights on the floor'
+      'A 3m × 3m booth at the Trade Fair on Conference Day',
+      'Sell products, advertise and sign up students at your booth'
     ]
   },
   {
-    id: 'enterprise-pavilion',
-    name: 'Enterprise & Innovation Pavilion',
-    badge: 'Prime Foyer Placement',
-    price: '₦120,000',
-    priceNote: 'Full Week (Also bundled with Silver/Gold Partners)',
-    idealFor: 'Fintechs, banks, telcos, national tech companies, hardware brands & talent recruiters.',
-    spaceSize: '5m × 3m Prime Double Pavilion at Entrance',
-    slots: 4,
+    id: 'booth-3x2',
+    name: 'Standard Booth',
+    badge: 'Trade Fair',
+    price: '₦150,000',
+    priceNote: 'Booth only, without a sponsorship package',
+    idealFor: 'Smaller teams and local businesses that want a presence on the day.',
+    spaceSize: '3m × 2m',
     features: [
-      'Prime high-traffic foyer positioning at auditorium entrance',
-      '5m × 3m double pavilion space with custom backdrop allowance',
-      'Mount support for high-definition demo screens/TVs',
-      'Dedicated recruiter desk & physical CV drop box for student talent',
-      '4 VIP All-Access Badges with executive lounge catering',
-      'Keynote mention during opening & closing ceremonies',
-      'Company logo on main hall displays and live stream lower-thirds'
+      'A 3m × 2m booth at the Trade Fair on Conference Day',
+      'Sell products, advertise and sign up students at your booth'
     ]
   }
 ];
+
+// What each sponsorship package already includes at the Trade Fair (pitch deck page 11)
+export const sponsorBoothNote =
+  'Sponsors get a Trade Fair space with their package: Title Partner 3m × 3m, Gold 3m × 2m, Silver 2m × 2m, Bronze a shared booth, and Friends of Confluence a shared table.';
 
 interface BoothBookingForm {
   brandName: string;
@@ -92,17 +68,18 @@ export const BoothSection: React.FC = () => {
     contactPerson: '',
     email: '',
     phone: '',
-    selectedTier: 'commercial-booth',
+    selectedTier: 'booth-3x3',
     description: '',
     specialNeeds: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [sendError, setSendError] = useState('');
 
-  const sponsorshipWhatsApp =
-    siteConfig.links.sponsorshipTeamWhatsApp ||
-    'https://chat.whatsapp.com/J29siJhWfLqARXxjC3fxbi?s=sw&p=a&mlu=4&ilr=4';
+  // Vendors talk to the official inbox, never to the internal committee WhatsApp groups
+  const sponsorEmail = siteConfig.links.sponsorEmail || siteConfig.links.generalEmail;
+  const sponsorMailHref = `mailto:${sponsorEmail}?subject=${encodeURIComponent('Exhibition booth: NACOS Week 2027')}`;
 
   const handleOpenBooking = (tierId: string) => {
     setSelectedTierForModal(tierId);
@@ -135,36 +112,36 @@ export const BoothSection: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
 
+    const endpoint = siteConfig.forms.registrationEndpoint;
+    if (!endpoint) {
+      setSendError(`Booth requests are not open online yet. Email ${sponsorEmail} instead.`);
+      return;
+    }
+
     setIsSubmitting(true);
-    const chosen = boothTiers.find((t) => t.id === formData.selectedTier) || boothTiers[1];
-    const generatedRef = `NW27-BTH-${Math.floor(1000 + Math.random() * 9000)}`;
+    setSendError('');
+    const chosen = boothTiers.find((t) => t.id === formData.selectedTier) || boothTiers[0];
 
+    // Saved to the "Booth Requests" tab of the registrations sheet (backend/registration.gs)
     try {
-      const endpoint = siteConfig.forms.registrationEndpoint;
-      if (endpoint) {
-        const bodyParams = new URLSearchParams();
-        bodyParams.append('name', `${formData.brandName} (${formData.contactPerson})`);
-        bodyParams.append('email', formData.email);
-        bodyParams.append('phone', formData.phone);
-        bodyParams.append('department', 'Exhibition Booth Vendor');
-        bodyParams.append('level', chosen.name);
-        bodyParams.append('volunteer_team', `Booth: ${chosen.name}`);
-        bodyParams.append('availability', 'Festival Week Exhibition');
-        bodyParams.append('experience', formData.description || 'Commercial Vendor');
-        bodyParams.append('type', 'booth');
-        bodyParams.append('contact_ok', 'yes');
-        bodyParams.append('interests', `Booth Tier: ${chosen.name} | Needs: ${formData.specialNeeds || 'None'}`);
-
-        await fetch(endpoint, {
-          method: 'POST',
-          body: bodyParams
-        });
-      }
+      const bodyParams = new URLSearchParams({
+        type: 'booth',
+        brand: formData.brandName,
+        contact: formData.contactPerson,
+        email: formData.email,
+        phone: formData.phone,
+        booth: chosen.name,
+        showcase: formData.description,
+        needs: formData.specialNeeds
+      });
+      const response = await fetch(endpoint, { method: 'POST', body: bodyParams });
+      const res = await response.json();
+      if (res.result !== 'success') throw new Error(res.error || 'rejected');
+      setSubmittedRef(chosen.name);
     } catch {
-      // offline fallback
+      setSendError(`That didn't go through. Please try again, or email ${sponsorEmail}.`);
     } finally {
       setIsSubmitting(false);
-      setSubmittedRef(generatedRef);
     }
   };
 
@@ -199,8 +176,8 @@ export const BoothSection: React.FC = () => {
           </h2>
 
           <p className="lead" style={{ margin: '0 auto', color: 'var(--color-ink-muted)' }}>
-            Put your brand, software, hardware, or campus venture directly in front of <strong>3,000+ tech students</strong>,
-            faculty leaders, and visiting industry executives at Akwa Ibom State University.
+            The Trade Fair runs on Conference Day outside the Conference Centre. Sell, advertise and connect
+            with students from a campus of <strong>30,000+</strong> at Akwa Ibom State University.
           </p>
         </div>
 
@@ -220,34 +197,26 @@ export const BoothSection: React.FC = () => {
         >
           <div>
             <div style={{ fontSize: '2rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-deep)' }}>
-              3,000+
+              30,000+
             </div>
             <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-muted)', fontWeight: 600 }}>
-              Engaged Campus Footfall
+              Students on campus
             </div>
           </div>
           <div>
             <div style={{ fontSize: '2rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-deep)' }}>
-              5 Days
+              500+
             </div>
             <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-muted)', fontWeight: 600 }}>
-              Sustained Hall Exposure
+              Recurring attendance
             </div>
           </div>
           <div>
             <div style={{ fontSize: '2rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-deep)' }}>
-              50+
+              500
             </div>
             <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-muted)', fontWeight: 600 }}>
-              Corporate &amp; Tech Partners
-            </div>
-          </div>
-          <div>
-            <div style={{ fontSize: '2rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-deep)' }}>
-              1-on-1
-            </div>
-            <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-muted)', fontWeight: 600 }}>
-              App Installs &amp; Direct Sales
+              Main hall seats
             </div>
           </div>
         </div>
@@ -290,11 +259,11 @@ export const BoothSection: React.FC = () => {
               NACOS AKSU Pitch Deck Presentation
             </h3>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-muted)', margin: '0 0 var(--space-md)', lineHeight: 1.55 }}>
-              Review the complete Confluence 2027 vision, stakeholder benefits, audience projections, festival timeline, and detailed exhibition booth architecture directly in the official pitch deck.
+              The event lineup, partnership tiers and benefits, in-kind partnerships and Trade Fair booth sizes, all in the official pitch deck.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', fontSize: '0.75rem', color: 'var(--color-ink-muted)', marginBottom: 'var(--space-md)' }}>
               <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
-                ✓ 3,000+ Footfall
+                ✓ 5 Partnership Tiers
               </span>
               <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
                 ✓ 5 Sector Tracks
@@ -303,7 +272,7 @@ export const BoothSection: React.FC = () => {
                 ✓ Category Exclusivity
               </span>
               <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
-                ✓ Perm Site Venue Map
+                ✓ Booth Sizes &amp; Prices
               </span>
             </div>
           </div>
@@ -327,14 +296,14 @@ export const BoothSection: React.FC = () => {
                   PDF PROSPECTUS
                 </span>
                 <span style={{ fontSize: '0.65rem', background: 'rgba(255, 255, 255, 0.15)', padding: '2px 8px', borderRadius: 'var(--radius-pill)' }}>
-                  26.6 MB
+                  30 MB
                 </span>
               </div>
               <strong style={{ display: 'block', fontSize: 'var(--text-base)', color: '#ffffff', fontFamily: 'var(--font-display)', marginBottom: '4px' }}>
                 NACOS AKSU Pitch Deck Presentation.pdf
               </strong>
               <span style={{ fontSize: 'var(--text-xs)', color: 'rgba(255, 255, 255, 0.7)', display: 'block' }}>
-                Approved by Faculty of Computing &amp; Information Technology, AKSU
+                Prepared by the NACOS AKSU Chapter
               </span>
             </div>
 
@@ -403,7 +372,7 @@ export const BoothSection: React.FC = () => {
                     boxShadow: '0 4px 10px rgba(8, 144, 2, 0.3)'
                   }}
                 >
-                  Recommended for Vendors
+                  Largest Booth
                 </div>
               )}
 
@@ -423,9 +392,11 @@ export const BoothSection: React.FC = () => {
                   >
                     {tier.badge}
                   </span>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--color-ink-muted)', fontWeight: 600 }}>
-                    {tier.slots} slots available
-                  </span>
+                  {tier.slots ? (
+                    <span style={{ fontSize: '0.75rem', color: 'var(--color-ink-muted)', fontWeight: 600 }}>
+                      {tier.slots} slots available
+                    </span>
+                  ) : null}
                 </div>
 
                 <h3 className="h3" style={{ fontSize: '1.4rem', color: 'var(--color-ink)', margin: 'var(--space-xs) 0' }}>
@@ -458,7 +429,7 @@ export const BoothSection: React.FC = () => {
 
                 <div style={{ margin: 'var(--space-md) 0' }}>
                   <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-ink)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 'var(--space-xs)' }}>
-                    Included Package Perks:
+                    What You Get:
                   </div>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                     {tier.features.map((feature, idx) => (
@@ -495,68 +466,20 @@ export const BoothSection: React.FC = () => {
           ))}
         </div>
 
-        {/* Floor Logistics & Amenities Section */}
-        <div
+        {/* Booths that come with a sponsorship package (pitch deck page 11) */}
+        <p
           style={{
-            background: 'var(--brand-black)',
-            color: '#ffffff',
-            borderRadius: 'var(--radius-md)',
-            padding: 'var(--space-xl)',
-            marginBottom: 'var(--space-2xl)'
+            margin: '0 0 var(--space-2xl)',
+            padding: 'var(--space-md) var(--space-lg)',
+            background: 'var(--brand-pale)',
+            borderLeft: '3px solid var(--brand-green)',
+            borderRadius: 'var(--radius-sm)',
+            fontSize: 'var(--text-sm)',
+            color: 'var(--color-ink)'
           }}
         >
-          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto var(--space-lg)' }}>
-            <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#a4f49b', fontWeight: 700 }}>
-              Exhibitor Experience &amp; Logistics
-            </span>
-            <h3 className="h3" style={{ color: '#ffffff', margin: 'var(--space-xs) 0' }}>
-              Everything Built For Effortless Showcasing
-            </h3>
-            <p style={{ fontSize: 'var(--text-sm)', color: 'rgba(255, 255, 255, 0.72)' }}>
-              From power to crowd facilitation, the NACOS Organizing Committee ensures your booth runs smoothly from Day 1 to Day 5.
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-              gap: 'var(--space-md)'
-            }}
-          >
-            <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: 'var(--space-md)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-              <div style={{ fontSize: '1.5rem', marginBottom: '6px' }}>⚡</div>
-              <h4 style={{ color: '#ffffff', fontSize: 'var(--text-base)', marginBottom: '4px' }}>Guaranteed Continuous Power</h4>
-              <p style={{ fontSize: 'var(--text-xs)', color: 'rgba(255, 255, 255, 0.7)', margin: 0 }}>
-                Uninterrupted dedicated generator power line for all active exhibition hours.
-              </p>
-            </div>
-
-            <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: 'var(--space-md)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-              <div style={{ fontSize: '1.5rem', marginBottom: '6px' }}>📶</div>
-              <h4 style={{ color: '#ffffff', fontSize: 'var(--text-base)', marginBottom: '4px' }}>Dedicated Exhibitor Wi-Fi</h4>
-              <p style={{ fontSize: 'var(--text-xs)', color: 'rgba(255, 255, 255, 0.7)', margin: 0 }}>
-                Isolated high-throughput Wi-Fi access for live software demonstrations and app testing.
-              </p>
-            </div>
-
-            <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: 'var(--space-md)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-              <div style={{ fontSize: '1.5rem', marginBottom: '6px' }}>🛡️</div>
-              <h4 style={{ color: '#ffffff', fontSize: 'var(--text-base)', marginBottom: '4px' }}>Overnight Venue Security</h4>
-              <p style={{ fontSize: 'var(--text-xs)', color: 'rgba(255, 255, 255, 0.7)', margin: 0 }}>
-                Main conference auditorium is locked and guarded overnight by university security personnel.
-              </p>
-            </div>
-
-            <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: 'var(--space-md)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-              <div style={{ fontSize: '1.5rem', marginBottom: '6px' }}>🤝</div>
-              <h4 style={{ color: '#ffffff', fontSize: 'var(--text-base)', marginBottom: '4px' }}>Assigned Crew Ambassador</h4>
-              <p style={{ fontSize: 'var(--text-xs)', color: 'rgba(255, 255, 255, 0.7)', margin: 0 }}>
-                A dedicated volunteer from the Protocol &amp; Sponsorship crew assigned to assist your setup.
-              </p>
-            </div>
-          </div>
-        </div>
+          {sponsorBoothNote}
+        </p>
 
         {/* Quick Contact & Custom Inquiries */}
         <div
@@ -583,20 +506,17 @@ export const BoothSection: React.FC = () => {
 
           <div style={{ display: 'flex', gap: 'var(--space-sm)', flexWrap: 'wrap' }}>
             <a
-              href={sponsorshipWhatsApp}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={sponsorMailHref}
               className="btn btn--signal"
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
             >
-              <span>Chat with Sponsorship Desk &rarr;</span>
+              <span>Email the Sponsorship Team &rarr;</span>
             </a>
-            <a
-              href={`mailto:${siteConfig.links.sponsorEmail}?subject=${encodeURIComponent('Exhibition Booth Inquiry: NACOS Week 2027')}`}
-              className="btn btn--outline"
-            >
-              Email Team
-            </a>
+            {siteConfig.links.phone && (
+              <a href={`tel:${siteConfig.links.phone.replace(/[^\d+]/g, '')}`} className="btn btn--outline">
+                Call {siteConfig.links.phone}
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -748,6 +668,12 @@ export const BoothSection: React.FC = () => {
                     />
                   </div>
 
+                  {sendError && (
+                    <p role="alert" style={{ marginTop: 'var(--space-md)', fontSize: 'var(--text-sm)', color: '#fca5a5' }}>
+                      {sendError}
+                    </p>
+                  )}
+
                   <div style={{ marginTop: 'var(--space-lg)' }}>
                     <button
                       type="submit"
@@ -755,7 +681,7 @@ export const BoothSection: React.FC = () => {
                       className="btn btn--signal"
                       style={{ width: '100%', justifyContent: 'center' }}
                     >
-                      <span>{isSubmitting ? 'Submitting Reservation...' : 'Submit Booth Reservation &rarr;'}</span>
+                      <span>{isSubmitting ? 'Sending request...' : 'Send Booth Request →'}</span>
                     </button>
                   </div>
                 </form>
@@ -778,7 +704,7 @@ export const BoothSection: React.FC = () => {
                   }}
                 >
                   <span className="nacos-green-dot"></span>
-                  BOOTH RESERVATION RECORDED
+                  BOOTH REQUEST RECEIVED
                 </div>
 
                 <h3 className="h3" style={{ color: '#ffffff', margin: '0 0 var(--space-xs)' }}>
@@ -786,7 +712,7 @@ export const BoothSection: React.FC = () => {
                 </h3>
 
                 <p style={{ fontSize: 'var(--text-sm)', color: 'rgba(255, 255, 255, 0.78)', margin: '0 0 var(--space-md)' }}>
-                  Your reservation inquiry has been registered. Reference: <strong style={{ color: '#a4f49b', fontFamily: 'monospace' }}>{submittedRef}</strong>.
+                  The sponsorship team has your request and will contact you at {formData.email} to confirm the space.
                 </p>
 
                 {/* Booth Summary Badge Card */}
@@ -813,16 +739,14 @@ export const BoothSection: React.FC = () => {
 
                 <div style={{ background: 'rgba(8, 144, 2, 0.12)', border: '1px solid rgba(8, 144, 2, 0.35)', borderRadius: 'var(--radius-sm)', padding: 'var(--space-md)', marginBottom: 'var(--space-md)' }}>
                   <p style={{ fontSize: '0.825rem', color: '#e6f2e3', margin: '0 0 var(--space-xs)', fontWeight: 500 }}>
-                    Finalize your space booking directly with the Sponsorship &amp; Collaboration Department:
+                    Questions before then? Write to the sponsorship team:
                   </p>
                   <a
-                    href={sponsorshipWhatsApp}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={sponsorMailHref}
                     className="btn btn--signal"
                     style={{ width: '100%', justifyContent: 'center' }}
                   >
-                    <span>Connect on Sponsorship WhatsApp &rarr;</span>
+                    <span>Email {sponsorEmail} &rarr;</span>
                   </a>
                 </div>
 

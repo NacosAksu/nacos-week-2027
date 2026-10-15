@@ -185,23 +185,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
 
       setSubmitLabel('Pass Reserved');
     } catch {
-      // In case network endpoint encounters CORS or local dev offline error, generate verified preview pass
-      const fallbackId = `NW27-REG-${Math.floor(1000 + Math.random() * 9000)}`;
-      const passObj: ConfirmedPass = {
-        name: currentName,
-        passId: fallbackId,
-        department: currentDept,
-        level: currentLevel,
-        email: currentEmail,
-        interests: currentInterests
-      };
-      setConfirmedPass(passObj);
-      savePassLocally(passObj);
+      // Nothing was saved: say so, keep what they typed, and let them try again
       setStatus({
-        tone: 'ok',
-        message: `Registration recorded locally! Your pass ID is ${fallbackId}.`
+        tone: 'error',
+        message: `Your registration didn't go through. Check your connection and try again. If it keeps failing, email ${siteConfig.links.generalEmail}.`
       });
-      setSubmitLabel('Pass Reserved');
+      setSubmitLabel('Try Again');
     } finally {
       setIsSubmitting(false);
     }
@@ -217,7 +206,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
               Reserve Your Pass
             </h2>
             <p className="lead" style={{ color: 'var(--color-ink-muted)' }}>
-              Select which events and tracks you want to participate in. We will issue your official delegate badge ID, send you session schedules, and enable hackathon team portal access.
+              Pick the events you want to attend. You'll get a registration ID by email (NW27-xxxx). Show it at the registration desk on the day.
             </p>
             <div className="register__benefits" style={{ marginTop: 'var(--space-md)', display: 'grid', gap: 'var(--space-sm)', fontSize: 'var(--text-sm)', color: 'var(--brand-black)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -234,31 +223,22 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
               </div>
             </div>
 
-            {/* Minimalist Physical Badge Preview */}
+            {/* Sample of the confirmation people get (no barcode: check-in is by registration ID) */}
             <div className="pass-preview-card" style={{ marginTop: 'var(--space-lg)' }}>
               <div className="pass-preview-card__header">
                 <div className="pass-preview-card__live-indicator">
-                  <span>OFFICIAL ACCREDITATION</span>
+                  <span>SAMPLE REGISTRATION</span>
                 </div>
                 <span className="pass-preview-card__year">FEB 2027</span>
               </div>
               <div className="pass-preview-card__body">
                 <div className="pass-preview-card__theme">CONFLUENCE &bull; NACOS WEEK 27</div>
-                <div className="pass-preview-card__role">DELEGATE &bull; ALL-ACCESS</div>
+                <div className="pass-preview-card__role">YOUR NAME HERE</div>
                 <div className="pass-preview-card__location">Conference Centre, Perm Site, AKSU</div>
               </div>
               <div className="pass-preview-card__footer">
-                <div className="pass-preview-barcode">
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </div>
-                <span className="pass-preview-card__id">NW27-VERIFIED-PASS</span>
+                <span style={{ fontSize: '0.72rem', color: 'var(--color-ink-muted)' }}>Show this ID at the registration desk</span>
+                <span className="pass-preview-card__id">NW27-0001</span>
               </div>
             </div>
 
@@ -469,7 +449,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
                   onClick={onSwitchToSignIn}
                   style={{ background: 'none', border: 'none', color: 'var(--brand-deep)', fontWeight: 600, fontSize: 'var(--text-xs)', cursor: 'pointer', padding: 0 }}
                 >
-                  Already reserved your pass? Sign in &amp; retrieve your badge &rarr;
+                  Already registered? Get your registration ID emailed again &rarr;
                 </button>
               </div>
             )}
@@ -501,9 +481,9 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
             </button>
 
             <div style={{ textAlign: 'center', marginBottom: 'var(--space-md)' }}>
-              <span className="deck-eyebrow">Seat Reserved</span>
+              <span className="deck-eyebrow">You're Registered</span>
               <h3 id="passModalTitle" className="h3" style={{ color: 'var(--brand-black)', margin: 'var(--space-xs) 0 4px' }}>
-                Delegate Pass Confirmed
+                Your Registration
               </h3>
               <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)', margin: 0 }}>
                 NACOS Week 2027: Confluence &bull; Akwa Ibom State University
@@ -514,7 +494,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
             <div className="pass-preview-card" style={{ boxShadow: '0 8px 24px rgba(11, 15, 12, 0.08)' }}>
               <div className="pass-preview-card__header">
                 <span style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#a4f49b', fontWeight: 700 }}>
-                  DELEGATE PASS
+                  REGISTRATION ID
                 </span>
                 <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.85rem', color: '#fff', background: 'rgba(255,255,255,0.18)', padding: '2px 8px', borderRadius: '4px' }}>
                   {confirmedPass.passId}
@@ -547,22 +527,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
               </div>
 
               <div className="pass-preview-card__footer">
-                <div className="pass-preview-barcode">
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </div>
+                <span style={{ fontSize: '0.72rem', color: 'var(--color-ink-muted)' }}>Show this ID at the registration desk</span>
                 <span className="pass-preview-card__id">{confirmedPass.passId}</span>
               </div>
             </div>
 
             <p style={{ fontSize: '0.78rem', color: 'var(--color-ink-muted)', marginTop: 'var(--space-sm)', textAlign: 'center' }}>
-              Please take a screenshot or print this pass. You can present this code at the registration desk for your physical badge and badge lanyard.
+              We've also emailed this to you. Take a screenshot or keep the email, and give your registration ID at the registration desk on the day.
             </p>
 
             <div className="modal-actions-row">

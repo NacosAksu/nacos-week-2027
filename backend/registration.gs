@@ -17,6 +17,7 @@
 var SHEET_NAME = "Registrations";
 var VOLUNTEER_SHEET_NAME = "Volunteers";
 var SUGGESTION_SHEET_NAME = "Speaker Suggestions";
+var BOOTH_SHEET_NAME = "Booth Requests";
 var FROM_NAME = "NACOS AKSU";
 var REPLY_TO = "hello@nacosaksu.com.ng";
 // Emails go out through Resend from this address when the RESEND_API_KEY script property is set
@@ -48,6 +49,8 @@ var VOL_HEADERS = ["Volunteer ID", "Timestamp", "Full name", "Email", "WhatsApp"
                    "Committee / Team", "Availability", "Prior experience", "Email status"];
 var SUGGESTION_HEADERS = ["Timestamp", "Nominee", "Role & organisation", "Track", "Profile link",
                           "Why they fit", "Committee notified"];
+var BOOTH_HEADERS = ["Timestamp", "Brand / company", "Contact person", "Email", "WhatsApp", "Booth type",
+                     "What they will showcase", "Special needs", "Committee notified"];
 var COL = { id: 1, email: 4, status: 11 };
 var VOL_COL = { id: 1, email: 4, status: 11 };
 
@@ -56,6 +59,7 @@ function setup() {
   getSheet_();
   getVolunteerSheet_();
   getSuggestionSheet_();
+  getBoothSheet_();
   ScriptApp.getProjectTriggers().forEach(function (t) {
     if (t.getHandlerFunction() === "sendPending") ScriptApp.deleteTrigger(t);
   });
@@ -65,7 +69,9 @@ function setup() {
 
 // ---------- Web endpoints ----------
 function doGet() {
-  return json_({ result: "ok", service: "NACOS Week 2027 registration & volunteer portal" });
+  // Bump "version" on every change, then open the web app URL to confirm the new copy is live.
+  return json_({ result: "ok", service: "NACOS Week 2027 registration & volunteer portal",
+                 version: "2026-10-15 lookup+booths+resend" });
 }
 
 function doPost(e) {
@@ -75,6 +81,8 @@ function doPost(e) {
   if (p.website) return json_({ result: "success", id: ID_PREFIX + "0000" });
 
   if (p.type === "speaker_suggestion") return saveSuggestion_(p);
+  if (p.type === "booth") return saveBooth_(p);
+  if (p.action === "lookup") return lookup_(p);
 
   var isVolunteer = p.type === "volunteer" || !!p.volunteer_team;
   var name = text_(p.name, 120);
@@ -191,6 +199,98 @@ function saveSuggestion_(p) {
     }
   }
   return json_({ result: "success" });
+}
+
+// ---------- Exhibition booth requests ----------
+// Saved to the "Booth Requests" tab; the committee inbox is notified. No payment is taken here.
+function saveBooth_(p) {
+  var brand = text_(p.brand, 120);
+  var contact = text_(p.contact, 120);
+  var email = text_(p.email, 160).toLowerCase();
+  var phone = text_(p.phone, 30);
+  var valid = brand.length > 1 && contact.length > 1 &&
+              /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
+              phone.replace(/\D/g, "").length >= 10;
+  if (!valid) return json_({ result: "error", error: "invalid" });
+
+  var booth = text_(p.booth, 80);
+  var showcase = text_(p.showcase, 600);
+  var needs = text_(p.needs, 300);
+
+  var sheet, row;
+  var lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    sheet = getBoothSheet_();
+    sheet.appendRow([new Date(), cell_(brand), cell_(contact), email, "'" + phone, cell_(booth),
+                     cell_(showcase), cell_(needs), "no"]);
+    row = sheet.getLastRow();
+  } finally {
+    lock.releaseLock();
+  }
+
+  if (canSend_()) {
+    try {
+      sendMail_({
+        to: REPLY_TO,
+        subject: "Booth request: " + brand + " (" + (booth || "booth") + ")",
+        text: [
+          "A new exhibition booth request came in from the website.",
+          "",
+          "Brand / company: " + brand,
+          "Contact person: " + contact,
+          "Email: " + email,
+          "WhatsApp: " + phone,
+          "Booth type: " + (booth || "-"),
+          "Showcasing: " + (showcase || "-"),
+          "Special needs: " + (needs || "-"),
+          "",
+          "All requests are in the '" + BOOTH_SHEET_NAME + "' tab of the registrations sheet."
+        ].join("\n")
+      });
+      sheet.getRange(row, BOOTH_HEADERS.length).setValue("yes");
+    } catch (err) {
+      sheet.getRange(row, BOOTH_HEADERS.length).setValue("failed: " + String(err.message || err).slice(0, 80));
+    }
+  }
+  return json_({ result: "success" });
+}
+
+// ---------- Find my pass ----------
+// Looks up a registration or volunteer application by email or ID and re-sends the confirmation
+// to the email on file. Nothing about the person is returned, so typing someone else's email
+// reveals nothing. Each row can be re-sent at most once every 10 minutes.
+function lookup_(p) {
+  var q = text_(p.query, 160).toLowerCase();
+  if (q.length < 4) return json_({ result: "error", error: "invalid" });
+
+  var sheets = [getSheet_(), getVolunteerSheet_()];
+  for (var s = 0; s < sheets.length; s++) {
+    var sheet = sheets[s];
+    var last = sheet.getLastRow();
+    if (last < 2) continue;
+    var values = sheet.getRange(2, 1, last - 1, COL.email).getValues();
+    for (var i = 0; i < values.length; i++) {
+      var id = String(values[i][COL.id - 1]).toLowerCase();
+      var email = String(values[i][COL.email - 1]).toLowerCase();
+      if (q !== id && q !== email) continue;
+
+      var cache = CacheService.getScriptCache();
+      var cacheKey = "resent_" + sheet.getName() + "_" + (i + 2);
+      if (!cache.get(cacheKey)) {
+        cache.put(cacheKey, "1", 600);
+        sendRow_(sheet, i + 2);
+      }
+      return json_({ result: "sent", to: maskEmail_(email) });
+    }
+  }
+  return json_({ result: "not_found" });
+}
+
+function maskEmail_(email) {
+  var parts = String(email).split("@");
+  if (parts.length !== 2) return "";
+  return parts[0].charAt(0) + "***@" + parts[1];
 }
 
 // ---------- Emails ----------
@@ -460,6 +560,17 @@ function getVolunteerSheet_() {
     sheet.appendRow(VOL_HEADERS);
     sheet.setFrozenRows(1);
     sheet.getRange(1, 1, 1, VOL_HEADERS.length).setFontWeight("bold").setBackground(BRAND.pale);
+  }
+  return sheet;
+}
+
+function getBoothSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(BOOTH_SHEET_NAME) || ss.insertSheet(BOOTH_SHEET_NAME);
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(BOOTH_HEADERS);
+    sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, BOOTH_HEADERS.length).setFontWeight("bold").setBackground(BRAND.pale);
   }
   return sheet;
 }
