@@ -711,7 +711,7 @@ abbr { text-decoration: none; font-size: 0.7em; letter-spacing: 0.04em; vertical
 /* Phones: CONFLUENCE. stays on one line, supporting text one size down */
 @media (max-width: 600px) {
   /* Content sits in the lower part of the screen, within thumb reach */
-  .hero.on-dark { justify-content: flex-end; padding-bottom: 2.75rem; }
+  .hero.on-dark { justify-content: flex-end; padding-bottom: max(4.5rem, 13svh); }
   .hero__title { font-size: 12vw; margin-top: 0.75rem; }
   .hero__eyebrow { font-size: 0.6875rem; }
   /* .hero prefix: these must beat the base rules further down the file */
