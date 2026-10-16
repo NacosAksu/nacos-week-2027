@@ -18,7 +18,7 @@ export const Programme: React.FC = () => {
             <h2 id="programme-title" className="h2">Five Events. One Flagship Week.</h2>
           </div>
           <p className="lead">
-            A comprehensive festival combining deep technical problem-solving, industry dialogue, campus sports, creative pageantry, and celebration.
+            A hackathon, a tech conference, a football tournament, fashion and pageantry, and an awards dinner.
           </p>
         </header>
 
@@ -35,10 +35,10 @@ export const Programme: React.FC = () => {
             <div className="pillar__body">
               <div className="pillar__num">01 / Flagship Product</div>
               <p className="pillar__when">
-                {programme.hackathon || "Starts 3 weeks prior"}
+                {programme.hackathon || "4-week bootcamp before the week"}
               </p>
               <h3 className="pillar__name">Hackathon (Innovation Bootcamp)</h3>
-              <p className="pillar__sub">Multi-week build across 5 industry tracks</p>
+              <p className="pillar__sub">4-week build across 5 industry tracks</p>
               <p>
                 Student teams build real solutions against briefs set by sector sponsors. Final projects are judged live on stage at the Tech Conference, where the winners are decided.
               </p>

@@ -22,6 +22,7 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
   onSwitchToVolunteer
 }) => {
   const [lookupQuery, setLookupQuery] = useState('');
+  const [phone4, setPhone4] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -66,16 +67,44 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
       return;
     }
 
-    // The sheet re-sends the confirmation to the email on file; no personal details come back
+    const digits = phone4.replace(/\D/g, '');
+    if (digits && digits.length !== 4) {
+      setError('Enter exactly the last 4 digits of your WhatsApp number, or leave that box empty.');
+      return;
+    }
+
+    // With the 4 digits the sheet returns the pass to show here; without them it only
+    // re-sends the confirmation to the email on file (no personal details come back)
     setIsSearching(true);
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
-        body: new URLSearchParams({ action: 'lookup', query })
+        body: new URLSearchParams({ action: 'lookup', query, phone4: digits })
       });
       const res = await response.json();
-      if (res.result === 'sent') {
-        setNotice(`Found it. We've sent your pass to ${res.to || 'your registered email'}. Check your inbox and spam folder.`);
+      if (res.result === 'found' && res.pass) {
+        const pass: VerifiedPassData = {
+          passId: res.pass.passId,
+          name: res.pass.name,
+          email: res.pass.email,
+          department: res.pass.department,
+          level: res.pass.team ? `Volunteer: ${res.pass.team}` : res.pass.level,
+          interests: res.pass.interests,
+          type: res.pass.type === 'volunteer' ? 'volunteer' : 'delegate'
+        };
+        setVerifiedPass(pass);
+        try {
+          localStorage.setItem('nw27_last_pass', JSON.stringify(pass));
+          setSavedPass(pass);
+        } catch {
+          // Storage blocked: the pass still shows now
+        }
+      } else if (res.result === 'sent') {
+        setNotice(`Found it. We've sent your pass to ${res.to || 'your registered email'}. To see and print it here instead, add the last 4 digits of your WhatsApp number and try again.`);
+      } else if (res.result === 'wrong_digits') {
+        setError("Those digits don't match the WhatsApp number on this registration. Check them, or leave the box empty to get your pass by email.");
+      } else if (res.result === 'locked') {
+        setError('Too many tries with the wrong digits. Leave the box empty to get your pass by email, or try again in an hour.');
       } else if (res.result === 'not_found') {
         setError('No registration found with that email or pass ID. Check the spelling, or register below.');
       } else {
@@ -98,7 +127,7 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
             Find Your Pass
           </h2>
           <p className="lead" style={{ color: 'var(--color-ink-muted)' }}>
-            Already registered? Enter the email you used or your registration ID and we'll email your confirmation to you again.
+            Already registered? Enter the email you used or your registration ID. Add the last 4 digits of your WhatsApp number to see and print your pass here, or we'll email it to you.
           </p>
 
           <div className="register__benefits" style={{ marginTop: 'var(--space-md)', display: 'grid', gap: 'var(--space-sm)', fontSize: 'var(--text-sm)', color: 'var(--brand-black)' }}>
@@ -112,7 +141,7 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ color: 'var(--brand-green)', fontWeight: 800 }}>✓</span>
-              <span>Sent only to the email on file, so your details stay private</span>
+              <span>Your details only show to someone who also knows your number</span>
             </div>
           </div>
 
@@ -145,7 +174,7 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
                 Find Your Pass
               </h3>
               <p style={{ margin: '2px 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>
-                We'll re-send your confirmation email with your pass ID
+                See and print it here, or get it by email
               </p>
             </div>
           </div>
@@ -260,8 +289,23 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
                   onChange={(e) => setLookupQuery(e.target.value)}
                   aria-invalid={!!error}
                 />
+              </div>
+
+              <div className="field">
+                <label htmlFor="lookup-phone4">Last 4 digits of your WhatsApp number (optional)</label>
+                <input
+                  id="lookup-phone4"
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="off"
+                  maxLength={4}
+                  className="field__input"
+                  placeholder="e.g. 5678"
+                  value={phone4}
+                  onChange={(e) => setPhone4(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                />
                 <span style={{ fontSize: 'var(--text-xs)', color: '#4b5563' }}>
-                  Your pass is sent to the email you registered with, never shown to whoever types it here.
+                  Add these to see your pass here and print or save it. Leave empty and we'll email it to you instead.
                 </span>
               </div>
 
@@ -278,7 +322,7 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
                 disabled={isSearching}
                 style={{ width: '100%', justifyContent: 'center' }}
               >
-                {isSearching ? 'Checking...' : 'Send Me My Pass →'}
+                {isSearching ? 'Checking...' : phone4.length === 4 ? 'Show My Pass →' : 'Email Me My Pass →'}
               </button>
 
               {/* Bottom links */}
@@ -290,7 +334,7 @@ export const PassLookupForm: React.FC<PassLookupFormProps> = ({
                     onClick={onSwitchToRegister}
                     className="auth-link-button"
                   >
-                    Register for Free Pass &rarr;
+                    Register &rarr;
                   </button>
                 </p>
                 {onSwitchToVolunteer && (

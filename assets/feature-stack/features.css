@@ -1,0 +1,117 @@
+/* Features section with stacked cards. Everything is scoped under .fs, so it does not clash with the
+   rest of the project. Fonts: DM Sans and IBM Plex Mono, e.g. from Google Fonts:
+   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap'); */
+
+/* ===== Tokens ===== */
+.fs{
+  --night:#001e27; --teal:#023737; --mist:#D6EAE5;
+  --paper:#F4F3EA;      /* page colour: covered cards fade towards it */
+  --white:#fff; --ink:#111; --ink-2:#3A4442; --stone:#5B6866; --line:#DDE4E2;
+  --green:#18E875; --green-ink:#087A3F; --lime:#E0EC3E; --sun:#FFC531; --sky:#73D2FF; --bubble:#FF8CC6;
+  --sans:"DM Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --r-s:12px; --r-m:20px; --r-l:28px;
+  background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:18px;line-height:1.5;
+  padding:120px 0;-webkit-font-smoothing:antialiased
+}
+.fs *{box-sizing:border-box;margin:0;padding:0}
+.fs-wrap{max-width:1248px;margin:0 auto;padding:0 24px}
+.fs h2,.fs h3{font-weight:700;letter-spacing:-.02em;line-height:1.05}
+.fs h2{font-size:clamp(34px,4.4vw,60px)}
+.fs-head{margin-bottom:56px;max-width:780px}
+.fs-head h2{margin-top:14px}
+.fs .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.fs b.num,.fs strong.num{font-weight:500}
+.fs .eyebrow{display:inline-block;font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:var(--ink-2)}
+.fs .eyebrow-light{color:var(--mist)}
+.fs .sub{font-size:20px;color:var(--ink-2);max-width:560px;margin-top:16px}
+
+/* ===== The stack (FeatureStack.jsx) =====
+   Sticky only once the script runs (.stack-on); without it the cards are a plain list.
+   --stick: gap above the pile. --peek: how much of each covered card's edge shows. */
+.fs .fc-stack{--stick:24px;--peek:12px;display:flex;flex-direction:column;gap:32px;padding-bottom:8px}
+.fs .fc-settle{height:14vh} /* scroll room for the last card to settle into the stack */
+.fs .fc-slide{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:44px;border-radius:var(--r-l);box-shadow:inset 0 0 0 1px rgba(0,30,39,.06);transform-origin:50% 0;will-change:transform}
+.fs .fc-stack.stack-on > .fc-slide{position:sticky;top:calc(var(--stick) + 3 * var(--peek))}
+.fs .fc-wash{position:absolute;inset:0;border-radius:inherit;background:var(--paper);opacity:0;pointer-events:none;will-change:opacity}
+.fs .fc-green{background:#DCFBEA}
+.fs .fc-sun{background:#FFF6E0}
+.fs .fc-pink{background:#FFEEF6}
+.fs .fc-sky{background:#EAF8FF}
+.fs .fc-mist{background:var(--mist)}
+.fs .fc-lime{background:#FAFCE2}
+.fs .fc-white{background:var(--white)}
+
+/* ===== Card copy (left) ===== */
+.fs .feat-copy{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+.fs .feat-n{font-size:15px;color:var(--stone)}
+.fs .mode-tag{align-self:flex-start;background:var(--night);color:var(--green);font-weight:700;font-size:15px;padding:6px 14px;border-radius:999px}
+.fs .feat-copy h3{font-size:clamp(28px,3vw,40px);line-height:1.08}
+
+/* ===== Card visual (right) ===== */
+.fs .fv{border-radius:var(--r-l);padding:36px;display:flex;flex-direction:column;gap:18px;justify-content:center;min-height:400px}
+.fs .fv-green{background:var(--green)}.fs .fv-sun{background:var(--sun)}.fs .fv-bubble{background:var(--bubble)}.fs .fv-sky{background:var(--sky)}
+.fs .fv-night{background:var(--night)}.fs .fv-lime{background:var(--lime)}.fs .fv-mist{background:var(--mist);box-shadow:inset 0 0 0 1px var(--line)}
+
+/* Chat bubbles */
+.fs .chat{display:flex;flex-direction:column;gap:8px}
+.fs .bub{max-width:88%;padding:12px 16px;border-radius:18px;font-size:16px;line-height:1.4}
+.fs .bub-user{align-self:flex-end;background:var(--green);color:var(--night);border-bottom-right-radius:6px}
+.fs .bub-krait{align-self:flex-start;background:var(--white);color:var(--ink);border-bottom-left-radius:6px;box-shadow:inset 0 0 0 1px var(--line)}
+.fs .bub .num{font-size:.92em}
+.fs .fv-green .bub-user{background:var(--night);color:var(--green)}
+.fs .fv-sun .bub-user,.fs .fv-bubble .bub-user,.fs .fv-sky .bub-user,.fs .fv-lime .bub-user{background:var(--night);color:var(--white)}
+
+/* 01 receipt */
+.fs .mini-receipt{background:var(--night);color:var(--white);border-radius:18px;padding:14px 16px;align-self:stretch;margin-top:4px}
+.fs .mini-receipt strong{display:block;font-size:20px;line-height:1.2;color:var(--green);margin:4px 0 10px}
+.fs .mr-row{display:flex;justify-content:space-between;font-size:13px;color:var(--mist);padding:4px 0;border-top:1px solid rgba(214,234,229,.18)}
+.fs .mr-row b{color:var(--white);font-weight:500}
+/* 02 pay card */
+.fs .paycard{background:var(--night);color:var(--white);border-radius:var(--r-m);padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.fs .paycard .eyebrow{color:var(--mist)}.fs .paycard b{font-weight:500;color:var(--sun);font-size:18px}.fs .paynote{font-size:14px;color:var(--mist)}
+/* 03 tiles */
+.fs .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fs .tiles span{background:var(--night);color:var(--white);border-radius:var(--r-m);padding:18px;font-weight:700;font-size:18px}
+/* 04 recipient */
+.fs .recip{display:flex;gap:14px;align-items:center;background:var(--white);border-radius:var(--r-m);padding:16px}
+.fs .recip b{display:block;font-size:18px}.fs .recip span span{color:var(--stone);font-size:15px}
+.fs .avatar-n{width:44px;height:44px;border-radius:50%;background:var(--night);color:var(--sky)!important;display:grid;place-items:center;font-weight:700;font-size:18px!important}
+/* 05 chips and pills */
+.fs .chan-row{display:flex;gap:8px}
+.fs .chip{font-weight:700;font-size:14px;padding:6px 14px;border-radius:999px;color:var(--night)}
+.fs .chip-green{background:var(--green)}
+.fs .pills{display:flex;flex-wrap:wrap;gap:8px}.fs .pills span{background:var(--teal);color:var(--white);border-radius:999px;padding:8px 16px;font-size:15px}
+.fs .fv-night .bub-krait{background:var(--white)}
+/* 06 voice note */
+.fs .voice{display:flex;align-items:center;gap:12px;background:var(--green);border-radius:999px;padding:10px 16px 10px 10px}
+.fs .play{width:40px;height:40px;border-radius:50%;background:var(--night);color:var(--green);display:grid;place-items:center;flex:none}
+.fs .play svg{width:18px;height:18px}
+.fs .wave{display:flex;align-items:center;gap:3px;flex:1;height:34px}
+.fs .wave i{display:block;width:3px;border-radius:2px;background:var(--night)}
+.fs .t{font-size:13px;color:var(--night)}
+.fs .transcript{font-size:16px;color:var(--ink);background:var(--white);border-radius:var(--r-s);padding:12px 14px;box-shadow:inset 0 0 0 1px var(--line)}
+.fs .transcript .eyebrow{display:block;margin-bottom:4px;font-size:11px}
+/* 07 scan */
+.fs .scan{position:relative;background:var(--white);border-radius:var(--r-m);padding:22px 24px}
+.fs .scan-row{display:flex;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line);font-size:16px}
+.fs .scan-row:first-of-type{border-top:0}.fs .scan-row span{color:var(--stone)}
+.fs .scan .c{position:absolute;width:22px;height:22px;border:solid var(--green-ink);border-width:0}
+.fs .scan .tl{left:8px;top:8px;border-left-width:4px;border-top-width:4px;border-top-left-radius:6px}
+.fs .scan .tr{right:8px;top:8px;border-right-width:4px;border-top-width:4px;border-top-right-radius:6px}
+.fs .scan .bl{left:8px;bottom:8px;border-left-width:4px;border-bottom-width:4px;border-bottom-left-radius:6px}
+.fs .scan .br{right:8px;bottom:8px;border-right-width:4px;border-bottom-width:4px;border-bottom-right-radius:6px}
+
+/* ===== Phones ===== */
+@media (max-width:900px){
+  .fs{padding:72px 0}
+  .fs .sub{font-size:clamp(17px,4.8vw,19px)}
+  .fs .fc-stack{--stick:16px;--peek:8px;gap:24px} /* with JS, FeatureStack.jsx sets the gap so the next card waits off-screen */
+  .fs .fc-slide{grid-template-columns:1fr;gap:14px;padding:18px;border-radius:var(--r-m)}
+  .fs .fc-slide .feat-copy{gap:10px}
+  .fs .fc-slide .feat-n{font-size:13px}
+  .fs .fc-slide .mode-tag{font-size:13px;padding:5px 12px}
+  .fs .feat-copy h3{font-size:23px}
+  .fs .fc-slide .sub{font-size:16px;margin-top:2px}
+  .fs .fv{padding:16px;gap:10px;border-radius:var(--r-m);min-height:0;zoom:.86} /* whole visual a touch smaller */
+}

@@ -15,12 +15,12 @@ export const Hackathon: React.FC = () => {
           </div>
           <h2 id="hack-title" className="h2">The Confluence Hackathon</h2>
           <p className="lead">
-            Student teams race the clock to build innovative software solutions against challenging briefs set by sector partners. A 3-week bootcamp with mentors in the room, culminating in a live stage demonstration at the Tech Conference.
+            Student teams build software against briefs set by sector partners. A 4-week bootcamp with mentors, ending in a live demo in front of judges on Conference Day.
           </p>
           <ul className="facts">
-            <li><strong>Format</strong> Innovation Bootcamp, about three weeks</li>
+            <li><strong>Format</strong> Innovation Bootcamp, 4 weeks</li>
             <li><strong>Tracks</strong> Energy, Finance, Oil &amp; Gas, Medicine, Technology</li>
-            <li><strong>Judging</strong> Final pitches at the Tech Conference, where judges pick winners</li>
+            <li><strong>Judging</strong> Demo day in front of the judges on Conference Day</li>
             <li><strong>Safeguard</strong> Students retain full ownership of their intellectual property</li>
           </ul>
           <div className="hack__actions">
@@ -50,13 +50,13 @@ export const Hackathon: React.FC = () => {
               <span className="deck-steps__num">02</span>
               <div>
                 <h3>Problem Statements</h3>
-                <p>Published by sector partners about six weeks prior, targeting real industry challenges.</p>
+                <p>Published by sector partners before the bootcamp starts, based on real industry challenges.</p>
               </div>
             </li>
             <li>
               <span className="deck-steps__num">03</span>
               <div>
-                <h3>3-Week Bootcamp</h3>
+                <h3>4-Week Bootcamp</h3>
                 <p>Intensive prototyping and deployment with industry mentors from each respective sector.</p>
               </div>
             </li>
@@ -64,7 +64,7 @@ export const Hackathon: React.FC = () => {
               <span className="deck-steps__num">04</span>
               <div>
                 <h3>Final Stage Demo &amp; Judging</h3>
-                <p>Teams present working products at the Tech Conference. Judges evaluate impact and crown winners.</p>
+                <p>Teams present working products to the judges on Conference Day. The judges pick the winners.</p>
               </div>
             </li>
             <li>

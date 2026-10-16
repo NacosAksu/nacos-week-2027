@@ -36,12 +36,6 @@ export const HackathonPage: React.FC = () => {
                 Dedicated technical and product mentors from leading Nigerian fintech, energy, and tech ecosystems.
               </p>
             </div>
-            <div style={{ background: 'rgba(255, 255, 255, 0.05)', padding: 'var(--space-lg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-forest-rule)' }}>
-              <h3 style={{ fontSize: 'var(--text-xl)', marginBottom: 'var(--space-xs)', color: 'var(--brand-soft)' }}>FCIT Tech Hub Space</h3>
-              <p style={{ color: 'var(--color-on-forest-muted)', fontSize: 'var(--text-sm)' }}>
-                Dedicated desk space, high-speed power and internet infrastructure on campus to continue building.
-              </p>
-            </div>
           </div>
 
           <div style={{ marginTop: 'var(--space-3xl)', textAlign: 'center' }}>

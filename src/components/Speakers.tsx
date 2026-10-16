@@ -77,7 +77,7 @@ export const Speakers: React.FC = () => {
             <h2 id="speakers-title" className="h2">Speakers, Mentors and Judges</h2>
           </div>
           <p className="lead">
-            Industry professionals from leading technology firms, energy operators, banks and healthcare institutions sharing knowledge with AKSU students.
+            Speakers from each of the five tracks. Names will be announced here.
           </p>
         </header>
 
@@ -162,7 +162,7 @@ export const Speakers: React.FC = () => {
               Nominate a Speaker or Judge
             </h3>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-muted)', marginBottom: 'var(--space-md)' }}>
-              Help us bring the finest practitioners to NACOS Week 2027. We reach out directly to approved nominees.
+              Tell us who you would like to hear from. We contact the people we shortlist.
             </p>
 
             {submitted ? (

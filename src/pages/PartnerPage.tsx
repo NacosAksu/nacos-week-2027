@@ -75,7 +75,7 @@ export const PartnerPage: React.FC = () => {
             href={siteConfig.links.brochure || '/assets/docs/nacos-aksu-pitch-deck-2027.pdf'}
             target="_blank"
             rel="noopener noreferrer"
-            download="NACOS-AKSU-Pitch-Deck-2027.pdf"
+            download="NACOS-Week-2027-Partnership-Brochure.pdf"
             className="btn btn--signal"
             style={{
               padding: '0.45rem 1rem',
@@ -89,7 +89,7 @@ export const PartnerPage: React.FC = () => {
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <span>Download Pitch Deck (PDF)</span>
+            <span>Download Brochure (PDF)</span>
           </a>
         </div>
       </div>

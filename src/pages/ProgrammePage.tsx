@@ -335,18 +335,15 @@ END:VCALENDAR`;
       {/* Registration Callout */}
       <section className="section" style={{ background: 'var(--brand-deep)', color: 'var(--brand-off)' }}>
         <div className="wrap" style={{ textAlign: 'center' }}>
-          <span className="tag" style={{ background: 'rgba(255, 255, 255, 0.1)', color: 'var(--brand-soft)' }}>
-            Seats Are Limited
-          </span>
-          <h2 className="h2" style={{ color: 'var(--brand-off)', margin: 'var(--space-sm) 0 var(--space-md)' }}>
-            Reserve Your Delegate Pass Today
+          <h2 className="h2" style={{ color: 'var(--brand-off)', margin: '0 0 var(--space-md)' }}>
+            Register for NACOS Week 2027
           </h2>
           <p className="lead" style={{ margin: '0 auto var(--space-xl)', color: 'var(--color-on-forest-muted)', maxWidth: '640px' }}>
-            Open to every student at Akwa Ibom State University across all faculties. Guaranteed access to workshops, career networking, and hackathon certificates.
+            Open to every student at Akwa Ibom State University, from any faculty.
           </p>
           <div style={{ display: 'flex', gap: 'var(--space-md)', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link to="/register" className="btn btn--signal">
-              Register Free Pass &rarr;
+              Register &rarr;
             </Link>
             <Link to="/faq" className="btn btn--outline" style={{ borderColor: 'var(--brand-soft)', color: 'var(--brand-off)' }}>
               Venue &amp; FAQ

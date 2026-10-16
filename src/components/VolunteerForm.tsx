@@ -4,7 +4,6 @@ import { siteConfig } from '../config/siteConfig';
 export interface VolunteerTeam {
   id: string;
   name: string;
-  icon: string;
   badge: string;
   description: string;
   tasks: string[];
@@ -16,7 +15,6 @@ export const volunteerTeams: VolunteerTeam[] = [
   {
     id: 'media',
     name: 'Media & Publicity Team',
-    icon: '📸',
     badge: 'Production & Video',
     description: 'Capture, document and broadcast NACOS Week 2027 across campus and digital platforms.',
     tasks: [
@@ -31,7 +29,6 @@ export const volunteerTeams: VolunteerTeam[] = [
   {
     id: 'protocol',
     name: 'Protocol Team',
-    icon: '🎖️',
     badge: 'Dignitaries & VIPs',
     description: 'Coordinate VIP protocol, guest speaker hospitality, high-table coordination, and official ushering.',
     tasks: [
@@ -46,7 +43,6 @@ export const volunteerTeams: VolunteerTeam[] = [
   {
     id: 'welfare_logistics',
     name: 'Welfare and Logistics Team',
-    icon: '📦',
     badge: 'Operations & Care',
     description: 'Manage venue readiness, hall layout, attendee hospitality, and sustenance logistics.',
     tasks: [
@@ -61,7 +57,6 @@ export const volunteerTeams: VolunteerTeam[] = [
   {
     id: 'registration',
     name: 'Registration Team',
-    icon: '🎟️',
     badge: 'Accreditation Desk',
     description: 'Manage attendee check-in, pass validation, delegate tag issuance, and accreditation desk.',
     tasks: [
@@ -76,7 +71,6 @@ export const volunteerTeams: VolunteerTeam[] = [
   {
     id: 'sponsorship',
     name: 'Sponsorship / Collaboration Department',
-    icon: '🤝',
     badge: 'Partnerships & Grants',
     description: 'Serve as company liaisons for corporate sponsors, exhibitors, and recruitment partners.',
     tasks: [
@@ -91,7 +85,6 @@ export const volunteerTeams: VolunteerTeam[] = [
   {
     id: 'technical',
     name: 'Technical & Sound Team',
-    icon: '⚡',
     badge: 'Audio-Visual',
     description: 'Manage audio-visual engineering, stage electronics, and hackathon lab networking.',
     tasks: [
@@ -267,16 +260,11 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
               Join the Volunteer Crew
             </h2>
             <p className="lead" style={{ maxWidth: '680px', color: 'var(--color-ink-muted)' }}>
-              Step into the engine room of Akwa Ibom State University&apos;s premier innovation festival.
-              Gain practical leadership experience, work side-by-side with industry guests, and earn an official certificate of commendation.
+              Help run NACOS Week 2027. Pick the one committee that suits you best.
             </p>
 
             {/* Quick Benefits Bar */}
             <div className="volunteer-perks">
-              <div className="volunteer-perk-item">
-                <span className="volunteer-perk-check">✓</span>
-                <span>Certified Letter of Commendation</span>
-              </div>
               <div className="volunteer-perk-item">
                 <span className="volunteer-perk-check">✓</span>
                 <span>Official NACOS Week Volunteer Gear</span>
@@ -333,9 +321,6 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
                     }}
                   >
                     <div className="volunteer-team-card__top">
-                      <span className="volunteer-team-card__icon" aria-hidden="true">
-                        {team.icon}
-                      </span>
                       <span className="volunteer-team-card__badge">
                         {team.badge}
                       </span>
@@ -549,7 +534,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ onSwitchToAttendee
                     onClick={onSwitchToAttendee}
                     className="volunteer-switch-link"
                   >
-                    &larr; Just looking for an Attendee Free Pass? Switch to Delegate Registration
+                    &larr; Just want to attend? Switch to registration
                   </button>
                 </div>
               )}

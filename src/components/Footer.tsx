@@ -136,7 +136,7 @@ export const Footer: React.FC = () => {
               <li><Link to="/hackathon">Hackathon</Link></li>
               <li><Link to="/partner">Partner with us</Link></li>
               <li><Link to="/booth">Exhibition Booths</Link></li>
-              <li><Link to="/register">Register Free Pass</Link></li>
+              <li><Link to="/register">Register</Link></li>
               <li><Link to="/register?tab=volunteer">Volunteer Crew</Link></li>
               <li><Link to="/faq">Venue &amp; FAQ</Link></li>
             </ul>

@@ -14,7 +14,7 @@ export const ClosingCTA: React.FC = () => {
         </p>
         <div className="closer__actions">
           <Link to="/register" className="btn btn--deep">
-            Register for Free Pass &rarr;
+            Register &rarr;
           </Link>
           <Link to="/partner" className="btn btn--outline">
             Partner with Us

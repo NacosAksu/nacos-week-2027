@@ -60,6 +60,12 @@ export const Navbar: React.FC = () => {
     }, 150);
   };
 
+  // Phone menu: one group open at a time, starting with the group for the current page
+  const [mobileGroup, setMobileGroup] = useState<string | null>(null);
+  const toggleMobileGroup = (name: string) => {
+    setMobileGroup(prev => (prev === name ? null : name));
+  };
+
   const toggleDropdown = (name: string) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setActiveDropdown(prev => (prev === name ? null : name));
@@ -69,6 +75,16 @@ export const Navbar: React.FC = () => {
   const isProgrammeActive = ['/tracks', '/programme', '/hackathon'].some(path => location.pathname.startsWith(path));
   const isPartnersActive = ['/partner', '/booth', '/booths', '/exhibit'].some(path => location.pathname.startsWith(path));
   const isFestivalActive = ['/about', '/faq', '/auth', '/login', '/signin'].some(path => location.pathname.startsWith(path));
+
+  useEffect(() => {
+    if (!isOpen) return;
+    setMobileGroup(
+      isProgrammeActive ? 'programme'
+        : isPartnersActive ? 'partners'
+        : ['/about', '/faq'].some(path => location.pathname.startsWith(path)) ? 'about'
+        : null
+    );
+  }, [isOpen]);
 
   return (
     <header className={`site-header ${isScrolled ? 'site-header--scrolled' : ''}`} aria-label="Main Navigation">
@@ -117,14 +133,14 @@ export const Navbar: React.FC = () => {
                   <div className="nav-dropdown__item-desc">Energy, Fintech, Oil &amp; Gas, Medicine, Technology</div>
                 </Link>
                 <Link to="/programme" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
-                  <div className="nav-dropdown__item-title">Flagship Programme</div>
-                  <div className="nav-dropdown__item-desc">Keynotes, Panels, Research Showcase &amp; Masterclasses</div>
+                  <div className="nav-dropdown__item-title">Programme</div>
+                  <div className="nav-dropdown__item-desc">The five events of the week</div>
                 </Link>
                 <Link to="/hackathon" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
                   <div className="nav-dropdown__item-title">
-                    Innovation Hackathon
+                    Hackathon
                   </div>
-                  <div className="nav-dropdown__item-desc">Student developer sprint, mentorship &amp; cash prizes</div>
+                  <div className="nav-dropdown__item-desc">Team bootcamp ending in a live demo</div>
                 </Link>
               </div>
             )}
@@ -152,14 +168,13 @@ export const Navbar: React.FC = () => {
               <div className="nav-dropdown__menu" role="menu">
                 <Link to="/partner" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
                   <div className="nav-dropdown__item-title">Sponsorship Packages</div>
-                  <div className="nav-dropdown__item-desc">Headline, Platinum, Gold &amp; Custom tiers</div>
+                  <div className="nav-dropdown__item-desc">Title, Gold, Silver, Bronze &amp; Friends tiers</div>
                 </Link>
                 <Link to="/booth" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
                   <div className="nav-dropdown__item-title">
                     Exhibition Booths
-                    <span className="nav-dropdown__item-badge">Expo</span>
                   </div>
-                  <div className="nav-dropdown__item-desc">Reserve branded tech spaces &amp; hardware pavilions</div>
+                  <div className="nav-dropdown__item-desc">Trade Fair booths on Conference Day</div>
                 </Link>
                 <a
                   href={siteConfig.links.brochure || '/assets/docs/nacos-aksu-pitch-deck-2027.pdf'}
@@ -170,16 +185,16 @@ export const Navbar: React.FC = () => {
                   onClick={closeMenu}
                 >
                   <div className="nav-dropdown__item-title">
-                    Official Pitch Deck
+                    Partnership Brochure
                     <span className="nav-dropdown__item-badge">PDF</span>
                   </div>
-                  <div className="nav-dropdown__item-desc">Download comprehensive sponsorship prospectus</div>
+                  <div className="nav-dropdown__item-desc">Partnership tiers, benefits and booth sizes</div>
                 </a>
               </div>
             )}
           </div>
 
-          {/* Festival Info Dropdown */}
+          {/* About Dropdown */}
           <div
             className="nav-item-dropdown"
             onMouseEnter={() => handleMouseEnter('festival')}
@@ -192,7 +207,7 @@ export const Navbar: React.FC = () => {
               aria-expanded={activeDropdown === 'festival'}
               aria-haspopup="true"
             >
-              <span>Festival Info</span>
+              <span>About</span>
               <svg className="nav-dropdown__chevron" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M4 6l4 4 4-4" />
               </svg>
@@ -201,14 +216,14 @@ export const Navbar: React.FC = () => {
               <div className="nav-dropdown__menu" role="menu">
                 <Link to="/about" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
                   <div className="nav-dropdown__item-title">About NACOS AKSU</div>
-                  <div className="nav-dropdown__item-desc">Chapter history, executive council &amp; patron legacy</div>
+                  <div className="nav-dropdown__item-desc">The chapter and the team behind the week</div>
                 </Link>
                 <Link to="/faq" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
                   <div className="nav-dropdown__item-title">Venue &amp; FAQ</div>
                   <div className="nav-dropdown__item-desc">Akwa Ibom State University location &amp; attendee guide</div>
                 </Link>
                 <Link to="/auth" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
-                  <div className="nav-dropdown__item-title">My Pass / Sign In</div>
+                  <div className="nav-dropdown__item-title">My Pass</div>
                   <div className="nav-dropdown__item-desc">Get your registration ID emailed to you again</div>
                 </Link>
               </div>
@@ -243,34 +258,66 @@ export const Navbar: React.FC = () => {
             <nav className="site-header__mobile-nav">
               <NavLink to="/" end onClick={closeMenu}>Home</NavLink>
 
-              <div className="site-header__mobile-group">
-                <div className="site-header__mobile-group-title">Programme &amp; Tracks</div>
-                <NavLink to="/tracks" onClick={closeMenu}>5 Industry Tracks</NavLink>
-                <NavLink to="/programme" onClick={closeMenu}>Flagship Programme</NavLink>
-                <NavLink to="/hackathon" onClick={closeMenu}>Innovation Hackathon</NavLink>
+              <div className={`site-header__mobile-group ${mobileGroup === 'programme' ? 'is-open' : ''}`}>
+                <button
+                  type="button"
+                  className="site-header__mobile-group-btn"
+                  aria-expanded={mobileGroup === 'programme'}
+                  onClick={() => toggleMobileGroup('programme')}
+                >
+                  Programme
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4" /></svg>
+                </button>
+                {mobileGroup === 'programme' && (
+                  <div className="site-header__mobile-sub">
+                    <NavLink to="/tracks" onClick={closeMenu}>5 Industry Tracks</NavLink>
+                    <NavLink to="/programme" onClick={closeMenu}>Programme</NavLink>
+                    <NavLink to="/hackathon" onClick={closeMenu}>Hackathon</NavLink>
+                  </div>
+                )}
               </div>
 
-              <div className="site-header__mobile-group">
-                <div className="site-header__mobile-group-title">Partners &amp; Exhibition</div>
-                <NavLink to="/partner" onClick={closeMenu}>Sponsorship Packages</NavLink>
-                <NavLink to="/booth" onClick={closeMenu}>Exhibition &amp; Vendor Booths</NavLink>
-                <a href={siteConfig.links.brochure || '/assets/docs/nacos-aksu-pitch-deck-2027.pdf'} target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
-                  Download Pitch Deck (PDF)
-                </a>
+              <div className={`site-header__mobile-group ${mobileGroup === 'partners' ? 'is-open' : ''}`}>
+                <button
+                  type="button"
+                  className="site-header__mobile-group-btn"
+                  aria-expanded={mobileGroup === 'partners'}
+                  onClick={() => toggleMobileGroup('partners')}
+                >
+                  Partners &amp; Booths
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4" /></svg>
+                </button>
+                {mobileGroup === 'partners' && (
+                  <div className="site-header__mobile-sub">
+                    <NavLink to="/partner" onClick={closeMenu}>Sponsorship Packages</NavLink>
+                    <NavLink to="/booth" onClick={closeMenu}>Exhibition Booths</NavLink>
+                    <a href={siteConfig.links.brochure || '/assets/docs/nacos-aksu-pitch-deck-2027.pdf'} target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
+                      Partnership Brochure (PDF)
+                    </a>
+                  </div>
+                )}
               </div>
 
-              <div className="site-header__mobile-group">
-                <div className="site-header__mobile-group-title">Festival Information</div>
-                <NavLink to="/about" onClick={closeMenu}>About NACOS AKSU</NavLink>
-                <NavLink to="/faq" onClick={closeMenu}>Venue &amp; FAQ</NavLink>
-                <NavLink to="/auth" onClick={closeMenu}>My Pass / Sign In</NavLink>
+              <div className={`site-header__mobile-group ${mobileGroup === 'about' ? 'is-open' : ''}`}>
+                <button
+                  type="button"
+                  className="site-header__mobile-group-btn"
+                  aria-expanded={mobileGroup === 'about'}
+                  onClick={() => toggleMobileGroup('about')}
+                >
+                  About
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 6l4 4 4-4" /></svg>
+                </button>
+                {mobileGroup === 'about' && (
+                  <div className="site-header__mobile-sub">
+                    <NavLink to="/about" onClick={closeMenu}>About NACOS AKSU</NavLink>
+                    <NavLink to="/faq" onClick={closeMenu}>Venue &amp; FAQ</NavLink>
+                  </div>
+                )}
               </div>
+
+              <NavLink to="/auth" onClick={closeMenu}>My Pass</NavLink>
             </nav>
-            <div className="site-header__mobile-action">
-              <Link to="/register" className="btn btn--header-cta" style={{ width: '100%' }} onClick={closeMenu}>
-                Register for Free Pass &rarr;
-              </Link>
-            </div>
           </div>
         </div>
       )}

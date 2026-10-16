@@ -71,7 +71,7 @@ function setup() {
 function doGet() {
   // Bump "version" on every change, then open the web app URL to confirm the new copy is live.
   return json_({ result: "ok", service: "NACOS Week 2027 registration & volunteer portal",
-                 version: "2026-10-15 lookup+booths+resend" });
+                 version: "2026-10-16 lookup-with-phone-digits" });
 }
 
 function doPost(e) {
@@ -257,28 +257,59 @@ function saveBooth_(p) {
 }
 
 // ---------- Find my pass ----------
-// Looks up a registration or volunteer application by email or ID and re-sends the confirmation
-// to the email on file. Nothing about the person is returned, so typing someone else's email
-// reveals nothing. Each row can be re-sent at most once every 10 minutes.
+// Looks up a registration or volunteer application by email or ID.
+// - Email/ID only: re-sends the confirmation to the email on file and returns nothing personal,
+//   so typing someone else's email reveals nothing (at most one re-send per row every 10 minutes).
+// - Email/ID plus the last 4 digits of their WhatsApp number: returns the pass so the page can
+//   show it with Print / Save. Wrong digits are limited to 5 tries per hour for that row.
 function lookup_(p) {
   var q = text_(p.query, 160).toLowerCase();
   if (q.length < 4) return json_({ result: "error", error: "invalid" });
+  var digits = String(p.phone4 || "").replace(/\D/g, "");
 
+  var cache = CacheService.getScriptCache();
   var sheets = [getSheet_(), getVolunteerSheet_()];
   for (var s = 0; s < sheets.length; s++) {
     var sheet = sheets[s];
     var last = sheet.getLastRow();
     if (last < 2) continue;
-    var values = sheet.getRange(2, 1, last - 1, COL.email).getValues();
+    // ID, Timestamp, Name, Email, WhatsApp, Department, Level, Interests / Team, Availability
+    var values = sheet.getRange(2, 1, last - 1, 9).getValues();
     for (var i = 0; i < values.length; i++) {
-      var id = String(values[i][COL.id - 1]).toLowerCase();
-      var email = String(values[i][COL.email - 1]).toLowerCase();
+      var v = values[i];
+      var id = String(v[0]).toLowerCase();
+      var email = String(v[COL.email - 1]).toLowerCase();
       if (q !== id && q !== email) continue;
 
-      var cache = CacheService.getScriptCache();
-      var cacheKey = "resent_" + sheet.getName() + "_" + (i + 2);
-      if (!cache.get(cacheKey)) {
-        cache.put(cacheKey, "1", 600);
+      var rowKey = sheet.getName() + "_" + (i + 2);
+      if (digits.length === 4) {
+        var triesKey = "tries_" + rowKey;
+        var tries = Number(cache.get(triesKey) || 0);
+        if (tries >= 5) return json_({ result: "locked" });
+        var phone = String(v[4]).replace(/\D/g, "");
+        if (phone.slice(-4) !== digits) {
+          cache.put(triesKey, String(tries + 1), 3600);
+          return json_({ result: "wrong_digits" });
+        }
+        var isVolunteer = sheet.getName() === VOLUNTEER_SHEET_NAME;
+        return json_({
+          result: "found",
+          pass: {
+            passId: String(v[0]),
+            name: String(v[2]).replace(/^'/, ""),
+            email: String(v[3]),
+            department: String(v[5]).replace(/^'/, ""),
+            level: String(v[6]).replace(/^'/, ""),
+            interests: isVolunteer ? [] : String(v[7]).split(/,\s*/).filter(String),
+            team: isVolunteer ? String(v[7]) : "",
+            type: isVolunteer ? "volunteer" : "delegate"
+          }
+        });
+      }
+
+      var sentKey = "resent_" + rowKey;
+      if (!cache.get(sentKey)) {
+        cache.put(sentKey, "1", 600);
         sendRow_(sheet, i + 2);
       }
       return json_({ result: "sent", to: maskEmail_(email) });

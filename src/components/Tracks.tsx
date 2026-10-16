@@ -1,37 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FeatureStack } from './FeatureStack';
+import { trackDetails } from '../pages/TracksPage';
 
-const tracksData = [
-  {
-    n: '01',
-    name: 'Energy',
-    tag: 'Grid & Power Systems',
-    desc: 'Power generation, distribution, renewable metering, and energy analytics. Where real-time data meets the electrical grid.'
-  },
-  {
-    n: '02',
-    name: 'Finance',
-    tag: 'FinTech & Digital Payments',
-    desc: 'Core banking systems, algorithmic payments, and decentralized trust. Building high-resilience financial tools that move money securely.'
-  },
-  {
-    n: '03',
-    name: 'Oil & Gas',
-    tag: 'Exploration & Industrial IoT',
-    desc: 'Exploration telemetry, pipeline safety monitoring, and logistical automation. Modern software modernizing the Niger Delta infrastructure.'
-  },
-  {
-    n: '04',
-    name: 'Medicine',
-    tag: 'HealthTech & Telemedicine',
-    desc: 'Electronic health records, predictive patient diagnostics, and rural healthcare access. Software engineered to save lives.'
-  },
-  {
-    n: '05',
-    name: 'Technology',
-    tag: 'Software, Cloud & Cyber Security',
-    desc: 'Distributed cloud infrastructure, proactive cybersecurity, and foundational software engineering every sector builds upon.'
-  }
+// Card tint and panel colour per track, cycling through the brand palette
+const looks = [
+  { card: 'fc-pale', panel: 'fv-deep' },
+  { card: 'fc-white', panel: 'fv-black' },
+  { card: 'fc-pale', panel: 'fv-green' },
+  { card: 'fc-white', panel: 'fv-deep' },
+  { card: 'fc-pale', panel: 'fv-black' }
 ];
 
 export const Tracks: React.FC = () => {
@@ -51,18 +29,39 @@ export const Tracks: React.FC = () => {
           </p>
         </header>
 
-        <ol className="tracks__list">
-          {tracksData.map((t) => (
-            <li className="track" key={t.n}>
-              <div className="track__top">
-                <span className="track__n">{t.n}</span>
-                <span className="track__tag">{t.tag}</span>
-              </div>
-              <h3 className="track__name">{t.name}</h3>
-              <p className="track__desc">{t.desc}</p>
-            </li>
-          ))}
-        </ol>
+        <div className="tracks__stack">
+          <FeatureStack>
+            {trackDetails.map((t, i) => (
+              <article
+                className={`fc-slide ${looks[i % looks.length].card}`}
+                key={t.id}
+                aria-label={`Track ${i + 1} of ${trackDetails.length}: ${t.name}`}
+              >
+                <div className="fc-copy">
+                  <span className="fc-copy__count">Track {t.n} <span>of 0{trackDetails.length}</span></span>
+                  <h3 className="fc-copy__name">{t.name}</h3>
+                  <p className="fc-copy__tag">{t.tag}</p>
+                  <p className="fc-copy__desc">{t.summary}</p>
+                  <Link to={`/tracks#${t.id}`} className="fc-copy__link">
+                    Read the full brief &rarr;
+                  </Link>
+                </div>
+                <div className={`fv ${looks[i % looks.length].panel}`}>
+                  <h4 className="fv__title">What teams could build</h4>
+                  <ul className="fv__list">
+                    {t.challenges.map((c, k) => (
+                      <li key={k}>{c}</li>
+                    ))}
+                  </ul>
+                  <p className="fv__fit">
+                    <span>Good fit for</span> {t.roles}
+                  </p>
+                </div>
+                <span className="fc-wash" aria-hidden="true" />
+              </article>
+            ))}
+          </FeatureStack>
+        </div>
 
         <div className="tracks__footer">
           <p className="tracks__note">

@@ -34,7 +34,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitLabel, setSubmitLabel] = useState('Register Free Pass');
+  const [submitLabel, setSubmitLabel] = useState('Register');
   const [confirmedPass, setConfirmedPass] = useState<ConfirmedPass | null>(null);
 
   const savePassLocally = (pass: ConfirmedPass) => {
@@ -120,7 +120,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
     }
 
     setIsSubmitting(true);
-    setSubmitLabel('Reserving Seat...');
+    setSubmitLabel('Registering...');
 
     try {
       const bodyParams = new URLSearchParams();
@@ -183,7 +183,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
         });
       }
 
-      setSubmitLabel('Pass Reserved');
+      setSubmitLabel('Registered');
     } catch {
       // Nothing was saved: say so, keep what they typed, and let them try again
       setStatus({
@@ -212,14 +212,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToVolunteer,
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ color: 'var(--brand-green)', fontWeight: 800 }}>✓</span>
                 <span>Free admission for all AKSU students across all faculties</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ color: 'var(--brand-green)', fontWeight: 800 }}>✓</span>
-                <span>Eligible for verified digital Certificate of Participation</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ color: 'var(--brand-green)', fontWeight: 800 }}>✓</span>
-                <span>Direct entry into the 3-week Confluence Innovation Bootcamp</span>
               </div>
             </div>
 

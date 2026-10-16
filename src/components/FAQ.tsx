@@ -11,7 +11,7 @@ const faqItems = [
   },
   {
     q: 'Does it cost anything?',
-    a: 'Attendance details, including any fees, will be published when registration opens fully. Register and we will tell you first.'
+    a: 'No. Admission is free for all AKSU students.'
   },
   {
     q: 'Who can join the hackathon?',

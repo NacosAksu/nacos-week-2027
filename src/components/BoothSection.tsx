@@ -150,27 +150,6 @@ export const BoothSection: React.FC = () => {
       <div className="wrap">
         {/* Header */}
         <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto var(--space-2xl)' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: 'rgba(8, 144, 2, 0.12)',
-              border: '1px solid rgba(8, 144, 2, 0.4)',
-              borderRadius: 'var(--radius-pill)',
-              padding: '6px 16px',
-              color: '#089002',
-              fontSize: 'var(--text-xs)',
-              fontWeight: 700,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              marginBottom: 'var(--space-sm)'
-            }}
-          >
-            <span style={{ fontSize: '1rem' }}>🎪</span>
-            Tech Exhibition &amp; Vendor Showcase · NACOS Week 2027
-          </div>
-
           <h2 id="booth-title" className="h2" style={{ margin: '0 0 var(--space-xs)', color: 'var(--color-ink)' }}>
             Exhibition Booths &amp; Showcase Spaces
           </h2>
@@ -205,14 +184,6 @@ export const BoothSection: React.FC = () => {
           </div>
           <div>
             <div style={{ fontSize: '2rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-deep)' }}>
-              500+
-            </div>
-            <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-muted)', fontWeight: 600 }}>
-              Recurring attendance
-            </div>
-          </div>
-          <div>
-            <div style={{ fontSize: '2rem', fontFamily: 'var(--font-display)', fontWeight: 800, color: 'var(--brand-deep)' }}>
               500
             </div>
             <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-muted)', fontWeight: 600 }}>
@@ -221,7 +192,7 @@ export const BoothSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Official Pitch Deck Showcase Banner */}
+        {/* Partnership Brochure Banner */}
         <div
           style={{
             background: 'linear-gradient(135deg, #ffffff 0%, #f4f8f4 100%)',
@@ -237,42 +208,24 @@ export const BoothSection: React.FC = () => {
           }}
         >
           <div>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: 'rgba(8, 144, 2, 0.12)',
-                color: 'var(--brand-deep)',
-                fontSize: '0.72rem',
-                fontWeight: 700,
-                letterSpacing: '0.06em',
-                textTransform: 'uppercase',
-                padding: '3px 10px',
-                borderRadius: 'var(--radius-pill)',
-                marginBottom: 'var(--space-xs)'
-              }}
-            >
-              <span>📄</span> Official Documentation
-            </div>
             <h3 className="h3" style={{ margin: '0 0 var(--space-xs)', color: 'var(--brand-black)', fontSize: 'clamp(1.25rem, 2vw, 1.65rem)' }}>
-              NACOS AKSU Pitch Deck Presentation
+              NACOS Week 2027 Partnership Brochure
             </h3>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-ink-muted)', margin: '0 0 var(--space-md)', lineHeight: 1.55 }}>
-              The event lineup, partnership tiers and benefits, in-kind partnerships and Trade Fair booth sizes, all in the official pitch deck.
+              The event lineup, partnership tiers and benefits, in-kind partnerships and Trade Fair booth sizes, all in the official brochure.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', fontSize: '0.75rem', color: 'var(--color-ink-muted)', marginBottom: 'var(--space-md)' }}>
               <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
-                ✓ 5 Partnership Tiers
+                5 Partnership Tiers
               </span>
               <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
-                ✓ 5 Sector Tracks
+                5 Sector Tracks
               </span>
               <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
-                ✓ Category Exclusivity
+                Category Exclusivity
               </span>
               <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
-                ✓ Booth Sizes &amp; Prices
+                Booth Sizes &amp; Prices
               </span>
             </div>
           </div>
@@ -293,14 +246,14 @@ export const BoothSection: React.FC = () => {
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-xs)' }}>
                 <span style={{ fontSize: '0.7rem', color: '#a4f49b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                  PDF PROSPECTUS
+                  PDF BROCHURE
                 </span>
                 <span style={{ fontSize: '0.65rem', background: 'rgba(255, 255, 255, 0.15)', padding: '2px 8px', borderRadius: 'var(--radius-pill)' }}>
                   30 MB
                 </span>
               </div>
               <strong style={{ display: 'block', fontSize: 'var(--text-base)', color: '#ffffff', fontFamily: 'var(--font-display)', marginBottom: '4px' }}>
-                NACOS AKSU Pitch Deck Presentation.pdf
+                NACOS Week 2027 Partnership Brochure.pdf
               </strong>
               <span style={{ fontSize: 'var(--text-xs)', color: 'rgba(255, 255, 255, 0.7)', display: 'block' }}>
                 Prepared by the NACOS AKSU Chapter
@@ -315,15 +268,15 @@ export const BoothSection: React.FC = () => {
                 className="btn btn--signal"
                 style={{ flex: 1, minWidth: '140px', justifyContent: 'center', padding: '0.6rem 1rem', fontSize: 'var(--text-sm)' }}
               >
-                <span>View Deck Online &rarr;</span>
+                <span>View Brochure &rarr;</span>
               </a>
               <a
                 href="/assets/docs/nacos-aksu-pitch-deck-2027.pdf"
-                download="NACOS-AKSU-Pitch-Deck-2027.pdf"
+                download="NACOS-Week-2027-Partnership-Brochure.pdf"
                 className="btn btn--outline"
                 style={{ flex: 1, minWidth: '140px', justifyContent: 'center', padding: '0.6rem 1rem', fontSize: 'var(--text-sm)', color: '#ffffff', borderColor: 'rgba(255, 255, 255, 0.3)' }}
               >
-                <span>Download PDF 📥</span>
+                <span>Download PDF</span>
               </a>
             </div>
           </div>
@@ -423,7 +376,7 @@ export const BoothSection: React.FC = () => {
                     Space Allocation:
                   </div>
                   <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--brand-deep)', background: 'rgba(8, 144, 2, 0.06)', padding: '6px 10px', borderRadius: '4px' }}>
-                    📐 {tier.spaceSize}
+                    {tier.spaceSize}
                   </div>
                 </div>
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-interface TrackItem {
+export interface TrackItem {
   n: string;
   id: string;
   name: string;
@@ -12,7 +12,7 @@ interface TrackItem {
   techStack: string[];
 }
 
-const trackDetails: TrackItem[] = [
+export const trackDetails: TrackItem[] = [
   {
     n: '01',
     id: 'energy',
@@ -86,7 +86,11 @@ const trackDetails: TrackItem[] = [
 ];
 
 export const TracksPage: React.FC = () => {
-  const [selectedFilter, setSelectedFilter] = useState<string>('all');
+  // Arriving from a home page card (/tracks#energy) opens that track straight away
+  const [selectedFilter, setSelectedFilter] = useState<string>(() => {
+    const fromHash = typeof window !== 'undefined' ? window.location.hash.slice(1) : '';
+    return trackDetails.some((t) => t.id === fromHash) ? fromHash : 'all';
+  });
 
   // Phones: track details start collapsed so five long cards don't fill ten screens
   const phoneQuery = '(max-width: 640px)';

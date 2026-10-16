@@ -114,11 +114,11 @@ export const Sponsorship: React.FC = () => {
           <div className="partner__actions">
             {links.brochure ? (
               <a className="btn btn--deep" href={links.brochure} download data-brochure>
-                Download Pitch Deck
+                Download Brochure
               </a>
             ) : (
               <span className="btn btn--deep" role="button" aria-disabled="true" data-brochure>
-                Pitch Deck Coming Soon
+                Brochure Coming Soon
               </span>
             )}
             <a className="btn btn--outline" href={mailHref} data-mail="sponsorEmail">
