@@ -85,6 +85,15 @@ export const Footer: React.FC = () => {
                   className="footer__crest"
                 />
               </Link>
+              <img
+                src="/assets/brand/aksu-logo.png"
+                alt="Akwa Ibom State University"
+                width="54"
+                height="52"
+                loading="lazy"
+                decoding="async"
+                className="footer__aksu"
+              />
               <div className="footer__logo-divider" aria-hidden="true" />
               <Link to="/" className="footer__logo-link" aria-label="NACOS Week 2027 home">
                 <img

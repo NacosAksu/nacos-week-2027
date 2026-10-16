@@ -2070,6 +2070,13 @@ abbr { text-decoration: none; font-size: 0.7em; letter-spacing: 0.04em; vertical
   transform: scale(1.06);
   box-shadow: 0 6px 18px rgba(8, 144, 2, 0.45), 0 0 0 2px var(--brand-green);
 }
+/* AKSU crest beside the NACOS seal; transparent PNG, so no white disc */
+.footer__aksu {
+  width: auto;
+  height: 52px;
+  flex-shrink: 0;
+  margin-left: -0.25rem;
+}
 .footer__logo-divider {
   width: 1px;
   height: 38px;
@@ -4224,6 +4231,7 @@ html.has-gsap .rv {
   .footer__body { gap: var(--space-xl); padding-bottom: var(--space-lg); }
   .footer__brand { gap: var(--space-sm); }
   .footer__crest { width: 40px; height: 40px; }
+  .footer__aksu { height: 40px; }
   .footer__logo-divider { height: 30px; }
   .footer__logo { width: 9.5rem; }
   .footer__heading { margin-bottom: var(--space-xs); }
