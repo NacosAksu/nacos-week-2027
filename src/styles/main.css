@@ -1677,6 +1677,7 @@ abbr { text-decoration: none; font-size: 0.7em; letter-spacing: 0.04em; vertical
 .facts li { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: var(--space-md); padding-block: var(--space-sm); border-bottom: 1px solid var(--color-rule); font-size: var(--text-sm); }
 .facts strong { font-family: var(--font-display); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--brand-deep); padding-top: 0.15em; }
 .hack__actions { margin-top: var(--space-xs); }
+.hack__actions--end { display: none; } /* phones only, see the phone layer */
 
 /* People */
 .people { display: grid; gap: var(--space-xl) var(--space-lg); grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -4239,12 +4240,47 @@ html.has-gsap .rv {
   .tracks__list .track p { font-size: 0.8125rem; line-height: 1.5; max-width: none; }
   .tracks__footer { margin-top: var(--space-lg); padding-top: var(--space-md); gap: var(--space-md); }
 
-  /* Numbered steps (hackathon) */
-  .deck-steps { gap: var(--space-xs); }
-  .deck-steps li { gap: var(--space-sm); padding: var(--space-sm) var(--space-md); }
-  .deck-steps h3 { font-size: 0.9375rem; }
-  .deck-steps p { font-size: 0.8125rem; line-height: 1.5; }
-  .facts li { padding-block: var(--space-xs); font-size: 0.8125rem; }
+  /* Numbered steps (hackathon): a plain timeline instead of five boxes */
+  .deck-steps { gap: 0; }
+  .deck-steps li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: var(--space-sm);
+    padding: 0 0 var(--space-lg);
+    background: none;
+    border: 0;
+    border-radius: 0;
+  }
+  .deck-steps li:last-child { padding-bottom: 0; }
+  .deck-steps li:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: calc(1rem - 1px);
+    top: 2rem;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-rule);
+  }
+  .deck-steps__num {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    margin: 0;
+    border-radius: 50%;
+    font-size: 0.75rem;
+  }
+  .deck-steps h3 { font-size: 1rem; padding-top: 0.3rem; }
+  .deck-steps p { font-size: 0.875rem; line-height: 1.55; }
+
+  /* Facts: label above its text, so long labels never crowd the value */
+  .facts li { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; padding-block: var(--space-sm); font-size: 0.875rem; }
+
+  /* Button after the steps */
+  .hack__intro .hack__actions { display: none; }
+  .hack__actions--end { display: block; margin-top: var(--space-xl); }
 
   /* Tracks page: swipeable filter row, compact cards, details tucked away */
   .deck-filter-bar {

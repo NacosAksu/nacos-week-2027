@@ -5,6 +5,17 @@ import { siteConfig } from '../config/siteConfig';
 export const Hackathon: React.FC = () => {
   const { links } = siteConfig;
 
+  const action = links.hackathonRegister ? (
+    <a href={links.hackathonRegister} className="btn btn--deep">
+      Register for the Hackathon
+    </a>
+  ) : (
+    // No separate hackathon portal yet: the main form has a Hackathon option
+    <Link to="/register" className="btn btn--deep">
+      Register Your Interest &rarr;
+    </Link>
+  );
+
   return (
     <section className="section hack" id="hackathon" aria-labelledby="hack-title">
       <div className="wrap hack__grid">
@@ -23,18 +34,7 @@ export const Hackathon: React.FC = () => {
             <li><strong>Judging</strong> Demo day in front of the judges on Conference Day</li>
             <li><strong>Safeguard</strong> Students retain full ownership of their intellectual property</li>
           </ul>
-          <div className="hack__actions">
-            {links.hackathonRegister ? (
-              <a href={links.hackathonRegister} className="btn btn--deep">
-                Register for the Hackathon
-              </a>
-            ) : (
-              // No separate hackathon portal yet: the main form has a Hackathon option
-              <Link to="/register" className="btn btn--deep">
-                Register Your Interest &rarr;
-              </Link>
-            )}
-          </div>
+          <div className="hack__actions">{action}</div>
         </div>
 
         <div className="hack__steps">
@@ -75,6 +75,8 @@ export const Hackathon: React.FC = () => {
               </div>
             </li>
           </ol>
+          {/* Phones: the button comes after the steps instead of before them */}
+          <div className="hack__actions hack__actions--end">{action}</div>
         </div>
       </div>
     </section>
