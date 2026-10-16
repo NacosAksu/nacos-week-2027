@@ -7,7 +7,7 @@ export const HackathonPage: React.FC = () => {
   return (
     <div style={{ paddingTop: 'var(--space-2xl)' }}>
       {/* Hackathon Overview & Step-by-Step Flow */}
-      <Hackathon />
+      <Hackathon asPage />
 
       {/* Mentor and Judge Silhouette Grid */}
       <Speakers />

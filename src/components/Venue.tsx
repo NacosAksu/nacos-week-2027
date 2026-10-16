@@ -8,7 +8,7 @@ export const Venue: React.FC = () => {
     <section className="section venue" id="venue" aria-labelledby="venue-title">
       <div className="wrap venue__grid">
         <div className="venue__text">
-          <h2 id="venue-title" className="h2">Getting there</h2>
+          <h1 id="venue-title" className="h2">Getting there</h1>
           <p className="venue__place">
             <span>{event.venue}</span>
           </p>

@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { siteConfig } from '../config/siteConfig';
 import { ImageSlot } from './ImageSlot';
 
-export const Programme: React.FC = () => {
+// asPage: this section opens its own page, so its heading is the page's h1
+export const Programme: React.FC<{ asPage?: boolean }> = ({ asPage = false }) => {
+  const Heading = asPage ? 'h1' : 'h2';
   const { programme } = siteConfig;
 
   return (
@@ -15,7 +17,7 @@ export const Programme: React.FC = () => {
               <span className="deck-eyebrow__num">04</span>
               <span className="deck-eyebrow__text">The Five Pillars</span>
             </div>
-            <h2 id="programme-title" className="h2">Five Events. One Flagship Week.</h2>
+            <Heading id="programme-title" className="h2">Five Events. One Flagship Week.</Heading>
           </div>
           <p className="lead">
             A hackathon, a tech conference, a football tournament, fashion and pageantry, and an awards dinner.

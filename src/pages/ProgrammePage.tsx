@@ -216,7 +216,7 @@ END:VCALENDAR`;
   return (
     <div style={{ paddingTop: 'var(--space-2xl)' }}>
       {/* Overview Pillars with photography */}
-      <Programme />
+      <Programme asPage />
 
       {/* Interactive Schedule Timetable Section (Commented Out)
       <section className="section nacos-schedule-section" id="schedule-explorer">

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useLenisScrollTrigger } from './hooks/useLenisScrollTrigger';
 import { ScrollToTop } from './components/ScrollToTop';
+import { PageMeta } from './components/PageMeta';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 
@@ -20,6 +21,7 @@ const AppContent: React.FC = () => {
   return (
     <>
       <ScrollToTop />
+      <PageMeta />
       <a className="skip" href="#main">
         Skip to content
       </a>

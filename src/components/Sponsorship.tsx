@@ -28,7 +28,7 @@ export const Sponsorship: React.FC = () => {
               <span className="deck-eyebrow__num">06</span>
               <span className="deck-eyebrow__text">Sponsorship &amp; Partnerships</span>
             </div>
-            <h2 id="partner-title" className="h2">Partner with Confluence</h2>
+            <h1 id="partner-title" className="h2">Partner with Confluence</h1>
           </div>
           <p className="lead">
             We sell outcomes, not logo space: students who sign up, talent you can hire, content you can use, and a verified impact report for your stakeholders.

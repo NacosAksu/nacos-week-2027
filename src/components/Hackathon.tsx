@@ -2,7 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { siteConfig } from '../config/siteConfig';
 
-export const Hackathon: React.FC = () => {
+// asPage: this section opens its own page, so its heading is the page's h1
+export const Hackathon: React.FC<{ asPage?: boolean }> = ({ asPage = false }) => {
+  const Heading = asPage ? 'h1' : 'h2';
   const { links } = siteConfig;
 
   const action = links.hackathonRegister ? (
@@ -24,7 +26,7 @@ export const Hackathon: React.FC = () => {
             <span className="deck-eyebrow__num">05</span>
             <span className="deck-eyebrow__text">Flagship Sponsorship Product</span>
           </div>
-          <h2 id="hack-title" className="h2">The Confluence Hackathon</h2>
+          <Heading id="hack-title" className="h2">The Confluence Hackathon</Heading>
           <p className="lead">
             Student teams build software against briefs set by sector partners. A 4-week bootcamp with mentors, ending in a live demo in front of judges on Conference Day.
           </p>

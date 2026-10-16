@@ -1,7 +1,9 @@
 import React from 'react';
 import { ImageSlot } from './ImageSlot';
 
-export const About: React.FC = () => {
+// asPage: this section opens its own page, so its heading is the page's h1
+export const About: React.FC<{ asPage?: boolean }> = ({ asPage = false }) => {
+  const Heading = asPage ? 'h1' : 'h2';
   return (
     <>
       {/* ABOUT */}
@@ -12,7 +14,7 @@ export const About: React.FC = () => {
               <span className="deck-eyebrow__num">01</span>
               <span className="deck-eyebrow__text">Event Background</span>
             </div>
-            <h2 id="about-title" className="h2">Computing does not work alone anymore.</h2>
+            <Heading id="about-title" className="h2">Computing does not work alone anymore.</Heading>
             <p className="lead">
               The power grid, financial systems, oil exploration, and modern healthcare all run on computing. NACOS Week 2027 puts emerging technologists in the same rooms as the industries they will build for.
             </p>

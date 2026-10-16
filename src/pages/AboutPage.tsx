@@ -8,7 +8,7 @@ export const AboutPage: React.FC = () => {
   return (
     <div style={{ paddingTop: 'var(--space-2xl)' }}>
       {/* About Overview & 4 Metric Highlights */}
-      <About />
+      <About asPage />
 
       {/* Leadership Team Behind the Week */}
       <Team />
