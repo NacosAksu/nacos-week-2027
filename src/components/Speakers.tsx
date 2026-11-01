@@ -16,8 +16,7 @@ const speakersList: SpeakerItem[] = [
   { name: "To be announced", role: "", track: "Energy", photo: "/assets/speakers/speaker-01.jpg", isRevealed: false },
   { name: "To be announced", role: "", track: "Finance", photo: "/assets/speakers/speaker-02.jpg", isRevealed: false },
   { name: "To be announced", role: "", track: "Oil & Gas", photo: "/assets/speakers/speaker-03.jpg", isRevealed: false },
-  { name: "To be announced", role: "", track: "Medicine", photo: "/assets/speakers/speaker-04.jpg", isRevealed: false },
-  { name: "To be announced", role: "", track: "Technology", photo: "/assets/speakers/speaker-05.jpg", isRevealed: false }
+  { name: "To be announced", role: "", track: "Medicine", photo: "/assets/speakers/speaker-04.jpg", isRevealed: false }
 ];
 
 export const Speakers: React.FC = () => {
@@ -25,7 +24,7 @@ export const Speakers: React.FC = () => {
   const [suggestForm, setSuggestForm] = useState({
     name: '',
     role: '',
-    track: 'Technology',
+    track: 'Energy',
     link: '',
     reason: ''
   });
@@ -59,7 +58,7 @@ export const Speakers: React.FC = () => {
       setTimeout(() => {
         setModalOpen(false);
         setSubmitted(false);
-        setSuggestForm({ name: '', role: '', track: 'Technology', link: '', reason: '' });
+        setSuggestForm({ name: '', role: '', track: 'Energy', link: '', reason: '' });
       }, 2500);
     } catch {
       setSendError(`That didn't go through. Please try again, or email ${siteConfig.links.generalEmail}.`);
@@ -77,7 +76,7 @@ export const Speakers: React.FC = () => {
             <h2 id="speakers-title" className="h2">Speakers, Mentors and Judges</h2>
           </div>
           <p className="lead">
-            Speakers from each of the five tracks. Names will be announced here.
+            Speakers from each of the four tracks. Names will be announced here.
           </p>
         </header>
 
@@ -207,7 +206,6 @@ export const Speakers: React.FC = () => {
                     <option value="Finance">Finance / FinTech</option>
                     <option value="Oil & Gas">Oil &amp; Gas</option>
                     <option value="Medicine">Medicine &amp; HealthTech</option>
-                    <option value="Technology">Technology &amp; AI</option>
                   </select>
                 </div>
 

@@ -51,7 +51,7 @@ export const About: React.FC<{ asPage?: boolean }> = ({ asPage = false }) => {
               <span className="numbers__l">Flagship Pillars</span>
             </li>
             <li>
-              <span className="numbers__n">5</span>
+              <span className="numbers__n">4</span>
               <span className="numbers__l">Industry Tracks</span>
             </li>
             <li>

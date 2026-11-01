@@ -13,7 +13,7 @@ interface Meta {
 const home: Meta = {
   title: 'NACOS Week 2027: Confluence | NACOS AKSU',
   description:
-    'NACOS Week 2027: Confluence at Akwa Ibom State University, February 2027. Five tracks (energy, finance, oil and gas, medicine and technology) and five events: Hackathon, Tech Conference, Football, Fashion & Pageantry and the Dinner & Award Night.',
+    'NACOS Week 2027: Confluence at Akwa Ibom State University, February 2027. Four tracks (energy, finance, oil and gas, and medicine) and five events: Hackathon, Tech Conference, Football, Fashion & Pageantry and the Dinner & Award Night.',
   canonical: '/'
 };
 
@@ -34,9 +34,9 @@ const passLookup: Meta = {
 const pages: Record<string, Meta> = {
   '/': home,
   '/tracks': {
-    title: 'Five Tracks | NACOS Week 2027',
+    title: 'Four Tracks | NACOS Week 2027',
     description:
-      'The five NACOS Week 2027 tracks: Energy, Finance, Oil & Gas, Medicine and Technology. Problem statements, skills and who each track suits.',
+      'The four NACOS Week 2027 tracks: Energy, Finance, Oil & Gas and Medicine. Problem statements, skills and who each track suits.',
     canonical: '/tracks'
   },
   '/programme': {

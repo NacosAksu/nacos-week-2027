@@ -111,7 +111,7 @@ export const Hero: React.FC = () => {
             CONFLUENCE<span className="hero__dot">.</span>
           </h1>
 
-          <p className="hero__sectors">Energy, Finance, Oil &amp; Gas, Medicine and Technology, converging with computing.</p>
+          <p className="hero__sectors">Energy, Finance, Oil &amp; Gas and Medicine, converging with computing.</p>
 
           {/* When / where */}
           <div className="hero__meta" aria-label="Key event details">
@@ -180,7 +180,6 @@ export const Hero: React.FC = () => {
           <span>FINANCE</span><span>&bull;</span>
           <span>OIL &amp; GAS</span><span>&bull;</span>
           <span>MEDICINE</span><span>&bull;</span>
-          <span>TECHNOLOGY</span><span>&bull;</span>
           <span>INNOVATION</span><span>&bull;</span>
           <span>COLLABORATION</span><span>&bull;</span>
           <span>NACOS AKSU</span><span>&bull;</span>
@@ -189,7 +188,6 @@ export const Hero: React.FC = () => {
           <span>FINANCE</span><span>&bull;</span>
           <span>OIL &amp; GAS</span><span>&bull;</span>
           <span>MEDICINE</span><span>&bull;</span>
-          <span>TECHNOLOGY</span><span>&bull;</span>
           <span>INNOVATION</span><span>&bull;</span>
           <span>COLLABORATION</span><span>&bull;</span>
           <span>NACOS AKSU</span><span>&bull;</span>

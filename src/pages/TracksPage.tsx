@@ -68,20 +68,6 @@ export const trackDetails: TrackItem[] = [
     ],
     roles: 'Mobile developers, Machine learning engineers, Health-tech researchers, UI/UX designers',
     techStack: ['Flutter / React Native', 'SQLite / PGLite (Offline)', 'TensorFlow Lite', 'Bluetooth Low Energy', 'FHIR / HL7']
-  },
-  {
-    n: '05',
-    id: 'technology',
-    name: 'Technology',
-    tag: 'Software, Cloud & Cyber Security',
-    summary: 'Core software engineering, developer tooling and cybersecurity. The foundational engineering craft that every other industrial track builds upon.',
-    challenges: [
-      'Developer tooling and localized natural language pipelines for regional applications',
-      'Campus identity management and verifiable academic credential systems for AKSU',
-      'Zero-trust network monitoring and proactive threat defense systems for distributed institutions'
-    ],
-    roles: 'Systems programmers, Cloud/DevOps engineers, Security researchers, Software builders',
-    techStack: ['Rust / Python', 'Linux / eBPF', 'Docker / Containers', 'Next.js / Vite', 'Go']
   }
 ];
 
@@ -117,7 +103,7 @@ export const TracksPage: React.FC = () => {
                 <span className="deck-eyebrow__text">Sector Specializations</span>
               </div>
               <h1 id="tracks-page-title" className="h2">
-                Five Tracks. One University.
+                Four Tracks. One University.
               </h1>
             </div>
             <p className="lead">
@@ -132,7 +118,7 @@ export const TracksPage: React.FC = () => {
               className={`deck-filter-btn ${selectedFilter === 'all' ? 'is-active' : ''}`}
               onClick={() => setSelectedFilter('all')}
             >
-              All 5 Tracks
+              All 4 Tracks
             </button>
             {trackDetails.map((t) => (
               <button

@@ -38,11 +38,11 @@ const scheduleData: ScheduleDay[] = [
       },
       {
         time: "11:00 AM - 01:00 PM",
-        title: "Track Briefings: 5 Industry Problem Statements",
+        title: "Track Briefings: 4 Industry Problem Statements",
         venue: "Virtual & Main Lab",
         category: "Workshop",
         speaker: "Track Partner Leads",
-        description: "Deep dive into real-world challenges across Energy, Finance, Oil & Gas, Medicine, and Technology."
+        description: "Deep dive into real-world challenges across Energy, Finance, Oil & Gas and Medicine."
       },
       {
         time: "02:00 PM - 05:00 PM",
@@ -196,7 +196,7 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
 SUMMARY:NACOS Week 2027: Confluence
-DESCRIPTION:Five tracks, five events. Akwa Ibom State University, FCIT.
+DESCRIPTION:Four tracks, five events. Akwa Ibom State University, FCIT.
 LOCATION:Conference Centre, Ikot Akpaden, Akwa Ibom State University
 DTSTART:20270215T090000Z
 DTEND:20270219T220000Z

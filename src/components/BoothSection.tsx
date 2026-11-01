@@ -219,7 +219,7 @@ export const BoothSection: React.FC = () => {
                 5 Partnership Tiers
               </span>
               <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
-                5 Sector Tracks
+                4 Sector Tracks
               </span>
               <span style={{ background: '#ffffff', border: '1px solid #d1d5db', padding: '3px 8px', borderRadius: '4px', fontWeight: 600 }}>
                 Category Exclusivity

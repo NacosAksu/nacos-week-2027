@@ -129,8 +129,8 @@ export const Navbar: React.FC = () => {
             {activeDropdown === 'programme' && (
               <div className="nav-dropdown__menu" role="menu">
                 <Link to="/tracks" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
-                  <div className="nav-dropdown__item-title">5 Industry Tracks</div>
-                  <div className="nav-dropdown__item-desc">Energy, Fintech, Oil &amp; Gas, Medicine, Technology</div>
+                  <div className="nav-dropdown__item-title">4 Industry Tracks</div>
+                  <div className="nav-dropdown__item-desc">Energy, Finance, Oil &amp; Gas, Medicine</div>
                 </Link>
                 <Link to="/programme" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
                   <div className="nav-dropdown__item-title">Programme</div>
@@ -270,7 +270,7 @@ export const Navbar: React.FC = () => {
                 </button>
                 {mobileGroup === 'programme' && (
                   <div className="site-header__mobile-sub">
-                    <NavLink to="/tracks" onClick={closeMenu}>5 Industry Tracks</NavLink>
+                    <NavLink to="/tracks" onClick={closeMenu}>4 Industry Tracks</NavLink>
                     <NavLink to="/programme" onClick={closeMenu}>Programme</NavLink>
                     <NavLink to="/hackathon" onClick={closeMenu}>Hackathon</NavLink>
                   </div>

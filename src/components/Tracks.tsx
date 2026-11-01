@@ -22,10 +22,10 @@ export const Tracks: React.FC = () => {
               <span className="deck-eyebrow__num">03</span>
               <span className="deck-eyebrow__text">Sector Specializations</span>
             </div>
-            <h2 id="tracks-title" className="h2">Five tracks. One university.</h2>
+            <h2 id="tracks-title" className="h2">Four tracks. One university.</h2>
           </div>
           <p className="lead">
-            Every pillar of the week, from the hackathon problem briefs to the Tech Conference panels, is organised around five sectors that shape the regional and national economy.
+            Every pillar of the week, from the hackathon problem briefs to the Tech Conference panels, is organised around four sectors that shape the regional and national economy, each converging with computing.
           </p>
         </header>
 

@@ -40,7 +40,7 @@ export const Programme: React.FC<{ asPage?: boolean }> = ({ asPage = false }) =>
                 {programme.hackathon || "4-week bootcamp before the week"}
               </p>
               <h3 className="pillar__name">Hackathon (Innovation Bootcamp)</h3>
-              <p className="pillar__sub">4-week build across 5 industry tracks</p>
+              <p className="pillar__sub">4-week build across 4 industry tracks</p>
               <p>
                 Student teams build real solutions against briefs set by sector sponsors. Final projects are judged live on stage at the Tech Conference, where the winners are decided.
               </p>
@@ -65,7 +65,7 @@ export const Programme: React.FC<{ asPage?: boolean }> = ({ asPage = false }) =>
                 {programme.conference || "Conference Centre"}
               </p>
               <h3 className="pillar__name">Tech Conference Day</h3>
-              <p>Keynotes, plenary panels in Energy, FinTech, Oil &amp; Gas, Medicine, and Technology. Hackathon project exhibition and live judging.</p>
+              <p>Keynotes and panels in Energy, FinTech, Oil &amp; Gas and Medicine. Hackathon project exhibition and live judging.</p>
               <Link to="/programme" className="link" style={{ fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginTop: 'var(--space-xs)' }}>
                 View conference agenda &rarr;
               </Link>

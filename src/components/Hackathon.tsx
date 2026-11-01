@@ -32,7 +32,7 @@ export const Hackathon: React.FC<{ asPage?: boolean }> = ({ asPage = false }) =>
           </p>
           <ul className="facts">
             <li><strong>Format</strong> Innovation Bootcamp, 4 weeks</li>
-            <li><strong>Tracks</strong> Energy, Finance, Oil &amp; Gas, Medicine, Technology</li>
+            <li><strong>Tracks</strong> Energy, Finance, Oil &amp; Gas, Medicine</li>
             <li><strong>Judging</strong> Demo day in front of the judges on Conference Day</li>
             <li><strong>Safeguard</strong> Students retain full ownership of their intellectual property</li>
           </ul>
