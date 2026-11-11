@@ -21,3 +21,6 @@ vite.config.js
 
 # Raw assets
 NACOS AKSU Pitch Deck Presentation.pdf
+
+# Rendered email HTML (npm run email:export)
+emails/out/

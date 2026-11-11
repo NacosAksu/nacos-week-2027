@@ -12,7 +12,8 @@ emails are sent from whichever account deploys the script.
 1. Go to [sheets.new](https://sheets.new) and name the file `NACOS Week 2027 Registrations`.
 2. Open **Extensions → Apps Script**.
 3. Delete everything in `Code.gs`, then paste in all of [registration.gs](registration.gs).
-4. In the `EVENT` settings near the top, change `site` to the live website address.
+4. Click **+** next to **Files → Script**, name it `email-templates`, delete what's in it, and paste in
+   all of [email-templates.gs](email-templates.gs). This holds the email designs.
 5. Click **Save**.
 
 ## 2. Run setup once
@@ -44,6 +45,36 @@ forms: {
 ```
 
 Commit and push. Then register once on the live site with your own email to test.
+
+## Emails
+
+The email designs live in [/emails](../emails) as React Email templates. Apps Script can't run
+React, so `npm run email:export` renders them into [email-templates.gs](email-templates.gs) with
+placeholders (`%%FIRST%%`, `%%ID%%`, ...) that `registration.gs` fills in for each person.
+
+**After changing any email:** run `npm run email:export`, then `npm run email:test`, then paste the
+new `email-templates.gs` over the old one in Apps Script and deploy a new version (see below).
+Preview the designs while you work with `npm run email` (opens localhost:3001).
+
+**Sent automatically:** the registration confirmation and the volunteer confirmation.
+
+**Bulk emails** are sent by hand: in the Apps Script editor pick the function in the dropdown and
+click **Run**. Each run sends until the day's limit or about 5 minutes, then stops. Run it again
+(the next day if the limit was hit) and it carries on where it left off. Every person's status is
+written to its own column, so nobody gets the same email twice. **View → Logs** shows how many
+went out and how many are still waiting.
+
+| Function | Who gets it | Before running |
+|---|---|---|
+| `sendProgrammeAnnouncement` | Everyone in **Registrations** | Nothing. |
+| `sendReminder7Days` / `sendReminder1Day` | Everyone in **Registrations** | Fill `reminder` in [emails/_data/campaigns.ts](../emails/_data/campaigns.ts) with the real dates and day-by-day schedule, then export and paste. |
+| `sendPartnerInvites` | Each row in **Partner Outreach** (Company, Contact name, Email) | Add the companies. Edit who signs it in `campaigns.ts`. |
+| `sendAwardInvites` | Each row in **Award Night Guests** (Guest name, Email, Seats, Nomination) | Fill `awardNight` in `campaigns.ts`, export and paste. Leave Nomination empty for guests who aren't nominated. |
+
+The reminder and award emails are not built until their details are filled in. Until then,
+their functions stop with a message and send nothing, so no one gets placeholder dates.
+Send yourself a test first: add a row with your own email, run the function, check the email,
+then add everyone else.
 
 ## Things to know
 
