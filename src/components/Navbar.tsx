@@ -76,6 +76,14 @@ export const Navbar: React.FC = () => {
   const isPartnersActive = ['/partner', '/booth', '/booths', '/exhibit'].some(path => location.pathname.startsWith(path));
   const isFestivalActive = ['/about', '/faq', '/auth', '/login', '/signin'].some(path => location.pathname.startsWith(path));
 
+  // Full-screen phone menu: freeze the page (and smooth scroll) behind it
+  useEffect(() => {
+    const lenis = (window as unknown as { lenis?: { stop(): void; start(): void } }).lenis;
+    document.documentElement.classList.toggle('menu-open', isOpen);
+    if (isOpen) lenis?.stop(); else lenis?.start();
+    return () => { document.documentElement.classList.remove('menu-open'); lenis?.start(); };
+  }, [isOpen]);
+
   useEffect(() => {
     if (!isOpen) return;
     setMobileGroup(
@@ -253,7 +261,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Navigation Drawer */}
       {isOpen && (
-        <div className="site-header__mobile-menu" role="dialog" aria-modal="true">
+        <div className="site-header__mobile-menu" role="dialog" aria-modal="true" aria-label="Menu" data-lenis-prevent>
           <div className="wrap site-header__mobile-inner">
             <nav className="site-header__mobile-nav">
               <NavLink to="/" end onClick={closeMenu}>Home</NavLink>
@@ -318,6 +326,11 @@ export const Navbar: React.FC = () => {
 
               <NavLink to="/auth" onClick={closeMenu}>My Pass</NavLink>
             </nav>
+
+            <div className="site-header__mobile-foot">
+              <Link to="/register" className="tf-pill" onClick={closeMenu}>Register for NACOS Week</Link>
+              <p>{siteConfig.event.datesLabel || 'February 2027'} · Ikot Akpaden</p>
+            </div>
           </div>
         </div>
       )}

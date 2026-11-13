@@ -129,12 +129,107 @@ export function useLenisScrollTrigger() {
         const heroBtns = document.querySelectorAll('.hero__actions .btn, .hero__btn-primary, .hero__btn-secondary');
         const heroCountdown = document.querySelector('.hero .countdown');
 
-        if (heroTitle) {
-          gsap.fromTo(
-            heroTitle,
-            { y: 35, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.85, delay: 0.1, ease: 'power3.out' }
-          );
+        // Wraps each word (or letter) of an element's text in spans once, keeping nested spans like .tf-dim
+        const split = (el: Element, by: 'word' | 'char') => {
+          if ((el as HTMLElement).dataset.split) return el.querySelectorAll('.sw');
+          (el as HTMLElement).dataset.split = by;
+          const walk = (node: Node) => {
+            [...node.childNodes].forEach((c) => {
+              if (c.nodeType === Node.TEXT_NODE) {
+                const frag = document.createDocumentFragment();
+                (c.textContent || '').split(/(\s+)/).forEach((part) => {
+                  if (!part) return;
+                  if (/^\s+$/.test(part)) { frag.append(part); return; }
+                  const outer = document.createElement('span');
+                  outer.className = 'sw-mask';
+                  if (by === 'char') {
+                    [...part].forEach((ch) => { const s = document.createElement('span'); s.className = 'sw'; s.textContent = ch; outer.append(s); });
+                  } else {
+                    const s = document.createElement('span'); s.className = 'sw'; s.textContent = part; outer.append(s);
+                  }
+                  frag.append(outer);
+                });
+                c.replaceWith(frag);
+              } else if (c.nodeType === Node.ELEMENT_NODE && !(c as Element).matches('svg')) walk(c);
+            });
+          };
+          walk(el);
+          return el.querySelectorAll('.sw');
+        };
+
+        // Hero: letters rise out of a mask on load, then the hero sinks and fades as you scroll past it
+        if (heroTitle && heroTitle.classList.contains('tf-hero__title')) {
+          heroTitle.classList.add('is-split');
+          gsap.fromTo(split(heroTitle, 'char'), { yPercent: 110 }, { yPercent: 0, duration: 1.1, stagger: 0.04, delay: 0.15, ease: 'expo.out' });
+          gsap.fromTo('.tf-hero__center > :not(#hero-title)', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.08, delay: 0.45, ease: 'power3.out' });
+          gsap.fromTo('.tf-hero__meta', { opacity: 0 }, { opacity: 1, duration: 1, delay: 0.9 });
+          const out = { trigger: '.tf-hero', start: 'top top', end: 'bottom top', scrub: true };
+          gsap.to('.tf-hero__center', { yPercent: 18, scale: 0.94, opacity: 0.15, ease: 'none', scrollTrigger: out });
+          gsap.to('.tf-hero__photos', { yPercent: 22, ease: 'none', scrollTrigger: out });
+          gsap.to('.tf-liquid', { yPercent: 10, ease: 'none', scrollTrigger: out });
+        } else if (heroTitle) {
+          gsap.fromTo(heroTitle, { y: 35, opacity: 0 }, { y: 0, opacity: 1, duration: 0.85, delay: 0.1, ease: 'power3.out' });
+        }
+
+        // Big statements light up word by word as they move through the screen
+        document.querySelectorAll('.tf-statement').forEach((el) => {
+          gsap.fromTo(split(el, 'word'), { opacity: 0.12 }, {
+            opacity: 1, stagger: 0.1, ease: 'none',
+            scrollTrigger: { trigger: el, start: 'top 85%', end: 'bottom 45%', scrub: 0.6 }
+          });
+        });
+
+        // Section titles: words slide up out of a mask
+        document.querySelectorAll('.tf-title, .tf-closer__title, .tf-agenda__mark').forEach((el) => {
+          el.classList.add('is-split');
+          gsap.fromTo(split(el, 'word'), { yPercent: 115 }, {
+            yPercent: 0, duration: 1, stagger: 0.07, ease: 'expo.out',
+            scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+          });
+        });
+
+        // Eyebrows, leads and links fade up
+        gsap.utils.toArray<HTMLElement>('.tf-eyebrow, .tf-head__side, .tf-about__note, .tf-closer__sub, .tf-closer .tf-actions').forEach((el) => {
+          gsap.fromTo(el, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
+        });
+
+        // Cards, people, logos, agenda rows and FAQ rows arrive in a quick cascade, in rows
+        ScrollTrigger.batch('.tf-card, .tf-person, .tf-logos > li, .tf-agenda > li, .tf-faq__list details, .tf-stats li, .tf-facts > *', {
+          start: 'top 90%',
+          once: true,
+          onEnter: (els) => gsap.fromTo(els, { y: 48, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.09, ease: 'power3.out', overwrite: true })
+        });
+        gsap.set('.tf-card, .tf-person, .tf-logos > li, .tf-agenda > li, .tf-faq__list details, .tf-stats li, .tf-facts > *', { opacity: 0 });
+
+        // Event photos unveil upward
+        gsap.utils.toArray<HTMLElement>('.tf-card__photo').forEach((el) => {
+          gsap.fromTo(el, { clipPath: 'inset(100% 0% 0% 0% round 8px)' }, {
+            clipPath: 'inset(0% 0% 0% 0% round 8px)', duration: 1.2, ease: 'expo.out',
+            scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+          });
+        });
+
+        // Stats count up once
+        document.querySelectorAll<HTMLElement>('.tf-stats__n').forEach((n) => {
+          const raw = n.dataset.raw || n.textContent || '';
+          n.dataset.raw = raw;
+          const target = parseInt(raw.replace(/[^\d]/g, ''), 10);
+          if (!target) return;
+          const plus = raw.includes('+') ? '+' : '';
+          const o = { v: 0 };
+          gsap.to(o, {
+            v: target, duration: 1.8, ease: 'power2.out',
+            scrollTrigger: { trigger: n, start: 'top 90%', once: true },
+            onUpdate: () => { n.textContent = Math.round(o.v).toLocaleString('en-US') + plus; }
+          });
+        });
+
+        // Closing call to action grows in as it scrolls up
+        const closer = document.querySelector('.tf-closer');
+        if (closer) {
+          gsap.fromTo(closer.querySelector('.tf-closer__inner, .wrap') || closer, { scale: 0.92 }, {
+            scale: 1, ease: 'none', scrollTrigger: { trigger: closer, start: 'top bottom', end: 'top 30%', scrub: true }
+          });
         }
         if (heroMeta) {
           gsap.fromTo(
