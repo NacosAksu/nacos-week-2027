@@ -1,31 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FeatureStack } from './FeatureStack';
+import { Squiggle, Arrow } from './Hero';
 import { trackDetails } from '../pages/TracksPage';
 
-// Card tint and panel colour per track, cycling through the brand palette
+// White cards on the grey section; panels alternate black and NACOS deep green
 const looks = [
-  { card: 'fc-pale', panel: 'fv-deep' },
   { card: 'fc-white', panel: 'fv-black' },
-  { card: 'fc-pale', panel: 'fv-green' },
-  { card: 'fc-white', panel: 'fv-deep' },
-  { card: 'fc-pale', panel: 'fv-black' }
+  { card: 'fc-white', panel: 'fv-deep' }
 ];
 
 export const Tracks: React.FC = () => {
   return (
-    <section className="section tracks" id="tracks" aria-labelledby="tracks-title">
+    <section className="tf-section tf-section--grey" id="tracks" aria-labelledby="tracks-title">
       <div className="wrap">
-        <header className="section__head section__head--split">
+        <header className="tf-head">
           <div>
-            <div className="deck-eyebrow">
-              <span className="deck-eyebrow__num">03</span>
-              <span className="deck-eyebrow__text">Sector Specializations</span>
-            </div>
-            <h2 id="tracks-title" className="h2">Four tracks. One university.</h2>
+            <p className="tf-eyebrow"><Squiggle /> Tracks</p>
+            <h2 id="tracks-title" className="tf-title">Four tracks. One university.</h2>
           </div>
-          <p className="lead">
-            Every pillar of the week, from the hackathon problem briefs to the Tech Conference panels, is organised around four sectors that shape the regional and national economy, each converging with computing.
+          <p className="tf-head__lead">
+            Every part of the week, from the hackathon briefs to the conference panels, is organised around four sectors that shape the regional and national economy, each converging with computing.
           </p>
         </header>
 
@@ -67,8 +62,8 @@ export const Tracks: React.FC = () => {
           <p className="tracks__note">
             Track partners set real-world problem statements for the hackathon. Partner announcements are ongoing.
           </p>
-          <Link to="/tracks" className="btn btn--outline tracks__btn">
-            Explore All Track Problem Statements &rarr;
+          <Link to="/tracks" className="tf-link">
+            <Arrow /> All track problem statements
           </Link>
         </div>
       </div>

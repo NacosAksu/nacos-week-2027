@@ -1,33 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Arrow } from './Hero';
 
 export const ClosingCTA: React.FC = () => {
   return (
-    <section className="closer" aria-labelledby="closer-title">
-      <div className="wrap closer__inner">
-        <p className="closer__tag">NACOS Week 2027 &bull; Confluence</p>
-        <h2 id="closer-title" className="closer__title">
-          Be part of the Confluence.
-        </h2>
-        <p className="closer__desc">
-          Connect your organisation with emerging talent, practical innovation, and the next generation of technology-enabled professionals at Akwa Ibom State University.
-        </p>
-        <div className="closer__actions">
-          <Link to="/register" className="btn btn--deep">
-            Register &rarr;
-          </Link>
-          <Link to="/partner" className="btn btn--outline">
-            Partner with Us
-          </Link>
-        </div>
-        <div className="closer__contacts">
-          <span>0903 505 6134</span>
-          <span>&bull;</span>
-          <span>0906 484 7152</span>
-          <span>&bull;</span>
-          <span>hello@nacosaksu.com.ng</span>
-          <span>&bull;</span>
-          <span>Ikot Akpaden, Akwa Ibom State</span>
+    <section className="tf-closer" aria-labelledby="closer-title">
+      <div className="tf-glow" aria-hidden="true"><span /><span /><span /></div>
+      <div className="wrap tf-closer__inner">
+        <h2 id="closer-title" className="tf-closer__title">Join us in February.</h2>
+        <p className="tf-closer__sub">Register for NACOS Week 2027, or bring your organisation in as a partner.</p>
+        <div className="tf-actions tf-actions--center">
+          <Link to="/register" className="tf-pill"><Arrow /> Register</Link>
+          <Link to="/partner" className="tf-pill tf-pill--ghost">Partner with us</Link>
         </div>
       </div>
     </section>

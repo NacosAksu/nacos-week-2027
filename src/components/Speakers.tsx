@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { siteConfig } from '../config/siteConfig';
+import { Squiggle, Arrow } from './Hero';
 
 interface SpeakerItem {
   name: string;
@@ -68,70 +69,36 @@ export const Speakers: React.FC = () => {
   };
 
   return (
-    <section className="section speakers" id="speakers" aria-labelledby="speakers-title">
-      <div className="wrap">
-        <header className="section__head section__head--split">
-          <div>
-            <p className="tag">Voices &amp; Mentors</p>
-            <h2 id="speakers-title" className="h2">Speakers, Mentors and Judges</h2>
-          </div>
-          <p className="lead">
-            Speakers from each of the four tracks. Names will be announced here.
+    <section className="tf-section" id="speakers" aria-labelledby="speakers-title">
+      <div className="wrap tf-speakers">
+        <div className="tf-speakers__intro">
+          <p className="tf-eyebrow"><Squiggle /> Speakers</p>
+          <h2 id="speakers-title" className="tf-title">Speakers, mentors and judges</h2>
+          <p className="tf-head__lead">
+            Speakers from each of the four tracks. Names will be announced here. Know a tech leader or alumnus who should take the stage?
           </p>
-        </header>
+          <button type="button" className="tf-link" onClick={() => setModalOpen(true)}>
+            <Arrow /> Suggest a speaker or judge
+          </button>
+        </div>
 
-        <ul className="people people--speakers">
+        <ul className="tf-people">
           {speakersList.map((s, idx) => (
-            <li className="person" key={idx}>
-              {s.photo ? (
-                <div className={`person__photo-wrap${s.isRevealed ? '' : ' person__photo-wrap--hidden'}`}>
-                  <img
-                    src={s.photo}
-                    alt={s.isRevealed ? s.name : `${s.track} speaker, to be announced`}
-                    className="person__photo-img"
-                    loading="lazy"
-                  />
-                  <span className="person__track-badge">{s.track}</span>
-                </div>
-              ) : (
-                <div
-                  className="ph ph--square ph--mystery person__photo"
-                  role="img"
-                  aria-label={`${s.track} speaker revealing soon`}
-                >
-                  <span className="ph__label">Revealing soon</span>
-                  <span className="person__track-badge">{s.track}</span>
-                </div>
-              )}
-              <h3 className="person__name" style={{ fontSize: 'var(--text-base)', marginTop: 'var(--space-xs)' }}>
-                {s.name}
-              </h3>
-              {s.role && (
-                <p className="person__role" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-ink-muted)' }}>
-                  {s.role}
-                </p>
-              )}
-              {s.topic && (
-                <p className="person__topic" style={{ fontSize: '0.78rem', color: 'var(--brand-deep)', fontWeight: 500, marginTop: 'var(--space-2xs)' }}>
-                  Topic: {s.topic}
-                </p>
-              )}
+            <li className="tf-person" key={idx}>
+              <div className={`tf-person__photo${s.isRevealed ? '' : ' is-hidden'}`}>
+                <img
+                  src={s.photo}
+                  alt={s.isRevealed ? s.name : `${s.track} speaker, to be announced`}
+                  loading="lazy"
+                />
+              </div>
+              <h3 className="tf-person__name">{s.name}</h3>
+              <p className="tf-person__org">{s.track}</p>
+              {s.role && <p className="tf-person__role">{s.role}</p>}
+              {s.topic && <p className="tf-person__role">Topic: {s.topic}</p>}
             </li>
           ))}
         </ul>
-
-        <div className="speakers__cta-box">
-          <p className="speakers__ask">
-            Know a tech leader or alumnus who should take the stage?
-          </p>
-          <button
-            type="button"
-            className="btn btn--outline btn--sm"
-            onClick={() => setModalOpen(true)}
-          >
-            Suggest a Speaker / Judge &rarr;
-          </button>
-        </div>
       </div>
 
       {/* Suggest Speaker Modal */}

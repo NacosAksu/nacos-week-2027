@@ -1,4 +1,6 @@
 import React from 'react';
+import { siteConfig } from '../config/siteConfig';
+import { Squiggle, Arrow } from './Hero';
 
 const faqItems = [
   {
@@ -31,19 +33,31 @@ const faqItems = [
   },
   {
     q: 'How does my company become a partner?',
-    a: 'See the tiers above, download the brochure, or write to the team. Payments go only to the NACOS AKSU student body account.'
+    a: 'See the partnership tiers on the Partner page, download the brochure, or write to the team. Payments go only to the NACOS AKSU student body account.'
   }
 ];
 
 export const FAQ: React.FC = () => {
   return (
-    <section className="section faq" id="faq" aria-labelledby="faq-title">
-      <div className="wrap faq__grid">
-        <h2 id="faq-title" className="h2">Questions</h2>
-        <div className="faq__list">
+    <section className="tf-section" id="faq" aria-labelledby="faq-title">
+      <div className="wrap tf-faq">
+        <div className="tf-faq__intro">
+          <p className="tf-eyebrow"><Squiggle /> FAQ</p>
+          <h2 id="faq-title" className="tf-title">FAQ</h2>
+          <p className="tf-head__lead">Still got questions? Write to us and we&apos;ll help.</p>
+          <a href={`mailto:${siteConfig.links.generalEmail || 'hello@nacosaksu.com.ng'}`} className="tf-link">
+            <Arrow /> Ask a question
+          </a>
+        </div>
+        <div className="tf-faq__list">
           {faqItems.map((item, idx) => (
             <details key={idx}>
-              <summary>{item.q}</summary>
+              <summary>
+                {item.q}
+                <svg viewBox="0 0 16 16" width="18" height="18" fill="none" aria-hidden="true">
+                  <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </summary>
               <p>{item.a}</p>
             </details>
           ))}

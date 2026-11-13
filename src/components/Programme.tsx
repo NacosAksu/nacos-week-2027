@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { siteConfig } from '../config/siteConfig';
+import { Squiggle, Arrow } from './Hero';
 import { ImageSlot } from './ImageSlot';
 
 // asPage: this section opens its own page, so its heading is the page's h1
@@ -8,133 +9,100 @@ export const Programme: React.FC<{ asPage?: boolean }> = ({ asPage = false }) =>
   const Heading = asPage ? 'h1' : 'h2';
   const { programme } = siteConfig;
 
+  const events = [
+    {
+      name: 'Hackathon',
+      photo: 'hackathon',
+      photoLabel: 'Hackathon teams at work',
+      photoW: '1600',
+      when: programme.hackathon || '4-week bootcamp before the week',
+      text: 'Student teams build solutions against briefs set by sector partners across the 4 industry tracks, then demo to the judges on Conference Day.',
+      to: '/hackathon'
+    },
+    {
+      name: 'Tech Conference Day',
+      photo: 'conference',
+      photoLabel: 'Tech Conference stage',
+      photoW: '1600',
+      when: programme.conference || 'Conference Centre',
+      text: 'Keynotes and panels in Energy, FinTech, Oil & Gas and Medicine, with the hackathon exhibition and live judging.'
+    },
+    {
+      name: 'Football Tournament',
+      photo: 'football',
+      photoLabel: 'Football tournament',
+      photoW: '1080',
+      when: programme.football || 'Open Pavilion / Football Stadium',
+      text: 'An open-crowd inter-faculty tournament drawing on the wider student body across campus.'
+    },
+    {
+      name: 'Fashion & Pageantry',
+      photo: 'fashion',
+      photoLabel: 'Fashion & Pageantry runway',
+      photoW: '1600',
+      when: programme.fashion || 'February 2027',
+      text: 'Crowns the Royal Council of NACOS AKSU, with runway, student creativity and the selection of campus ambassadors.'
+    },
+    {
+      name: 'Dinner & Award Night',
+      photo: 'dinner',
+      photoLabel: 'Dinner & Award Night',
+      photoW: '1600',
+      when: programme.dinner || 'February 2027',
+      text: 'A formal evening to dine, network and honour students for character, conduct, academic contribution and leadership.'
+    }
+  ];
+
   return (
-    <section className="section programme" id="programme" aria-labelledby="programme-title">
+    <section className="tf-section" id="programme" aria-labelledby="programme-title">
       <div className="wrap">
-        <header className="section__head section__head--split">
+        <header className="tf-head">
           <div>
-            <div className="deck-eyebrow">
-              <span className="deck-eyebrow__num">04</span>
-              <span className="deck-eyebrow__text">The Five Pillars</span>
-            </div>
-            <Heading id="programme-title" className="h2">Five Events. One Flagship Week.</Heading>
+            <p className="tf-eyebrow"><Squiggle /> What&apos;s on</p>
+            <Heading id="programme-title" className="tf-title">Five events. One week.</Heading>
           </div>
-          <p className="lead">
-            A hackathon, a tech conference, a football tournament, fashion and pageantry, and an awards dinner.
-          </p>
+          <div className="tf-head__side">
+            <p className="tf-head__lead">
+              A hackathon, a tech conference, a football tournament, fashion and pageantry, and an awards dinner.
+            </p>
+            {!asPage && <Link to="/programme" className="tf-link"><Arrow /> Full programme</Link>}
+          </div>
         </header>
 
-        <div className="pillars">
-          <article className="pillar pillar--feature">
-            <ImageSlot
-              src="/assets/photos/pillar-hackathon.jpg"
-              srcSet="/assets/photos/pillar-hackathon-800.jpg 800w, /assets/photos/pillar-hackathon.jpg 1600w"
-              sizes="(max-width: 699px) 100vw, 50vw"
-              label="Hackathon teams at work"
-              spec="1600 x 1000"
-              className="pillar__media"
-            />
-            <div className="pillar__body">
-              <div className="pillar__num">01 / Flagship Product</div>
-              <p className="pillar__when">
-                {programme.hackathon || "4-week bootcamp before the week"}
-              </p>
-              <h3 className="pillar__name">Hackathon (Innovation Bootcamp)</h3>
-              <p className="pillar__sub">4-week build across 4 industry tracks</p>
-              <p>
-                Student teams build real solutions against briefs set by sector sponsors. Final projects are judged live on stage at the Tech Conference, where the winners are decided.
-              </p>
-              <Link to="/hackathon" className="link" style={{ fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginTop: 'var(--space-xs)' }}>
-                How the hackathon works &rarr;
-              </Link>
+        <ul className="tf-cards">
+          {events.map((e, i) => (
+            <li className="tf-card" key={e.name}>
+              <div className="tf-card__top">
+                <h3 className="tf-card__title">{e.name}</h3>
+                <span className="tf-card__n">{String(i + 1).padStart(2, '0')}</span>
+              </div>
+              <ImageSlot
+                src={`/assets/photos/pillar-${e.photo}.jpg`}
+                srcSet={`/assets/photos/pillar-${e.photo}-800.jpg 800w, /assets/photos/pillar-${e.photo}.jpg ${e.photoW}w`}
+                sizes="(max-width: 639px) 100vw, (max-width: 999px) 50vw, 33vw"
+                label={e.photoLabel}
+                className="tf-card__photo"
+              />
+              <div className="tf-card__foot">
+                <p className="tf-card__when">{e.when}</p>
+                <p className="tf-card__text">{e.text}</p>
+                {e.to && (
+                  <Link to={e.to} className="tf-link"><Arrow /> How it works</Link>
+                )}
+              </div>
+            </li>
+          ))}
+          <li className="tf-card tf-card--dark">
+            <div className="tf-card__top">
+              <h3 className="tf-card__title">Want to be involved?</h3>
+              <Squiggle />
             </div>
-          </article>
-
-          <article className="pillar">
-            <ImageSlot
-              src="/assets/photos/pillar-conference.jpg"
-              srcSet="/assets/photos/pillar-conference-800.jpg 800w, /assets/photos/pillar-conference.jpg 1600w"
-              sizes="(max-width: 699px) 100vw, 50vw"
-              label="Tech Conference stage"
-              spec="1200 x 800"
-              className="pillar__media"
-            />
-            <div className="pillar__body">
-              <div className="pillar__num">02 / Conference</div>
-              <p className="pillar__when">
-                {programme.conference || "Conference Centre"}
-              </p>
-              <h3 className="pillar__name">Tech Conference Day</h3>
-              <p>Keynotes and panels in Energy, FinTech, Oil &amp; Gas and Medicine. Hackathon project exhibition and live judging.</p>
-              <Link to="/programme" className="link" style={{ fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginTop: 'var(--space-xs)' }}>
-                View conference agenda &rarr;
-              </Link>
+            <div className="tf-card__foot">
+              <Link to="/partner" className="tf-pill tf-pill--white"><Arrow /> Partner with us</Link>
+              <Link to="/volunteer" className="tf-link tf-link--light">Or join the volunteer crew</Link>
             </div>
-          </article>
-
-          <article className="pillar">
-            <ImageSlot
-              src="/assets/photos/pillar-football.jpg"
-              srcSet="/assets/photos/pillar-football-800.jpg 800w, /assets/photos/pillar-football.jpg 1080w"
-              sizes="(max-width: 699px) 100vw, 50vw"
-              label="Football tournament"
-              spec="1200 x 800"
-              className="pillar__media"
-            />
-            <div className="pillar__body">
-              <div className="pillar__num">03 / Sports</div>
-              <p className="pillar__when">
-                {programme.football || "Open Pavilion / Football Stadium"}
-              </p>
-              <h3 className="pillar__name">Football Tournament</h3>
-              <p>Open-crowd inter-faculty tournament drawing from the wider 30,000 student body across campus. Sportsmanship, community, and energy.</p>
-            </div>
-          </article>
-
-          <article className="pillar">
-            <ImageSlot
-              src="/assets/photos/pillar-fashion.jpg"
-              srcSet="/assets/photos/pillar-fashion-800.jpg 800w, /assets/photos/pillar-fashion.jpg 1600w"
-              sizes="(max-width: 699px) 100vw, 50vw"
-              label="Fashion & Pageantry runway"
-              spec="1200 x 800"
-              className="pillar__media"
-            />
-            <div className="pillar__body">
-              <div className="pillar__num">04 / Culture</div>
-              <p className="pillar__when">
-                {programme.fashion || "February 2027"}
-              </p>
-              <h3 className="pillar__name">Fashion &amp; Pageantry</h3>
-              <p>Crowns the Royal Council of NACOS AKSU. Runway elegance, student creativity, and selection of brand campus ambassadors.</p>
-            </div>
-          </article>
-
-          <article className="pillar">
-            <ImageSlot
-              src="/assets/photos/pillar-dinner.jpg"
-              srcSet="/assets/photos/pillar-dinner-800.jpg 800w, /assets/photos/pillar-dinner.jpg 1600w"
-              sizes="(max-width: 699px) 100vw, 50vw"
-              label="Dinner & Award Night"
-              spec="1200 x 800"
-              className="pillar__media"
-            />
-            <div className="pillar__body">
-              <div className="pillar__num">05 / Celebration</div>
-              <p className="pillar__when">
-                {programme.dinner || "February 2027"}
-              </p>
-              <h3 className="pillar__name">Dinner &amp; Award Night</h3>
-              <p>A formal evening to dine, network, and honour students who have shown exceptional character, conduct, academic contribution, and leadership.</p>
-            </div>
-          </article>
-        </div>
-
-        <div className="programme__footer" style={{ textAlign: 'center', marginTop: 'var(--space-2xl)' }}>
-          <Link to="/programme" className="btn btn--outline">
-            View Complete 5-Day Programme &rarr;
-          </Link>
-        </div>
+          </li>
+        </ul>
       </div>
     </section>
   );

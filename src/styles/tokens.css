@@ -1,34 +1,40 @@
 /* NACOS Week 2027 design tokens.
- * Colours and type come from the NACOS Week 2027 brand guidelines.
+ * Layout and type follow the Think Forward Summit style: black and white
+ * sections, zinc greys, Inter at 600 with tight tracking, pill buttons.
+ * The NACOS greens stay as the accent.
  */
 :root {
   /* Core palette */
   --brand-green: #089002;      /* active signal colour */
   --brand-deep: #005012;       /* depth and authority */
-  --brand-off: #F5F7F2;        /* breathing room */
+  --brand-off: #FAFAFA;        /* light surface, and text on black */
   /* Supporting palette */
-  --brand-pale: #E6F2E3;
+  --brand-pale: #F4F4F5;       /* zinc card grey */
   --brand-soft: #78B978;
-  --brand-black: #0B0F0C;
+  --brand-black: #000000;
   --brand-accent: var(--brand-green);
+  --accent-pastel: #B8F0A6;    /* pill buttons, like the reference's lavender */
+  --accent-pastel-hover: #9FE58A;
+  --accent-ink: #3E8E2E;       /* small accent text on white (squiggles, numbers) */
 
   /* Semantic colours */
-  --color-paper: var(--brand-off);
+  --color-paper: #FFFFFF;
   --color-paper-card: #FFFFFF;
   --color-paper-2: var(--brand-pale);
-  --color-ink: var(--brand-black);
-  --color-ink-muted: #4A554E;
-  --color-ink-faint: #738077;
-  --color-rule: rgba(11, 15, 12, 0.10);
-  --color-rule-subtle: rgba(11, 15, 12, 0.05);
+  --color-ink: #000000;
+  --color-ink-muted: #52525B;
+  --color-ink-faint: #71717A;
+  --color-ink-ghost: #A1A1AA;
+  --color-rule: #E4E4E7;
+  --color-rule-subtle: #F4F4F5;
   --color-rule-green: rgba(0, 80, 18, 0.14);
-  
-  --color-night: var(--brand-black);
-  --color-night-card: #121814;
-  --color-night-2: #162019;
-  --color-night-rule: rgba(245, 247, 242, 0.12);
-  --color-on-night: var(--brand-off);
-  --color-on-night-muted: #B8C4BA;
+
+  --color-night: #000000;
+  --color-night-card: #0E0E10;
+  --color-night-2: #18181B;
+  --color-night-rule: rgba(255, 255, 255, 0.12);
+  --color-on-night: #FAFAFA;
+  --color-on-night-muted: #A1A1AA;
   
   --color-forest: var(--brand-deep);
   --color-forest-card: #043810;
@@ -44,8 +50,8 @@
   --color-error: #B91C1C;
 
   /* Type */
-  --font-display: "Montserrat", system-ui, -apple-system, sans-serif;
-  --font-body: "Poppins", system-ui, -apple-system, sans-serif;
+  --font-display: "Inter", system-ui, -apple-system, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
@@ -54,7 +60,9 @@
   --text-xl: clamp(1.25rem, 1.1rem + 0.8vw, 1.5rem);
   --text-2xl: clamp(1.5rem, 1.3rem + 1.2vw, 2.25rem);
   --text-3xl: clamp(2rem, 1.5rem + 2.5vw, 3.25rem);
-  --text-display: clamp(2.75rem, 1.5rem + 6vw, 6.5rem);
+  --text-display: clamp(3.75rem, 1rem + 12.5vw, 12rem);
+  --text-mega: clamp(3rem, 1rem + 6.4vw, 6.875rem);   /* section titles, 110px max */
+  --text-statement: clamp(1.625rem, 1rem + 2vw, 3rem); /* two-tone statements, 48px max */
   --text-stat: clamp(2.5rem, 1.8rem + 3.5vw, 4.5rem);
 
   /* Space (4pt) */
@@ -72,10 +80,10 @@
   --max: 76rem;
 
   /* Shape & Borders */
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 12px;
+  --radius-lg: 12px;
   --radius-pill: 9999px;
   --rule: 1px solid var(--color-rule);
   --rule-night: 1px solid var(--color-night-rule);

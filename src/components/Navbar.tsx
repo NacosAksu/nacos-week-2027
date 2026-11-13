@@ -92,7 +92,7 @@ export const Navbar: React.FC = () => {
         {/* Brand / Logo */}
         <Link to="/" className="site-header__brand" aria-label="NACOS Week 2027 Home" onClick={closeMenu}>
           <img
-            src="/assets/brand/nw27-wordmark-v3.png"
+            src="/assets/brand/nw27-wordmark-v3-reversed.png"
             alt="NACOS Week 2027"
             width="280"
             height="56"

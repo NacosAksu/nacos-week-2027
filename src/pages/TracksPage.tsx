@@ -107,7 +107,7 @@ export const TracksPage: React.FC = () => {
               </h1>
             </div>
             <p className="lead">
-              Every pillar of NACOS Week 2027, from the Confluence Hackathon problem statements to the Tech Conference keynotes, is anchored around five core industry sectors.
+              Every pillar of NACOS Week 2027, from the Confluence Hackathon problem statements to the Tech Conference keynotes, is anchored around four industry sectors, each converging with computing.
             </p>
           </header>
 
