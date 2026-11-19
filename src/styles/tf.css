@@ -557,14 +557,7 @@ html.menu-open, html.menu-open body { overflow: hidden; }
 .is-split .sw-mask { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.12em; margin-bottom: -0.12em; }
 .tf-hero__title.is-split .sw-mask { padding-inline: 0.04em; margin-inline: -0.04em; }
 
-/* Gallery orbit (React Bits OrbitImages) */
-.tf-orbit { margin-top: clamp(1.5rem, 4vw, 3rem); }
-.tf-orbit .orbit-container { max-width: 1100px; }
-.tf-orbit__center {
-  font-size: clamp(1.75rem, 0.8rem + 4vw, 4.5rem);
-  font-weight: 600;
-  letter-spacing: -0.06em;
-  line-height: 1;
-  color: var(--color-ink);
-}
-.tf-orbit__hint { margin-top: 0.75rem; text-align: center; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-ink-faint); }
+/* Gallery ring (React Bits CircularCarousel) */
+.tf-ring { position: relative; height: clamp(26rem, 52vw, 36rem); margin-top: clamp(1.5rem, 4vw, 3rem); color: var(--color-ink); }
+.tf-ring .circular-carousel__title { font-size: 0.9375rem; font-weight: 500; letter-spacing: -0.02em; max-width: 36ch; }
+.tf-ring__hint { margin-top: 0.75rem; text-align: center; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-ink-faint); }

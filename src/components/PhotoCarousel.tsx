@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import OrbitImages from './OrbitImages';
+import CircularCarousel from './CircularCarousel';
 
 interface Slide {
   src: string;
@@ -145,14 +145,14 @@ const slides: Slide[] = [
   }
 ];
 
-// Photos that orbit: full-frame shots only (the quote card and contain-fit shots don't crop to a square)
-const orbitSlides = slides.map((s, i) => ({ ...s, i })).filter((s) => !s.contain).slice(0, 10);
-const orbitImages = orbitSlides.map((s) => ({ src: s.src.replace('.jpg', '-800.jpg'), alt: s.alt }));
+// Ring photos: full-frame shots only (the quote card and contain-fit shots don't crop to a square)
+const ringSlides = slides.map((s, i) => ({ ...s, i })).filter((s) => !s.contain);
+const ringItems = ringSlides.map((s) => ({ src: s.src.replace('.jpg', '-800.jpg'), alt: s.alt, title: s.alt }));
 
 export const PhotoCarousel: React.FC = () => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  // Phones: a tighter, taller orbit so the photos stay a usable size
+  // Phones: the whole ring must fit the screen width, so 10 photos keeps each one a usable size
   const [isPhone, setIsPhone] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches);
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)');
@@ -190,23 +190,20 @@ export const PhotoCarousel: React.FC = () => {
             </p>
           </header>
 
-          <div className="tf-orbit">
-            <OrbitImages
-              images={isPhone ? orbitImages.slice(0, 7) : orbitImages}
-              shape="ellipse"
-              radiusX={isPhone ? 230 : 340}
-              radiusY={isPhone ? 90 : 80}
-              rotation={-8}
-              duration={30}
-              itemSize={isPhone ? 110 : 90}
-              depth={0.6}
-              showPath
-              pathColor="rgba(8, 144, 2, 0.35)"
-              onItemClick={(index) => setLightboxIndex(orbitSlides[index].i)}
-              centerContent={<p className="tf-orbit__center">Moments</p>}
+          <div className="tf-ring">
+            <CircularCarousel
+              items={isPhone ? ringItems.slice(0, 10) : ringItems}
+              preset="cylinder"
+              intro="rise"
+              cardWidth={220}
+              aspectRatio={1}
+              speed={14}
+              fadeColor="#FFFFFF"
+              captions
+              onItemClick={(_item: unknown, index: number) => setLightboxIndex(ringSlides[index].i)}
             />
-            <p className="tf-orbit__hint">Drag to spin. Tap a photo to open it.</p>
           </div>
+          <p className="tf-ring__hint">Drag to spin. Tap a photo to open it.</p>
         </div>
       </section>
 
