@@ -1,4 +1,5 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import OrbitImages from './OrbitImages';
 
 interface Slide {
   src: string;
@@ -144,75 +145,21 @@ const slides: Slide[] = [
   }
 ];
 
+// Photos that orbit: full-frame shots only (the quote card and contain-fit shots don't crop to a square)
+const orbitSlides = slides.map((s, i) => ({ ...s, i })).filter((s) => !s.contain).slice(0, 10);
+const orbitImages = orbitSlides.map((s) => ({ src: s.src.replace('.jpg', '-800.jpg'), alt: s.alt }));
+
 export const PhotoCarousel: React.FC = () => {
-  const carRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLUListElement>(null);
-  const [current, setCurrent] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const isPaused = useRef(false);
-  const isVisible = useRef(false);
 
-  const goTo = useCallback((index: number) => {
-    const nextIdx = (index + slides.length) % slides.length;
-    setCurrent(nextIdx);
-    if (trackRef.current) {
-      const slideNodes = trackRef.current.children;
-      if (slideNodes[nextIdx]) {
-        const targetEl = slideNodes[nextIdx] as HTMLElement;
-        trackRef.current.scrollTo({
-          left: targetEl.offsetLeft - (slideNodes[0] as HTMLElement).offsetLeft,
-          behavior: 'smooth'
-        });
-      }
-    }
-  }, []);
-
-  const handleScroll = useCallback(() => {
-    if (!trackRef.current) return;
-    const firstSlide = trackRef.current.children[0] as HTMLElement | undefined;
-    const slideWidth = firstSlide?.offsetWidth || 1;
-    const newIdx = Math.min(
-      slides.length - 1,
-      Math.max(0, Math.round(trackRef.current.scrollLeft / slideWidth))
-    );
-    if (newIdx !== current) {
-      setCurrent(newIdx);
-    }
-  }, [current]);
-
+  // Phones: a tighter, taller orbit so the photos stay a usable size
+  const [isPhone, setIsPhone] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 640px)').matches);
   useEffect(() => {
-    const car = carRef.current;
-    const track = trackRef.current;
-    if (!car || !track) return;
-
-    let timer: number | null = null;
-    const onScroll = () => {
-      if (timer) cancelAnimationFrame(timer);
-      timer = requestAnimationFrame(handleScroll);
-    };
-    track.addEventListener('scroll', onScroll, { passive: true });
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        isVisible.current = entries[0].isIntersecting;
-      },
-      { threshold: 0.3 }
-    );
-    observer.observe(car);
-
-    const autoInterval = setInterval(() => {
-      if (!isPaused.current && isVisible.current && !document.hidden && lightboxIndex === null) {
-        goTo(current + 1);
-      }
-    }, 6000);
-
-    return () => {
-      track.removeEventListener('scroll', onScroll);
-      if (timer) cancelAnimationFrame(timer);
-      observer.disconnect();
-      clearInterval(autoInterval);
-    };
-  }, [current, goTo, handleScroll, lightboxIndex]);
+    const mq = window.matchMedia('(max-width: 640px)');
+    const onChange = () => setIsPhone(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
 
   // Handle keyboard navigation for lightbox
   useEffect(() => {
@@ -243,75 +190,22 @@ export const PhotoCarousel: React.FC = () => {
             </p>
           </header>
 
-          <div
-            className="carousel"
-            data-carousel
-            ref={carRef}
-            aria-roledescription="carousel"
-            aria-label="Moments from earlier editions"
-            onPointerEnter={() => { isPaused.current = true; }}
-            onPointerLeave={() => { isPaused.current = false; }}
-            onFocusCapture={() => { isPaused.current = true; }}
-            onBlurCapture={() => { isPaused.current = false; }}
-          >
-            <ul className="carousel__track" ref={trackRef} data-carousel-track tabIndex={0}>
-              {slides.map((s, idx) => (
-                <li
-                  key={idx}
-                  className={`carousel__slide ${s.contain ? 'carousel__slide--contain' : ''}`}
-                  aria-roledescription="slide"
-                  aria-label={`${idx + 1} of ${slides.length}`}
-                  onClick={() => setLightboxIndex(idx)}
-                  style={{ cursor: 'pointer' }}
-                  title="Click to view full photo"
-                >
-                  <img
-                    src={s.src}
-                    srcSet={s.srcset}
-                    sizes="(max-width: 1240px) 100vw, 1200px"
-                    alt={s.alt}
-                    style={s.style}
-                    loading={idx === 0 ? 'eager' : 'lazy'}
-                    decoding="async"
-                  />
-                  <div className="carousel__slide-hint" aria-hidden="true">
-                    <span>Click to expand</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-
-            <div className="carousel__controls">
-              <button
-                className="carousel__btn"
-                type="button"
-                data-carousel-prev
-                onClick={() => goTo(current - 1)}
-                aria-label="Previous photo"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="15 18 9 12 15 6" />
-                </svg>
-              </button>
-
-              <div className="carousel__dots" data-carousel-dots>
-                <span className="carousel__count">
-                  {current + 1} / {slides.length}
-                </span>
-              </div>
-
-              <button
-                className="carousel__btn"
-                type="button"
-                data-carousel-next
-                onClick={() => goTo(current + 1)}
-                aria-label="Next photo"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </button>
-            </div>
+          <div className="tf-orbit">
+            <OrbitImages
+              images={isPhone ? orbitImages.slice(0, 7) : orbitImages}
+              shape="ellipse"
+              radiusX={isPhone ? 230 : 340}
+              radiusY={isPhone ? 90 : 80}
+              rotation={-8}
+              duration={30}
+              itemSize={isPhone ? 110 : 90}
+              depth={0.6}
+              showPath
+              pathColor="rgba(8, 144, 2, 0.35)"
+              onItemClick={(index) => setLightboxIndex(orbitSlides[index].i)}
+              centerContent={<p className="tf-orbit__center">Moments</p>}
+            />
+            <p className="tf-orbit__hint">Drag to spin. Tap a photo to open it.</p>
           </div>
         </div>
       </section>
