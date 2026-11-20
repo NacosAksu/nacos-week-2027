@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageSlot } from './ImageSlot';
+import ProfileCard from './ProfileCard';
 
 interface TeamMember {
   name: string;
@@ -46,22 +46,32 @@ export const Team: React.FC = () => {
         <header className="section__head">
           <h2 id="team-title" className="h2">The people behind the week</h2>
         </header>
-        <ul className="people people--team">
-          {teamMembers.map((m, idx) => (
-            <li className="person" key={idx}>
-              <ImageSlot
-                src={m.photo}
-                srcSet={m.srcset}
-                sizes="(max-width: 899px) 50vw, 25vw"
-                label="Portrait"
-                spec="800 x 800"
-                className="ph--square person__photo"
+        {/* React Bits ProfileCard for the photo; no footer, since there are no handles to show */}
+        <ul className="tf-team">
+          {teamMembers.map((m) => (
+            <li key={m.name}>
+              {/* name and title left empty so nothing covers the photo; they're shown under the card instead */}
+              <ProfileCard
+                name=""
+                title=""
+                avatarUrl={m.photo}
+                theme="dark"
+                holo={0.8}
+                glare={0.5}
+                tiltStrength={12}
+                parallax={8}
+                radius={16}
+                enableTilt={true}
+                intro={true}
+                showUserInfo={false}
+                enableMobileTilt={false}
+                className="tf-team__card"
               />
-              <h3 className="person__name">
+              <h3 className="tf-team__name">
                 {m.name}{' '}
                 {m.abbr && <abbr title={m.abbr.title}>{m.abbr.text}</abbr>}
               </h3>
-              <p className="person__role">{m.role}</p>
+              <p className="tf-team__role">{m.role}</p>
             </li>
           ))}
         </ul>

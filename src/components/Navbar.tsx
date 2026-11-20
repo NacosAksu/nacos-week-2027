@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { siteConfig } from '../config/siteConfig';
+import GooeyNav from './GooeyNav';
+
+// Desktop nav: Home, then three sections whose links open in a dropdown
+const GOOEY_ITEMS = [{ label: 'Home' }, { label: 'Programme' }, { label: 'Partners & Booths' }, { label: 'About' }];
+const NAV_GROUPS = [null, 'programme', 'partners', 'festival'] as const;
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,10 +76,36 @@ export const Navbar: React.FC = () => {
     setActiveDropdown(prev => (prev === name ? null : name));
   };
 
+  const navigate = useNavigate();
+  const [menuLeft, setMenuLeft] = useState(0);
+  const focusFirstRef = useRef(false);
+  const gooeyItemAt = (target: EventTarget) => (target as HTMLElement).closest?.('[data-gooey-index]') as HTMLElement | null;
+
+  // Opens (or, on click, toggles) the dropdown for a hovered or clicked nav item, centred under it
+  const openGroup = (li: HTMLElement, toggle: boolean) => {
+    const group = NAV_GROUPS[Number(li.dataset.gooeyIndex)];
+    if (!group) {
+      setActiveDropdown(null);
+      return;
+    }
+    const navBox = navRef.current?.getBoundingClientRect();
+    const box = li.getBoundingClientRect();
+    if (navBox) setMenuLeft(box.left - navBox.left + box.width / 2);
+    if (toggle) toggleDropdown(group);
+    else handleMouseEnter(group);
+  };
+
+  useEffect(() => {
+    if (!activeDropdown || !focusFirstRef.current) return;
+    focusFirstRef.current = false;
+    navRef.current?.querySelector<HTMLElement>('.nav-dropdown__menu a')?.focus();
+  }, [activeDropdown]);
+
   // Check if any subroute is active for a dropdown group
   const isProgrammeActive = ['/tracks', '/programme', '/hackathon'].some(path => location.pathname.startsWith(path));
   const isPartnersActive = ['/partner', '/booth', '/booths', '/exhibit'].some(path => location.pathname.startsWith(path));
   const isFestivalActive = ['/about', '/faq', '/auth', '/login', '/signin'].some(path => location.pathname.startsWith(path));
+  const gooeyActive = location.pathname === '/' ? 0 : isProgrammeActive ? 1 : isPartnersActive ? 2 : isFestivalActive ? 3 : -1;
 
   // Full-screen phone menu: freeze the page (and smooth scroll) behind it
   useEffect(() => {
@@ -110,133 +141,105 @@ export const Navbar: React.FC = () => {
           />
         </Link>
 
-        {/* Center Navigation Links (Desktop with Clean Dropdowns) */}
-        <nav className="site-header__nav" aria-label="Primary" ref={navRef}>
-          <NavLink to="/" end className={({ isActive }) => (isActive ? 'is-active' : '')}>
-            Home
-          </NavLink>
+        {/* Desktop navigation: React Bits GooeyNav for the four sections, each section's links in a dropdown */}
+        <nav
+          className="site-header__nav site-header__gooey"
+          aria-label="Primary"
+          ref={navRef}
+          onMouseOver={(e) => {
+            const li = gooeyItemAt(e.target);
+            if (li) openGroup(li, false);
+          }}
+          onMouseLeave={handleMouseLeave}
+          onClickCapture={(e) => {
+            const li = gooeyItemAt(e.target);
+            if (!li) return;
+            if (!NAV_GROUPS[Number(li.dataset.gooeyIndex)]) {
+              closeMenu();
+              navigate('/');
+              return;
+            }
+            focusFirstRef.current = e.detail === 0; // opened from the keyboard: move focus into the menu
+            openGroup(li, true);
+          }}
+        >
+          <GooeyNav
+            items={GOOEY_ITEMS}
+            activeIndex={gooeyActive}
+            theme="dark"
+            size="sm"
+            frame={true}
+            color="#B8F0A6"
+            particleCount={15}
+            spread={56}
+            animationTime={600}
+            timeVariance={300}
+            gooeyness={0.5}
+            wobble={0.5}
+            hoverEffect={true}
+            style={{ '--gn-frame': 'rgba(255, 255, 255, 0.06)', '--gn-muted': 'rgba(255, 255, 255, 0.72)' } as React.CSSProperties}
+          />
 
-          {/* Events & Programme Dropdown */}
-          <div
-            className="nav-item-dropdown"
-            onMouseEnter={() => handleMouseEnter('programme')}
-            onMouseLeave={handleMouseLeave}
-          >
-            <button
-              type="button"
-              className={`nav-dropdown__btn ${isProgrammeActive ? 'is-active' : ''}`}
-              onClick={() => toggleDropdown('programme')}
-              aria-expanded={activeDropdown === 'programme'}
-              aria-haspopup="true"
-            >
-              <span>Programme</span>
-              <svg className="nav-dropdown__chevron" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M4 6l4 4 4-4" />
-              </svg>
-            </button>
-            {activeDropdown === 'programme' && (
-              <div className="nav-dropdown__menu" role="menu">
-                <Link to="/tracks" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
-                  <div className="nav-dropdown__item-title">4 Industry Tracks</div>
-                  <div className="nav-dropdown__item-desc">Energy, Finance, Oil &amp; Gas, Medicine</div>
-                </Link>
-                <Link to="/programme" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
-                  <div className="nav-dropdown__item-title">Programme</div>
-                  <div className="nav-dropdown__item-desc">The five events of the week</div>
-                </Link>
-                <Link to="/hackathon" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
-                  <div className="nav-dropdown__item-title">
-                    Hackathon
-                  </div>
-                  <div className="nav-dropdown__item-desc">Team bootcamp ending in a live demo</div>
-                </Link>
-              </div>
-            )}
-          </div>
+          {activeDropdown === 'programme' && (
+            <div className="nav-dropdown__menu" role="menu" style={{ left: menuLeft }}>
+              <Link to="/tracks" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
+                <div className="nav-dropdown__item-title">4 Industry Tracks</div>
+                <div className="nav-dropdown__item-desc">Energy, Finance, Oil &amp; Gas, Medicine</div>
+              </Link>
+              <Link to="/programme" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
+                <div className="nav-dropdown__item-title">Programme</div>
+                <div className="nav-dropdown__item-desc">The five events of the week</div>
+              </Link>
+              <Link to="/hackathon" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
+                <div className="nav-dropdown__item-title">Hackathon</div>
+                <div className="nav-dropdown__item-desc">Team bootcamp ending in a live demo</div>
+              </Link>
+            </div>
+          )}
 
-          {/* Partners & Booths Dropdown */}
-          <div
-            className="nav-item-dropdown"
-            onMouseEnter={() => handleMouseEnter('partners')}
-            onMouseLeave={handleMouseLeave}
-          >
-            <button
-              type="button"
-              className={`nav-dropdown__btn ${isPartnersActive ? 'is-active' : ''}`}
-              onClick={() => toggleDropdown('partners')}
-              aria-expanded={activeDropdown === 'partners'}
-              aria-haspopup="true"
-            >
-              <span>Partners &amp; Booths</span>
-              <svg className="nav-dropdown__chevron" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M4 6l4 4 4-4" />
-              </svg>
-            </button>
-            {activeDropdown === 'partners' && (
-              <div className="nav-dropdown__menu" role="menu">
-                <Link to="/partner" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
-                  <div className="nav-dropdown__item-title">Sponsorship Packages</div>
-                  <div className="nav-dropdown__item-desc">Title, Gold, Silver, Bronze &amp; Friends tiers</div>
-                </Link>
-                <Link to="/booth" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
-                  <div className="nav-dropdown__item-title">
-                    Exhibition Booths
-                  </div>
-                  <div className="nav-dropdown__item-desc">Trade Fair booths on Conference Day</div>
-                </Link>
-                <a
-                  href={siteConfig.links.brochure || '/assets/docs/nacos-aksu-pitch-deck-2027.pdf'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="nav-dropdown__item"
-                  role="menuitem"
-                  onClick={closeMenu}
-                >
-                  <div className="nav-dropdown__item-title">
-                    Partnership Brochure
-                    <span className="nav-dropdown__item-badge">PDF</span>
-                  </div>
-                  <div className="nav-dropdown__item-desc">Partnership tiers, benefits and booth sizes</div>
-                </a>
-              </div>
-            )}
-          </div>
+          {activeDropdown === 'partners' && (
+            <div className="nav-dropdown__menu" role="menu" style={{ left: menuLeft }}>
+              <Link to="/partner" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
+                <div className="nav-dropdown__item-title">Sponsorship Packages</div>
+                <div className="nav-dropdown__item-desc">Title, Gold, Silver, Bronze &amp; Friends tiers</div>
+              </Link>
+              <Link to="/booth" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
+                <div className="nav-dropdown__item-title">Exhibition Booths</div>
+                <div className="nav-dropdown__item-desc">Trade Fair booths on Conference Day</div>
+              </Link>
+              <a
+                href={siteConfig.links.brochure || '/assets/docs/nacos-aksu-pitch-deck-2027.pdf'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="nav-dropdown__item"
+                role="menuitem"
+                onClick={closeMenu}
+              >
+                <div className="nav-dropdown__item-title">
+                  Partnership Brochure
+                  <span className="nav-dropdown__item-badge">PDF</span>
+                </div>
+                <div className="nav-dropdown__item-desc">Partnership tiers, benefits and booth sizes</div>
+              </a>
+            </div>
+          )}
 
-          {/* About Dropdown */}
-          <div
-            className="nav-item-dropdown"
-            onMouseEnter={() => handleMouseEnter('festival')}
-            onMouseLeave={handleMouseLeave}
-          >
-            <button
-              type="button"
-              className={`nav-dropdown__btn ${isFestivalActive ? 'is-active' : ''}`}
-              onClick={() => toggleDropdown('festival')}
-              aria-expanded={activeDropdown === 'festival'}
-              aria-haspopup="true"
-            >
-              <span>About</span>
-              <svg className="nav-dropdown__chevron" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M4 6l4 4 4-4" />
-              </svg>
-            </button>
-            {activeDropdown === 'festival' && (
-              <div className="nav-dropdown__menu" role="menu">
-                <Link to="/about" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
-                  <div className="nav-dropdown__item-title">About NACOS AKSU</div>
-                  <div className="nav-dropdown__item-desc">The chapter and the team behind the week</div>
-                </Link>
-                <Link to="/faq" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
-                  <div className="nav-dropdown__item-title">Venue &amp; FAQ</div>
-                  <div className="nav-dropdown__item-desc">Akwa Ibom State University location &amp; attendee guide</div>
-                </Link>
-                <Link to="/auth" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
-                  <div className="nav-dropdown__item-title">My Pass</div>
-                  <div className="nav-dropdown__item-desc">Get your registration ID emailed to you again</div>
-                </Link>
-              </div>
-            )}
-          </div>
+          {activeDropdown === 'festival' && (
+            <div className="nav-dropdown__menu" role="menu" style={{ left: menuLeft }}>
+              <Link to="/about" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
+                <div className="nav-dropdown__item-title">About NACOS AKSU</div>
+                <div className="nav-dropdown__item-desc">The chapter and the team behind the week</div>
+              </Link>
+              <Link to="/faq" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
+                <div className="nav-dropdown__item-title">Venue &amp; FAQ</div>
+                <div className="nav-dropdown__item-desc">Akwa Ibom State University location &amp; attendee guide</div>
+              </Link>
+              <Link to="/auth" className="nav-dropdown__item" role="menuitem" onClick={closeMenu}>
+                <div className="nav-dropdown__item-title">My Pass</div>
+                <div className="nav-dropdown__item-desc">Get your registration ID emailed to you again</div>
+              </Link>
+            </div>
+          )}
         </nav>
 
         {/* Right CTA Actions */}

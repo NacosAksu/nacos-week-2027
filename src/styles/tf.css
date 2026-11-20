@@ -561,3 +561,18 @@ html.menu-open, html.menu-open body { overflow: hidden; }
 .tf-ring { position: relative; height: clamp(26rem, 52vw, 36rem); margin-top: clamp(1.5rem, 4vw, 3rem); color: var(--color-ink); }
 .tf-ring .circular-carousel__title { font-size: 0.9375rem; font-weight: 500; letter-spacing: -0.02em; max-width: 36ch; }
 .tf-ring__hint { margin-top: 0.75rem; text-align: center; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-ink-faint); }
+/* Desktop navbar: React Bits GooeyNav */
+.site-header__gooey { position: relative; }
+.site-header__gooey .gooey-nav__link { font-family: var(--font-body); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.01em; text-transform: uppercase; }
+.site-header__gooey .nav-dropdown__menu { z-index: 1050; }
+.site-header__gooey .nav-dropdown__item { text-transform: none; letter-spacing: normal; font-size: 0.875rem; }
+
+/* Team: React Bits ProfileCard grid */
+.tf-team { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: clamp(1rem, 2vw, 1.5rem); margin: 0; padding: 0; list-style: none; }
+.tf-team__card.profile-card { width: 100%; }
+.tf-team .profile-card__name { font-family: var(--font-body); letter-spacing: -0.03em; }
+.tf-team__name { margin-top: 1rem; font-size: 1.1875rem; font-weight: 600; letter-spacing: -0.03em; line-height: 1.25; }
+.tf-team__name abbr { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; color: var(--accent-ink); text-decoration: none; }
+.tf-team__role { margin-top: 0.3rem; font-size: 0.9375rem; line-height: 1.45; color: var(--color-ink-muted); }
+.tf-team .profile-card__photo { max-width: none; } /* the global img max-width clipped the parallax overscan, leaving a dark strip */
+.tf-team .profile-card__body { --pc-frame-shadow: 0 14px 30px -20px rgba(0, 0, 0, 0.28), 0 2px 6px -3px rgba(0, 0, 0, 0.1); } /* the dark theme shadow is built for dark pages; softer on white */
